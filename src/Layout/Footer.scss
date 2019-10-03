@@ -1,0 +1,18 @@
+.footer-app{
+    position: 'fixed';
+    z-index : 1;
+    width: '100%';
+}
+
+.logo-footer{
+    width: 100%;
+    .img-responsive-footer{
+        // float: left;
+    }
+    .text-logo-footer{
+        font-weight: bolder;
+        // float: left;
+        // margin-left: 10px;
+        text-align: center;
+    }
+}
