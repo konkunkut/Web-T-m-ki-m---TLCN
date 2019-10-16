@@ -85,7 +85,10 @@ class DrawerForm extends React.Component {
               </Col>
             </Row>
            <Row gutter={5}>
-           <div
+             <div style={{float: "left"}}>
+               <Button type="link">Quên mật khẩu?</Button>
+             </div>
+            <div
               style={{float : "right"}}
             >
               <Button onClick={this.onClose} style={{ marginRight: 8 }}>
@@ -109,7 +112,7 @@ class DrawerForm extends React.Component {
               // padding: '10px 16px',
               background: '#fff',
               textAlign: 'left',
-              marginTop : '20px',
+              marginTop : '80px',
               fontWeight: 'bold'
             }}
             >

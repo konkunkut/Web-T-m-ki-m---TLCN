@@ -1,7 +1,7 @@
 .footer-app{
-    position: 'fixed';
+    // position: fixed;
     z-index : 1;
-    width: '100%';
+    width: 100%;
 }
 
 .logo-footer{
@@ -15,4 +15,7 @@
         // margin-left: 10px;
         text-align: center;
     }
+}
+.decription-footer{
+    text-align: left;
 }

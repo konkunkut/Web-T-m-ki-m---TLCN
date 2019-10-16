@@ -1,8 +1,10 @@
-.content-home{  
+.content-home{ 
         background-image: url(../background-image1.jpg);
     
         // /* Center and scale the image nicely */
-        background-position: center;
+        // background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
+
+        margin-top: 60px;
 }

@@ -1,40 +1,75 @@
 
 import React from 'react';
 import 'antd/dist/antd.css';
-import { Modal, Button, Form, Row, Col, Input} from 'antd';
+import { Modal, Button, Form, Row, Col, Input, message} from 'antd';
 
-class NewAcc extends React.Component {
+class NewAccount extends React.Component {
   state = {
     loading: false,
     visible: false,
-    alert: false,
   };
 
-//   showModal = () => {
-//     this.setState({
-//       visible: false,
-//     });
-//   }; 
-
-  handleOk = () => {
-    this.setState({ loading: true });
-    setTimeout(() => {
-      this.setState({ loading: false});
-    }, 3000);
-    // this.props.callback();
-    this.setState({alert: true});
+  handleOk = (e) => {
+    e.preventDefault();
+    this.props.form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        // console.log('Received values of form: ', values);
+        this.setState({ loading: true });
+        setTimeout(() => {
+          this.setState({ loading: false});
+          message.success('Tạo tài khoản thành công !', 2);
+          this.props.callback();
+        }, 2500);
+        //  this.props.callback();
+        // message.success('This is a success message');
+      }
+    });
   };
 
   handleCancel = () => {
     this.setState({ visible: false });
     this.props.callback();
   };
+  
   componentWillMount(){
       this.setState({visible:this.props.an});
   }
 
+  //for validation
+  handleSubmit = e => {
+    e.preventDefault();
+    this.props.form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        console.log('Received values of form: ', values);
+      }
+    });
+  };
+
+  handleConfirmBlur = e => {
+    const { value } = e.target;
+    this.setState({ confirmDirty: this.state.confirmDirty || !!value });
+  };
+
+  compareToFirstPassword = (rule, value, callback) => {
+    const { form } = this.props;
+    if (value && value !== form.getFieldValue('password')) {
+      callback('Mật khẩu nhập lại chưa trùng khớp');
+    } else {
+      callback();
+    }
+  };
+
+  validateToNextPassword = (rule, value, callback) => {
+    const { form } = this.props;
+    if (value && this.state.confirmDirty) {
+      form.validateFields(['confim-password'], { force: true });
+    }
+    callback();
+  };
+
   render() {
     const { visible, loading } = this.state;
+    const {form :{getFieldDecorator}} = this.props;
     return (
       <div>
         <Modal
@@ -52,17 +87,25 @@ class NewAcc extends React.Component {
             </Button>,
           ]}
         >
-          <Form layout="vertical" hideRequiredMark>
+          <Form layout="vertical" hideRequiredMark >
 
             <Row gutter={5}>
               <Col span={12}>
                 <Form.Item label="Họ">
-                  <Input placeholder="VD: Nguyễn" />
+                  {getFieldDecorator('ho', {
+                    rules: [{ required: true, message: 'Không bỏ trống phần này!' }],
+                  })(
+                    <Input placeholder="VD: Nguyễn" />
+                  )}
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item label="Tên">
+                  {getFieldDecorator('ten', {
+                    rules: [{ required: true, message: 'Không bỏ trống phần này!' }],
+                  })(
                     <Input placeholder="VD: Văn A" />
+                  )}
                 </Form.Item>
               </Col>
             </Row>
@@ -70,21 +113,58 @@ class NewAcc extends React.Component {
             <Row gutter={5}>
               <Col>
                 <Form.Item label="Email">
-                  <Input placeholder="VD: abc@xyz" />
+                  {getFieldDecorator('email', {
+                    rules: [
+                      {
+                        type: 'email',
+                        message: 'Đây không phải email.',
+                      },
+                      {
+                        required: true,
+                        message: 'Không bỏ trống phần này!',
+                      },
+                    ],
+                  })(
+                    <Input placeholder="VD: abc@xyz" />
+                  )}
                 </Form.Item>
               </Col>
             </Row>
             <Row gutter={5}>
               <Col>
-                <Form.Item label="Password">
-                  <Input.Password placeholder="********"/>
+                <Form.Item label="Password" hasFeedback>
+                  {getFieldDecorator('password', {
+                    rules: [
+                      {
+                        required: true,
+                        message: 'Không bỏ trống phần này!',
+                      },
+                      {
+                        validator: this.validateToNextPassword,
+                      },
+                    ],
+                  })(
+                    <Input.Password placeholder="********"/>
+                  )}
                 </Form.Item>
               </Col>
             </Row>
             <Row gutter={5}>
               <Col>
-                <Form.Item label="Nhập lại password">
-                  <Input placeholder=""/>
+                <Form.Item label="Nhập lại password" hasFeedback>
+                  {getFieldDecorator('confim-password', {
+                    rules: [
+                      {
+                        required: true,
+                        message: 'Không bỏ trống phần này!',
+                      },
+                      {
+                        validator: this.compareToFirstPassword,
+                      },
+                    ],
+                  })(
+                    <Input.Password placeholder="" onBlur={this.handleConfirmBlur}/>
+                  )}
                 </Form.Item>
               </Col>
             </Row>
@@ -95,6 +175,6 @@ class NewAcc extends React.Component {
     );
   }
 }
-
+const NewAcc = Form.create()(NewAccount);
 export default NewAcc;
           
