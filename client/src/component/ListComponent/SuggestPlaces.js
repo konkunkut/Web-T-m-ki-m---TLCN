@@ -1,16 +1,16 @@
 import React from 'react';
 import 'antd/dist/antd.css';
-import { Card, Col, Rate } from 'antd';
+import { Card, Col, Rate, Row } from 'antd';
 import './SuggestPlaces.scss';
 import PropTypes from "prop-types";
 
 export default function SuggestPlaces(props)
 {
     return(
-        <div>
-            <Card className="card-places" size="small" title={props.name} extra={<a href="#">Xem thêm</a>}>
+        <Row style={{marginBottom : 10}}>
+            <Card className="card-places" hoverable size="small" title={props.name}>
                 <Col span={4}>
-                    <img src="dog-paw-logo.png" style={{width:70, height:70}} />
+                    <img src="dog-paw-logo.png" style={{maxWidth:70, width:'100%', height:'auto'}} />
                 </Col>
                 <Col span={12}>
                     <p>
@@ -29,7 +29,7 @@ export default function SuggestPlaces(props)
                     </div>
                 </Col>
             </Card>
-        </div>
+        </Row>
     );
 }
 

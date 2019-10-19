@@ -6,8 +6,13 @@ import SuggestBlog from './SuggestBlog';
 function BlogList(props) {
   return (
     <div>
-        {props.contacts.map(c => 
-            <SuggestBlog key={c.id} name={c.name} />
+        {props.listData.map(c => 
+            <SuggestBlog  
+                         href={c.href} 
+                         title={c.title} 
+                         avatar={c.avatar} 
+                         description={c.description}
+                         content={c.content} />
         )}
     </div>
   );
