@@ -10,8 +10,10 @@ const userRoute= require('./router/user.route');
 app.use(cors());
 app.use(bodyPaser.json());
 mongoose.connect('mongodb://localhost:27017/peg');
+app.use(passport.initialize());
 
 app.use('/user',userRoute);
+app.use('/',userRoute);
 app.listen(Port,function(){
     console.log("server is running on port: "+ Port);
 })

@@ -1,48 +1,80 @@
 const mongoose = require ('mongoose');
 const crypto = require('crypto');
 const User = new mongoose.Schema({
-    fistname:{
-        type: String,
-        trim: true,
-        required: "fist name is required"
+   
+    local:{
+        fistname:{
+            type: String,
+            trim: true
+           
+        },
+        lastname:{
+            type: String,
+            trim: true
+           
+        },
+        salt: String,
+        email:{
+            type: String,
+            trim: true,
+            unique: 'email is already exits',
+            match: [/.+\@.+\..+/, 'Please fill a valid email address'],
+            sparse:true
+           
+        },
+        hash_password:{
+            type: String
+        }
+        
     },
-    lastname:{
-        type: String,
-        trim: true,
-        required: 'last name is required'
+    google:{
+        fistname:{
+            type:String,
+            trim:true
+        },
+        lastname:{
+            type:String,
+            trim:true
+        },
+        email:{
+            type:String,
+            trim:true,
+            sparse:true
+        }
     },
-    salt: String,
-    email:{
-        type: String,
-        trim: true,
-        unique: 'email is already exits',
-        match: [/.+\@.+\..+/, 'Please fill a valid email address'],
-        required: 'email is required'
-    },
-    hash_password:{
-        type: String,
-        required: 'password is required'
-    },
-    
+    facebook:{
+        id:{
+            type:String,
+            trim:true
+        },
+        fullName:{
+            type:String,
+            trim: true
+        },
+        email:{
 
-
+            type:String,
+            trim:true,
+            sparse:true
+        }
+    }
 });
 User
- .virtual('password')
+ .virtual('local.password')
  .set(function(password){
-     this._password = password;
-     this.salt = this.makeSalt();
-     this.hash_password = this.encrypassword(password);
+     this.local._password = password;
+     this.local.salt = this.makeSalt();
+     this.local.hash_password = this.encrypassword(password);
  })
  .get(function(){
-     return this._password;
+     return this.local._password;
  });
 
- User.path('hash_password').validate(function(v) {
-    if (this._password && this._password.length < 6) {
+ User.path('local.hash_password').validate(function(v) {
+    if (this.local._password && this.local._password.length < 6) {
       this.invalidate('password', 'Password must be at least 6 characters.')
     }
-    if (this.isNew && !this._password) {
+    if (this.isNew && !this.local._password) {
       this.invalidate('password', 'Password is required')
     }
   }, null);
@@ -54,7 +86,7 @@ User.methods =  {
         }
         try{
             return crypto
-            .createHmac('sha1',this.salt)
+            .createHmac('sha1',this.local.salt)
             .update(password)
             .digest('hex')
         }catch(err){
@@ -65,7 +97,7 @@ User.methods =  {
         return Math.round((new Date().valueOf() * Math.random())) + ''
       },
     authanticate: function(plaitext){
-            return this.encrypassword(plaitext)=== this.hash_password;
+            return this.encrypassword(plaitext)=== this.local.hash_password;
       }
 };
 module.exports = mongoose.model('User',User);
