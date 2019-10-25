@@ -41,7 +41,9 @@ export default function MyFooter()
                 <div className="logo-footer">
                     <img class="img-responsive-footer" src="dog-paw-logo.png" width="100" height="100"></img>
                     <h1 className='text-logo-footer'>For Pet</h1>
-                    
+                    <h3>
+                        Lựa chọn tốt nhất cho thú cưng nhà bạn
+                    </h3>
                 </div>
             </Col>
         </Footer>
