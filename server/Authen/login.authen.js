@@ -11,7 +11,7 @@ const passport =  require('passport');
 // login with web system account 
 const signin = (req,res) =>{
     User.findOne({
-        "google.email":req.body.email
+        "local.email":req.body.email
     },(err,user)=>{
         if(err||!user){
             return res.status('401').json({
@@ -23,30 +23,69 @@ const signin = (req,res) =>{
                 password: " password not match."
             });
         }
-        const token = tokena.sign({_id: user._id},config.jwtSecret);
-        console.log('token local: '+token);
+        // when success login
+        const token = tokena.sign({_id: user._id},config.jwtSecretUser);
+       // console.log('token local: '+token);
         res.cookie('token',token, {exqire: new Date()+3000});
         return res.json({
-            token
+            token   
           })
-        
     })
 }
+const checkOauthTokenAddMin = (req,res,next)=>
+{
+    var valueResult = checkOathToken(req,res,next,config.jwtSecretAddmin);
+    
+}
+const checkOauthTokenEditer = (req,res,next)=>{
+    valueResult = checkOathToken(req,res,next,config.jwtSecretEditer);
+    
+    
+}
+const checkOauthTokenUser = (req,res,next) =>{
+    checkOathToken(req,res,next,config.jwtSecretUser);
+}
+const checkOathToken = (req,res,next, jwtSecret )=>{
+    let token = req.headers['x-access-token']||req.headers['authorization'];
+    
+    if(token){
+        if(token.startsWith('Bearer ')){
+           
+            token = token.slice(7,token.length);
+            
+        }
+        tokena.verify(token,jwtSecret,function(err,decoded){
+            if(err){
+                return res.status(401).json({message:'failed authencation token'});
+            }
+            else{
+                //console.log(decoded);
+                req.decoded = decoded;
+               console.log(decoded);
+                next();
+            }
+        });
+    }
+    else{
+        return res.status(401).json({massage:'not token'});
+    }
+}
+
+// use login with google, facebook
 const callback = (req,res, next)=>{
-    console.log('gggg'+req.user);
-    const token = tokena.sign({_id: req.user._id},config.jwtSecret);
+    const token = tokena.sign({_id: req.user._id},config.jwtSecretUser);
     res.cookie('token',token, {exqire: new Date()+3000});
     return res.json({
         token
     })
 }
 
-//login with google
-
-
 module.exports =
 {
     callback:callback,
-    signin:signin
+    signin:signin,
+    checkOauthTokenAddMin:checkOauthTokenAddMin,
+    checkOauthTokenEditer:checkOauthTokenEditer,
+    checkOauthTokenUser:checkOauthTokenUser
     
 };

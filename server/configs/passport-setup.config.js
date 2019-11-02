@@ -60,9 +60,8 @@ passport.use(
                         'facebook.id':profile._json.id
                     }
                     );
-                    console.log(user);
+                   // console.log(user);
                     user.save();
-                   
                 }
                 done(null,user);
              });
