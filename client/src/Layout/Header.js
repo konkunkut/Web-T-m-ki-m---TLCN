@@ -27,11 +27,17 @@ export default function MyHeader()
                 <Menu.Item key="2"><Link className='link-nav' to='/places'>Cơ sở chăm sóc</Link></Menu.Item>
                 <Menu.Item key="3"><Link className='link-nav' to='/news'>Chuyên mục sức khoẻ</Link></Menu.Item>
                 <Menu.Item key="4"><Link className='link-nav' to='/contact'>Thông tin liên hệ</Link></Menu.Item>
+
+                <Menu.Item className="dang-nhap" key="5" disabled>
+                    <div>
+                        <Account new={true}/>
+                    </div>
+                </Menu.Item>
             </Menu>
 
-            <div className="dang-nhap">
+            {/* <div className="dang-nhap">
                 <Account new={true}/>
-            </div>
+            </div> */}
         </Header>
     );
 }
