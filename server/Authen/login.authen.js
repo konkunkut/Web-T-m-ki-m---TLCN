@@ -11,7 +11,7 @@ const passport =  require('passport');
 // login with web system account 
 const signin = (req,res) =>{
     User.findOne({
-        "google.email":req.body.email
+        "local.email":req.body.email
     },(err,user)=>{
         if(err||!user){
             return res.status('401').json({
@@ -23,17 +23,45 @@ const signin = (req,res) =>{
                 password: " password not match."
             });
         }
+        // when success login
         const token = tokena.sign({_id: user._id},config.jwtSecret);
-        console.log('token local: '+token);
+       // console.log('token local: '+token);
         res.cookie('token',token, {exqire: new Date()+3000});
         return res.json({
-            token
+            token   
           })
-        
     })
 }
+
+const checkOathToken = (req,res,next )=>{
+    let token = req.headers['x-access-token']||req.headers['authorization'];
+    
+    if(token){
+        if(token.startsWith('Bearer ')){
+           
+            token = token.slice(7,token.length);
+            
+        }
+        tokena.verify(token,config.jwtSecret,function(err,decoded){
+            if(err){
+                return res.status(401).json({message:'failed authencation token'});
+            }
+            else{
+               req.session = {userId:decoded._id}
+               //console.log(req.session);
+                req.decoded = decoded;
+              
+                next();
+            }
+        });
+    }
+    else{
+        return res.status(401).json({massage:'not token'});
+    }
+}
+
+// use login with google, facebook
 const callback = (req,res, next)=>{
-    console.log('gggg'+req.user);
     const token = tokena.sign({_id: req.user._id},config.jwtSecret);
     res.cookie('token',token, {exqire: new Date()+3000});
     return res.json({
@@ -41,12 +69,11 @@ const callback = (req,res, next)=>{
     })
 }
 
-//login with google
-
-
 module.exports =
 {
     callback:callback,
-    signin:signin
+    signin:signin,
+    checkOauthToken:checkOathToken
+    
     
 };
