@@ -24,7 +24,7 @@ const signin = (req,res) =>{
             });
         }
         // when success login
-        const token = tokena.sign({_id: user._id},config.jwtSecretUser);
+        const token = tokena.sign({_id: user._id},config.jwtSecret);
        // console.log('token local: '+token);
         res.cookie('token',token, {exqire: new Date()+3000});
         return res.json({
@@ -32,20 +32,8 @@ const signin = (req,res) =>{
           })
     })
 }
-const checkOauthTokenAddMin = (req,res,next)=>
-{
-    var valueResult = checkOathToken(req,res,next,config.jwtSecretAddmin);
-    
-}
-const checkOauthTokenEditer = (req,res,next)=>{
-    valueResult = checkOathToken(req,res,next,config.jwtSecretEditer);
-    
-    
-}
-const checkOauthTokenUser = (req,res,next) =>{
-    checkOathToken(req,res,next,config.jwtSecretUser);
-}
-const checkOathToken = (req,res,next, jwtSecret )=>{
+
+const checkOathToken = (req,res,next )=>{
     let token = req.headers['x-access-token']||req.headers['authorization'];
     
     if(token){
@@ -54,14 +42,15 @@ const checkOathToken = (req,res,next, jwtSecret )=>{
             token = token.slice(7,token.length);
             
         }
-        tokena.verify(token,jwtSecret,function(err,decoded){
+        tokena.verify(token,config.jwtSecret,function(err,decoded){
             if(err){
                 return res.status(401).json({message:'failed authencation token'});
             }
             else{
-                //console.log(decoded);
+               req.session = {userId:decoded._id}
+               //console.log(req.session);
                 req.decoded = decoded;
-               console.log(decoded);
+              
                 next();
             }
         });
@@ -73,7 +62,7 @@ const checkOathToken = (req,res,next, jwtSecret )=>{
 
 // use login with google, facebook
 const callback = (req,res, next)=>{
-    const token = tokena.sign({_id: req.user._id},config.jwtSecretUser);
+    const token = tokena.sign({_id: req.user._id},config.jwtSecret);
     res.cookie('token',token, {exqire: new Date()+3000});
     return res.json({
         token
@@ -84,8 +73,7 @@ module.exports =
 {
     callback:callback,
     signin:signin,
-    checkOauthTokenAddMin:checkOauthTokenAddMin,
-    checkOauthTokenEditer:checkOauthTokenEditer,
-    checkOauthTokenUser:checkOauthTokenUser
+    checkOauthToken:checkOathToken
+    
     
 };

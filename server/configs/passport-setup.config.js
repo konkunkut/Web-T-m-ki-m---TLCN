@@ -2,6 +2,7 @@ const token = require('jsonwebtoken');
 const passport = require('passport');
 const googleStrategy =  require('passport-google-oauth20');
 const facebookStrategy = require('passport-facebook');
+const {Aclclass}= require('../helper/acl_store.heiper');
 
 passport.serializeUser(function(user, done) {
     done(null, user);
@@ -19,20 +20,35 @@ passport.use(
         callbackURL:'/Home'
 
     },( accessToken, refreshToken, profile,  done) =>{
-        //console.log(profile._json.email);
+      //  console.log(profile);
         
        User.findOne({'google.email':profile._json.email},(err,user)=>{
            
-            if(err||!user){
-                user = new User(
-                    {
-                        'google.fistname': profile._json.family_name,
-                        'google.lastname': profile._json.given_name,
-                        'google.email': profile._json.email
-                    });
+            if(!user){
+                user = new User({
+                        google:{
+                            email: profile._json.email,
+                            picture: profile._json.picture
+                        },
+                        fistname: profile._json.family_name,
+                        lastname: profile._json.given_name
+                });
         
                // console.log(user);
-                user.save();    
+                user.save((err,result)=>{
+                    if(err){
+                        console.log(err);
+                    }
+                    else{
+                        const acl = Aclclass.getAcl;
+                        acl.addUserRoles(result._id.toString(),'user',(err)=>{
+                            if(err){
+                                console.log(err);
+                            }
+
+                        })
+                    }
+                });    
               
             }    
             done(null,user); 
@@ -47,21 +63,38 @@ passport.use(
             clientID:key.facebook.clientID,
             clientSecret:key.facebook.clientSecret,
             callbackURL:'/HomeFace',
-            profileFields: ['id', 'displayName', 'email']
+            profileFields: ['id', 'displayName', 'email','photos','name']
         }, (accessToken, refreshToken,profile,done)=>{
-            console.log('day la profile fullName '+profile.displayName);
-            console.log('day la profile id '+profile._json.id);
+            console.log(profile);
             User.findOne({'facebook.email':profile._json.email},(err,user)=>{
+
+                //console.log(profile._json.bio);
               if(err||!user){
-                    user = new User(
-                    {
-                        'facebook.email':profile._json.email,
-                        'facebook.fullName':profile.displayName,
-                        'facebook.id':profile._json.id
-                    }
-                    );
+                    user = new User({
+                        facebook:{
+                            emai:profile._json.email,
+                            fullName:profile.displayName,
+                            id:profile._json.id,
+                        },
+                        lastname:profile._json.last_name,
+                        fistname:profile._json.middle_name +' '+profile._json.first_name
+
+                    });
                    // console.log(user);
-                    user.save();
+                    user.save((err,result)=>{
+                        if(err){
+                            console.log(err)
+                        }
+                        else{
+                            const acl1 = Aclclass.getAcl;
+                            acl1.addUserRoles(result._id.toString(),'user',(err)=>{
+                                if(err){
+                                    console.log(err);
+                                }
+
+                            })
+                        }
+                    });
                 }
                 done(null,user);
              });

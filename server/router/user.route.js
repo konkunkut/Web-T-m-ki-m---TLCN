@@ -12,7 +12,8 @@ route.get('/authGoogle',passport.authenticate('google',{
     scope:['profile', 'email']
 }));
 route.get('/Home',passport.authenticate('google'),login.callback);
-route.get('/ViewProfile',login.checkOauthTokenUser,usercontroller.Viewprofile);
+route.get('/ViewProfile',login.checkOauthToken,usercontroller.Viewprofile);
 route.get('/authFacebook', passport.authenticate('facebook',{scope:'email'}));
 route.get('/HomeFace',  passport.authenticate('facebook'),login.callback);
+route.put('/editUserProfile',login.checkOauthToken,usercontroller.editProfile);
 module.exports=route;
