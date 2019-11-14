@@ -2,7 +2,6 @@ import React from "react";
 import 'antd/dist/antd.css';
 import { Card, Col, Rate, Row, Pagination } from 'antd';
 import SuggestPlaces from './SuggestPlaces';
-
 function PlacesList(props) {
   return (
     <div>
@@ -16,5 +15,4 @@ function PlacesList(props) {
     </div>
   );
 }
-
 export default PlacesList;

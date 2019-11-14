@@ -1,18 +1,8 @@
 const mongoose = require ('mongoose');
 const crypto = require('crypto');
 const User = new mongoose.Schema({
-   
+    
     local:{
-        fistname:{
-            type: String,
-            trim: true
-           
-        },
-        lastname:{
-            type: String,
-            trim: true
-           
-        },
         salt: String,
         email:{
             type: String,
@@ -24,22 +14,22 @@ const User = new mongoose.Schema({
         },
         hash_password:{
             type: String
+        },
+        picture:{
+            type: String,
+            require: false
         }
         
     },
     google:{
-        fistname:{
-            type:String,
-            trim:true
-        },
-        lastname:{
-            type:String,
-            trim:true
-        },
         email:{
             type:String,
             trim:true,
             sparse:true
+        },
+        picture:{
+            require:false,
+            type:String
         }
     },
     facebook:{
@@ -47,17 +37,27 @@ const User = new mongoose.Schema({
             type:String,
             trim:true
         },
-        fullName:{
-            type:String,
-            trim: true
-        },
         email:{
 
             type:String,
             trim:true,
             sparse:true
+        },
+        picture:{
+            require:false,
+            type:String
         }
-    }
+    },
+    fistname:{
+        type: String,
+        trim: true
+       
+    },
+    lastname:{
+        type: String,
+        trim: true
+       
+    },
 });
 User
  .virtual('local.password')
