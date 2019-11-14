@@ -16,7 +16,9 @@ for (let j = 0; j < 10; j++)
 {
     contacts.push({
         id: `${j}`,
-        name : `PET House ${j}`
+        name : `PET House ${j}`,
+        add : 'Địa chỉ: 99 Lê Văn Việt, Quận 9, Tp.HCM',
+        tel : 'Liện hệ: 012 345 6789'
     });
 }
 
@@ -38,75 +40,32 @@ render()
                 <MyCarousel />
 
                 <Row className="search-content">
-                        {/* nội dung search */}
-                        <Col className="detail-search" span={12}>
-                            {/* <Form>
-                                <Divider>Chọn khu vực bạn muốn tìm</Divider>
-                                thanh tìm kiếm 
-                                <Row gutter={5}>
-                                    <Col span={8}>
-                                    <Form.Item>
-                                        {getFieldDecorator('search1', {
-                                            rules: [
-                                            { required: true, message: 'Chọn loại địa điểm' },
-                                            ],
-                                        })( <Select defaultValue="default">
-                                                <Option value="default">Loại địa điểm</Option>
-                                            </Select>)}
-                                    </Form.Item>
-                                    </Col>
+                    {/* nội dung search */}
+                    <Col className="detail-search" span={12}>
+                        <Divider>Chọn khu vực bạn muốn tìm</Divider>
+                        <Form>
+                            <Row gutter={5}>
+                                <Col span={8}>
+                                    <Select defaultValue="default">
+                                        <Option value="default">Loại địa điểm</Option>
+                                    </Select>
+                                </Col>
+                                <Col span={8}>
+                                    <Select defaultValue="default">
+                                         <Option value="default">Chọn tỉnh/thành phố</Option>
+                                      </Select>
+                                </Col>
+                                <Col span={8}>
+                                    <Select defaultValue="default">
+                                        <Option value="default">Chọn quận/huyện</Option>
+                                    </Select>
+                                </Col>
+                            </Row>
+                        </Form>
+                        <Button className="submit-button">Tìm kiếm</Button>
+                        <Divider></Divider>
 
-                                    <Col span={8}>
-                                    <Form.Item>
-                                        {getFieldDecorator('search2', {
-                                            rules: [
-                                            { required: true, message: 'Chọn tỉnh/thành phố' },
-                                            ],
-                                        })(<Select />)}
-                                    </Form.Item>
-                                    </Col>
-
-                                    <Col span={8}>
-                                    <Form.Item>
-                                        {getFieldDecorator('search3', {
-                                            rules: [
-                                            { required: true, message: 'Chọn quận/huyện' },
-                                            ],
-                                        })(<Select />)}
-                                    </Form.Item>
-                                    </Col>
-                                </Row>
-                                
-                                submit button
-                                <Button className="submit-button">Tìm kiếm</Button>
-
-                                <Divider></Divider>
-                            </Form> */}
-                            <Divider>Chọn khu vực bạn muốn tìm</Divider>
-                            <Form>
-                                <Row gutter={5}>
-                                    <Col span={8}>
-                                        <Select defaultValue="default">
-                                            <Option value="default">Loại địa điểm</Option>
-                                        </Select>
-                                    </Col>
-                                    <Col span={8}>
-                                        <Select defaultValue="default">
-                                            <Option value="default">Chọn tỉnh/thành phố</Option>
-                                        </Select>
-                                    </Col>
-                                    <Col span={8}>
-                                        <Select defaultValue="default">
-                                            <Option value="default">Chọn quận/huyện</Option>
-                                        </Select>
-                                    </Col>
-                                </Row>
-                            </Form>
-                            <Button className="submit-button">Tìm kiếm</Button>
-                            <Divider></Divider>
-
-                            <div>
-
+                        <div>
                             <MySuggestList contacts={contacts} />
                             {/* phân trang */}
                             <Pagination 
@@ -115,14 +74,13 @@ render()
                                 pageSize={5} 
                                 style={{float: 'left'}}
                             />
+                        </div>
+                    </Col>
 
-                            </div>
-                        </Col>
-
-                        {/* gợi ý và quảng cáo */}
-                        <Col className="suggest-and-ad" span={10}>
-                            bản đồ ở đây
-                        </Col>
+                    {/* gợi ý và quảng cáo */}
+                    <Col className="suggest-and-ad" span={10}>
+                        bản đồ ở đây
+                    </Col>
                 </Row>
             </div>
             </Col>

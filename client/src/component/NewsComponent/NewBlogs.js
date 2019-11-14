@@ -1,5 +1,6 @@
 import React from 'react';
 import 'antd/dist/antd.css';
+import {Link } from 'react-router-dom';
 
 import {Col, Row, Card, Divider, Avatar, Icon} from 'antd';
 
@@ -9,6 +10,17 @@ export default function NewBlogs(props)
 {
     return(
         <Col span={11}  style={{marginTop: 20, marginBottom: 5, marginLeft: 22}}>
+            <Link
+                to={
+                    {pathname:`/detailBlogs/${props.title}`,
+                     state: {   title: props.title,
+                                blogger: props.blogger,
+                                date: props.date,
+                                star: props.star
+                    }}
+                }
+            >
+
             <Card
                 style={{width: '100%', height:'auto'}}
                 cover={[
@@ -30,7 +42,7 @@ export default function NewBlogs(props)
                 <Divider style={{marginTop:-30, marginBottom:10}}></Divider>
                 <Meta
                     title= {
-                        <a href={props.href} style={{color:'#636363', fontSize:20}}>
+                        <a style={{color:'#636363', fontSize:20}}>
                             {props.title}
                         </a>}
                     description= {props.description}
@@ -38,6 +50,8 @@ export default function NewBlogs(props)
                     // style={{marginTop: -20}}
                 />
             </Card>
+
+            </Link>
         </Col>
     );
 }

@@ -1,32 +1,40 @@
 import React from 'react';
 import 'antd/dist/antd.css';
-import {Col, Skeleton, List, Avatar, Icon, Row, Card} from 'antd';
+import {Link } from 'react-router-dom';
+import {Col, List, Avatar, Icon, Row, Card} from 'antd';
 import PropTypes from "prop-types";
 
 const { Meta } = Card;
 
 export default function SuggestBlog(props)
 {
-    return(
-        <Col style={{marginBottom: 30}}>
-              {/* <Skeleton active avatar>
-                  avatar={<Avatar src={props.avatar} />}
-                  title={<a href={props.href}>{props.title}</a>}
-                  description={props.description}
-                {props.content}
-              </Skeleton> */}
-          
-          <Card
-            hoverable
-          >
-            <div style={{paddingBottom: 15}}>
-              <img alt="example" src={props.avatar} width="100%" height="auto"/>
-            </div>
-            <Meta title={<a href={props.href} style={{fontSize: 26}}>{props.title}</a>} 
-                  description={props.content} style={{fontSize: 18}} />
-          </Card>
-        </Col>
-    );
+  return(
+    <Col style={{marginBottom: 30}}>
+      <Link
+        to={
+            {pathname:`/detailBlogs/${props.title}`,
+             state: {__id: props.title}}
+        }
+      >
+        
+      <Card
+        hoverable
+      >
+        <div style={{paddingBottom: 15}}>
+          <img alt="example" src={props.avatar} width="100%" height="auto"/>
+        </div>
+        <Meta 
+          title={
+            <a style={{fontSize: 26, color:'#636363'}}>
+              {props.title}
+            </a>
+            } 
+              description={props.content} style={{fontSize: 18}} 
+        />
+      </Card>
+      </Link>
+    </Col>
+  );
 };
 
 SuggestBlog.propTypes = {

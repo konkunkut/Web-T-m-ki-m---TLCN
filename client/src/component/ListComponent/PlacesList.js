@@ -7,7 +7,11 @@ function PlacesList(props) {
   return (
     <div>
         {props.contacts.map(c => 
-            <SuggestPlaces key={c.id} name={c.name} />
+            <SuggestPlaces  key={c.id}
+                            name={c.name}
+                            add={c.add}
+                            tel={c.tel}
+            />
         )}
     </div>
   );

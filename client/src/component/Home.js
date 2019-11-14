@@ -15,7 +15,9 @@ for (let j = 0; j < 5; j++)
 {
     contacts.push({
         id: `${j}`,
-        name : `PET House ${j}`
+        name : `PET House ${j}`,
+        add : 'Địa chỉ: 99 Lê Văn Việt, Quận 9, Tp.HCM',
+        tel : 'Liện hệ: 012 345 6789'
     });
 }
 

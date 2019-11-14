@@ -3,7 +3,6 @@ import 'antd/dist/antd.css';
 import {Link} from 'react-router-dom';
 
 import {Menu, Dropdown, Icon} from 'antd';
-import renderEmpty from 'antd/lib/config-provider/renderEmpty';
 
 
 class ShowAcc extends React.Component{
@@ -17,10 +16,17 @@ class ShowAcc extends React.Component{
         <Dropdown overlay={
             <Menu>
                 <Menu.Item key="0">
-                  <Link to="#">Tài khoản</Link>
+                  <Link to={{
+                        pathname: "/profile",
+                        state: {currentID: "1"}
+                  }}
+                  >Tài khoản</Link>
                 </Menu.Item>
                 <Menu.Item key="1">
-                <Link to="#">Địa điểm của tôi</Link>
+                <Link to={{
+                        pathname: "/profile",
+                        state: {currentID: "2"}
+                  }}>Địa điểm của tôi</Link>
                 </Menu.Item>
                 <Menu.Divider />
                     <Menu.Item key="3" onClick={this.onLogout}>Đăng xuất</Menu.Item>
