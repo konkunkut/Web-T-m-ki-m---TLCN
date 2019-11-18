@@ -13,7 +13,7 @@ export default function SuggestBlog(props)
       <Link
         to={
             {pathname:`/detailBlogs/${props.title}`,
-             state: {__id: props.title}}
+             state: {title: props.title}}
         }
       >
         

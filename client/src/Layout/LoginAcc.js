@@ -2,18 +2,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import 'antd/dist/antd.css';
-import Link from 'react-router-dom';
+import {logIn, saveSessionStorage} from './authAPI';
 
 import NewAcc from './NewAcc';
 
-import { Drawer, Form, Button, Col, Row, Input, Select, DatePicker, Icon } from 'antd';
+import { Drawer, Form, Button, Col, Row, Input, Select, DatePicker, Icon, message } from 'antd';
 
 const { Option } = Select;
 
 class DrawerForm extends React.Component {
   state = { 
     visible: false,
-    visibleX:false
+    visibleX:false,
+    loading: false,
+
+    email : null,
+    password : null
   };
 
   showDrawer = () => {
@@ -26,11 +30,44 @@ class DrawerForm extends React.Component {
     this.setState({
       visible: false,
     });
+    this.props.form.resetFields();
   };
 
-  onSubmit = () => {
-    this.onClose();
-    this.props.callback();
+  onSubmit = (e) => {
+    // this.onClose();
+    // this.props.callback();
+    e.preventDefault();
+    this.props.form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+
+        const body={
+          email : this.state.email,
+          password : this.state.password
+        };
+
+        logIn(body).then((data) => {
+          if (!data.success)
+          {
+            message.error(data.message, 5);
+          }
+          else{
+            // save on session
+            saveSessionStorage(data);
+
+            // console.log('Received values of form: ', values);
+            this.setState({ loading: true });
+            setTimeout(() => {
+              this.setState({ loading: false});
+              message.success(data.message, 2);
+              this.onClose();
+              this.props.callback();
+            }, 2000);
+            //  this.props.callback();
+            // message.success('This is a success message');
+          }
+        });
+      }
+    });
   };
 
   onClicku = () => {
@@ -44,6 +81,10 @@ class DrawerForm extends React.Component {
     if(this.state.visibleX===true){
       return(<NewAcc an={this.state.visibleX} callback={this.newState}/>);
     }
+  }
+
+  inputChange = event =>{
+    this.setState({ [event.target.name] : event.target.value});
   }
 
   render() {
@@ -68,7 +109,7 @@ class DrawerForm extends React.Component {
                   {getFieldDecorator('email', {
                     rules: [{ required: true, message: 'Bạn chưa nhập email' }],
                   })(
-                    <Input placeholder="VD: abc@xyz" />
+                    <Input name="email" placeholder="VD: abc@xyz" onChange={this.inputChange} />
                   )}
                 </Form.Item>
               </Col>
@@ -79,7 +120,7 @@ class DrawerForm extends React.Component {
                   {getFieldDecorator('password', {
                     rules: [{ required: true, message: 'Bạn chưa nhập password' }],
                   })(
-                    <Input.Password type="password" placeholder="********" />
+                    <Input.Password name="password" type="password" placeholder="********" onChange={this.inputChange} />
                   )}
                 </Form.Item>
               </Col>
@@ -94,7 +135,7 @@ class DrawerForm extends React.Component {
               <Button onClick={this.onClose} style={{ marginRight: 8 }}>
                 Huỷ
              </Button>
-              <Button onClick={this.onSubmit} type="primary">
+              <Button onClick={this.onSubmit} loading={this.state.loading} type="primary">
                 Xác nhận
               </Button>
             </div>

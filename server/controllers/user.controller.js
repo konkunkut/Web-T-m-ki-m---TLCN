@@ -5,7 +5,6 @@ const User = require('../models/User.model');
 const {Aclclass} = require('../helper/acl_store.heiper')
 //signup
 const signup = (req, res, next) => {
-    
     const user = new User(
         {
             local:{
@@ -20,7 +19,12 @@ const signup = (req, res, next) => {
     user.save((err, result)=>{
 
         if(err){
-            return res.status('401').json(err);
+            console.log(err);
+            return res.status('200').json({
+                data: {},
+                message : err.errmsg,
+                success : false
+            });
         }
         const acl = Aclclass.getAcl;
         acl.addUserRoles(result._id.toString(),'user',(err)=>{
@@ -30,7 +34,9 @@ const signup = (req, res, next) => {
            
         })
         res.status(200).json({
-            message: "Tao tai khoan thanh cong"
+            data : {},
+            message: "Tao tai khoan thanh cong",
+            success : true
             
         });
     });
@@ -47,37 +53,58 @@ const Viewprofile = (req,res)=>{
         console.log(user)
         if(err){
           
-           return res.status(401).json({err:'not find user'});
+           return res.status('200')
+                    .json({
+                        message:'not find user',
+                        success: false
+                    });
 
         }
         
         if(user.local.email){
            
-            return res.json(
-                {
-                    'email':user.local.email,
-                    'fistname':user.fistname,
-                    'lastname':user.lastname
-                }); 
+            return res.status('200')
+                    .json({
+                        data: { email : user.local.email,
+                                firstName : user.fistname,
+                                lastName : user.lastname,
+                                avatar : user.local.picture,
+                                tel : user.tel,
+                                id_place : user.id_place
+                            },
+                        message : "successfull",
+                        success : true
+                    }); 
         }
         else if(user.google.email){
             
-            return res.json(
-                {
-                    'email':user.google.email,
-                    'fistname':user.fistname,
-                    'lastname':user.lastname
-                }); 
+            return res.status('200')
+                    .json({
+                        data: { email : user.google.email,
+                                firstName : user.fistname,
+                                lastName : user.lastname,
+                                avatar : user.google.picture,
+                                tel : user.tel,
+                                id_place : user.id_place
+                            },
+                        message : "successfull",
+                        success : true
+                    }); 
         }
         else{
             
-            return res.json(
-                {
-                    'email':user.facebook.email,
-                    'fistname':user.fistname,
-                    'lastname':user.lastname
-                    
-                }); 
+            return res.status('200')
+                    .json({
+                        data: { email : user.facebook.email,
+                                firstName : user.fistname,
+                                lastName : user.lastname,
+                                avatar : user.facebook.picture,
+                                tel : user.tel,
+                                id_place : user.id_place
+                            },
+                        message : "successfull",
+                        success : true   
+                    }); 
         }
         
     })
@@ -110,25 +137,29 @@ const editProfile = (req,res)=>{
         }
         else{
             result.fistname= req.body.fistname;
-            result.lastname = req.body.lastname
-            if(result.local.email){
-                
-                result.local = req.body;
-            }
-            if(result.google.email){
-                result.google = req.body;
-            }
-            if(result.facebook.email){
-                result.facebook = req.body;
-            }
+            result.lastname = req.body.lastname;
+            result.tel = req.body.tel;
             //console.log(result)
             result.save((error)=>{
                 if(error){
-                    res.status('400').json(error);
+                    res.status('400').json({
+                        data : {
+                            
+                        },
+                        message : "Không cập nhật được!",
+                        success : false
+                    });
                 }
                 else
                 {
-                    res.status('200').json({massage:'edited success!'});
+                    res.status('200').json({
+                        data : {
+                            lastName : req.body.lastname,
+                            firstName : req.body.fistname
+                        },
+                        message:'Cập nhật tài khoản thành công!',
+                        success: true
+                    });
                 }
                 
             })
@@ -141,7 +172,7 @@ const editProfile = (req,res)=>{
 const signout = (req,res)=>{
     res.clearCookie('token');
     return res.status('200').json({
-        message: "signed out"
+        message: "Đã đăng xuất"
     })
 }
 

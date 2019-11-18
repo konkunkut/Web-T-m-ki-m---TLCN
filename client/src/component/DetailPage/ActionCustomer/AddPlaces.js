@@ -2,8 +2,11 @@ import React from 'react';
 import 'antd/dist/antd.css';
 import './AddPlaces.scss';
 
+import StepOne from './StepSignPlace/StepOne';
+import StepTwo from './StepSignPlace/StepTwo';
+import StepThree from './StepSignPlace/StepThree';
+
 import { Col, Row, Divider, BackTop, Layout, Icon, Steps, message, Button } from 'antd';
-import { async } from 'q';
 
 const { Content } = Layout;
 
@@ -72,10 +75,10 @@ class AddPlaces extends React.Component {
                                 ))}
                             </Steps>
                         </div>
-                        <div className="steps-content">
-                            {(current===0) ? steps[current].content : 
-                             (current===1) ? steps[current].content : 
-                             (current===2) ? steps[current].content : <div>null</div>
+                        <div>
+                            {(current===0) ? <StepOne /> : 
+                             (current===1) ? <StepTwo /> : 
+                             (current===2) ? <StepThree /> : <div>null</div>
                             }                        
                         </div>
 

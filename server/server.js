@@ -4,7 +4,7 @@ const bodyPaser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const passport = require('passport')
-const Port = 3000;
+const Port = 3100;
 const { acl_config } = require('./configs/acl.config');
 app.use(cors());
 app.use(bodyPaser.json());

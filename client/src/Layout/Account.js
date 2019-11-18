@@ -4,17 +4,18 @@ import ShowAcc from './ShowAcc';
 
 export default class Account extends React.Component{
     state = {
-        isnew : true
+        isnew : sessionStorage.getItem("token") || null
     }
+    
     setIsNew = () =>{
-        this.setState({isnew:!this.state.isnew})
+        this.setState({isnew : sessionStorage.getItem("token") || null})
     }
     render(){
-        if(this.state.isnew === true){
-            return <LoginAcc callback={this.setIsNew}/>
+        if(this.state.isnew !== null){
+            return <ShowAcc callback={this.setIsNew}/>
         }
         else{
-            return <ShowAcc callback={this.setIsNew}/>
+            return <LoginAcc callback={this.setIsNew}/>
         }
     }
 }

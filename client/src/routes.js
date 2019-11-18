@@ -21,7 +21,7 @@ const Routing = () =>(
 
         <Route path="/detailPlaces/:name" component={PlacesDetail} />
         <Route path="/detailBlogs/:name" component={BlogsDetail} />
-        <Route path="/profile" component={CusProfile} />
+        <Route path="/profile/:id" component={CusProfile} />
     </Switch>
     </div>
 )

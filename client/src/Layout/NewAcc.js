@@ -1,27 +1,51 @@
-
 import React from 'react';
 import 'antd/dist/antd.css';
+import axios from 'axios';
 import { Modal, Button, Form, Row, Col, Input, message} from 'antd';
+
+import {signUp} from './authAPI';
 
 class NewAccount extends React.Component {
   state = {
     loading: false,
     visible: false,
+
+    firstName : null,
+    lastName : null,
+    email : null,
+    pass : null
   };
 
   handleOk = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        // console.log('Received values of form: ', values);
-        this.setState({ loading: true });
-        setTimeout(() => {
-          this.setState({ loading: false});
-          message.success('Tạo tài khoản thành công !', 2);
-          this.props.callback();
-        }, 2500);
-        //  this.props.callback();
-        // message.success('This is a success message');
+
+        const body={
+          fistname : this.state.firstName,
+          lastname : this.state.lastName,
+          email : this.state.email,
+          password : this.state.pass
+        };
+
+        signUp(body).then((data) => {
+          console.log(data);
+          if (!data.success)
+          {
+            message.error(data.message, 5);
+          }
+          else{
+            // console.log('Received values of form: ', values);
+            this.setState({ loading: true });
+            setTimeout(() => {
+              this.setState({ loading: false});
+              message.success('Tạo tài khoản thành công !', 2);
+              this.props.callback();
+            }, 2500);
+            //  this.props.callback();
+            // message.success('This is a success message');
+          }
+        });
       }
     });
   };
@@ -35,15 +59,15 @@ class NewAccount extends React.Component {
       this.setState({visible:this.props.an});
   }
 
-  //for validation
-  handleSubmit = e => {
-    e.preventDefault();
-    this.props.form.validateFieldsAndScroll((err, values) => {
-      if (!err) {
-        console.log('Received values of form: ', values);
-      }
-    });
-  };
+  // //for validation
+  // handleSubmit = e => {
+  //   e.preventDefault();
+  //   this.props.form.validateFieldsAndScroll((err, values) => {
+  //     if (!err) {
+  //       console.log('Received values of form: ', values);
+  //     }
+  //   });
+  // };
 
   handleConfirmBlur = e => {
     const { value } = e.target;
@@ -66,6 +90,19 @@ class NewAccount extends React.Component {
     }
     callback();
   };
+
+  firstNameChange = event =>{
+    this.setState({firstName : event.target.value});
+  }
+  lastNameChange = event =>{
+    this.setState({lastName : event.target.value});
+  }
+  emailChange = event =>{
+    this.setState({email : event.target.value});
+  }
+  passChange = event =>{
+    this.setState({pass : event.target.value});
+  }
 
   render() {
     const { visible, loading } = this.state;
@@ -95,7 +132,7 @@ class NewAccount extends React.Component {
                   {getFieldDecorator('ho', {
                     rules: [{ required: true, message: 'Không bỏ trống phần này!' }],
                   })(
-                    <Input placeholder="VD: Nguyễn" />
+                    <Input placeholder="VD: Nguyễn" onChange={this.firstNameChange} />
                   )}
                 </Form.Item>
               </Col>
@@ -104,7 +141,7 @@ class NewAccount extends React.Component {
                   {getFieldDecorator('ten', {
                     rules: [{ required: true, message: 'Không bỏ trống phần này!' }],
                   })(
-                    <Input placeholder="VD: Văn A" />
+                    <Input placeholder="VD: Văn A" onChange={this.lastNameChange} />
                   )}
                 </Form.Item>
               </Col>
@@ -125,7 +162,7 @@ class NewAccount extends React.Component {
                       },
                     ],
                   })(
-                    <Input placeholder="VD: abc@xyz" />
+                    <Input placeholder="VD: abc@xyz" onChange={this.emailChange} />
                   )}
                 </Form.Item>
               </Col>
@@ -163,7 +200,7 @@ class NewAccount extends React.Component {
                       },
                     ],
                   })(
-                    <Input.Password placeholder="" onBlur={this.handleConfirmBlur}/>
+                    <Input.Password placeholder="" onBlur={this.handleConfirmBlur} onChange={this.passChange} />
                   )}
                 </Form.Item>
               </Col>

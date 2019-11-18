@@ -1,36 +1,50 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 import './CustommerPage.scss';
+import {connect} from 'react-redux';
+import {configName} from '../../action/identifyData';
+
+import { getProfile } from './ActionCustomer/actionAPI';
 
 import EditProfile from './ActionCustomer/EditProfile';
 import OwnPlaces from './ActionCustomer/OwnPlaces';
 
-import { Col, Row, Divider, BackTop, Layout, Icon, Progress, Avatar, Tag, Tabs } from 'antd';
+import { Col, Row, Divider, BackTop, Layout, Icon, Progress, Avatar, Tag, Tabs, message } from 'antd';
 import AddPlaces from './ActionCustomer/AddPlaces';
 
 const { Content } = Layout;
 const { TabPane } = Tabs;
 
 class CustommerPage extends React.Component {
-    state = {
-        checkOwn: false
+    constructor() {
+        super();
+        this.state = {
+            checkOwn: false,
+            userAvatar: null,
+            userID: sessionStorage.getItem("userID")||null,
+            // firstName: sessionStorage.getItem("firstName")||null,
+            // lastName: sessionStorage.getItem("lastName"),
+            userToken: sessionStorage.getItem("token")||null
+        }
     }
+
 
     setOwn = () => {
         this.setState({ checkOwn: !this.state.checkOwn })
     }
 
-    // setOwn = () => {
-    //     if(/*kiểm tra tml có sở hữu địa điểm nào chưa*/0)
-    //     {
-    //         // nếu có
-    //         this.state.checkOwn = true;
-    //     }
-    //     else
-    //     {
-    //         this.state.checkOwn = false;
-    //     }
-    // }
+    componentDidMount() {
+
+        getProfile(this.state.userToken).then((data) => {
+            if (!data.success) {
+                message.error(data.message, 2);
+            }
+            else {
+                this.setState({ userAvatar: data.data.avatar });
+            }
+        });
+        this.props.configName();
+    }
 
     render() {
         return (
@@ -41,8 +55,8 @@ class CustommerPage extends React.Component {
                 {/* khung nội dung chính */}
                 <Col span={20}>
                     <Row className="info-profile" >
-                        <Avatar className="avatar-user" shape="square" size={64} icon="user" />
-                        <h2>Nguyễn Văn A</h2>
+                        <Avatar className="avatar-user" size={64} icon="user" />
+                        <h2>{this.props.firstName} {this.props.lastName}</h2>
                     </Row>
 
                     <Row className="content-profile">
@@ -52,13 +66,13 @@ class CustommerPage extends React.Component {
                             </TabPane>
                             <TabPane tab="Địa điểm của tôi" key="2">
                                 {this.state.checkOwn ?
-                                    <OwnPlaces checkOwn={this.state.checkOwn} />:
+                                    <OwnPlaces checkOwn={this.state.checkOwn} /> :
                                     <AddPlaces callback={this.setOwn} />
                                 }
                             </TabPane>
-                            <TabPane tab="Tab 3" key="3">
+                            {/* <TabPane tab="Tab 3" key="3">
                                 Content of Tab Pane 3
-                            </TabPane>
+                            </TabPane> */}
                         </Tabs>
                     </Row>
                 </Col>
@@ -75,4 +89,11 @@ class CustommerPage extends React.Component {
     }
 }
 
-export default CustommerPage;
+function mapStateToProp(state){
+    return{
+        lastName: state.config.fullName.lastName,
+        firstName: state.config.fullName.firstName
+    }
+}
+
+export default connect(mapStateToProp, {configName})(CustommerPage);

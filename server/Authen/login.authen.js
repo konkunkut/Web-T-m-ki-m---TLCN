@@ -14,21 +14,33 @@ const signin = (req,res) =>{
         "local.email":req.body.email
     },(err,user)=>{
         if(err||!user){
-            return res.status('401').json({
-                erro:"email not found"
+            return res.status('200').json({
+                data: {},
+                message:"Email không tồn tại trong hệ thống!",
+                success: false
             })
         }
         if(!user.authanticate(req.body.password)){
-            return res.status('401').json({
-                password: " password not match."
+            return res.status('200').json({
+                data: {},
+                message: " Password không đúng!",
+                success: false
             });
         }
         // when success login
         const token = tokena.sign({_id: user._id},config.jwtSecret);
+        console.log(user);
        // console.log('token local: '+token);
         res.cookie('token',token, {exqire: new Date()+3000});
         return res.json({
-            token   
+                data: { token:token,
+                        userID: user._id,
+                        firstName: user.fistname,
+                        lastName: user.lastname,
+                        isLocal: "isLocal"
+                    },
+                message:"Đăng nhập thành công!",
+                success: true   
           })
     })
 }

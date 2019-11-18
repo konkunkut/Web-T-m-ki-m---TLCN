@@ -58,6 +58,14 @@ const User = new mongoose.Schema({
         trim: true
        
     },
+    tel:{
+        type:String,
+        trim: true
+    },
+    id_place:{
+        type: String,
+        trim: true
+    }
 });
 User
  .virtual('local.password')
