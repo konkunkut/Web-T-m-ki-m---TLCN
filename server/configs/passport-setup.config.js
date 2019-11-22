@@ -12,7 +12,7 @@ const config = require('./config');
 const key = require('./key.config');
 const User = require('../models/User.model');
 
-
+//google
 passport.use(
     new googleStrategy({
         clientID:key.google.clientID,
@@ -28,10 +28,11 @@ passport.use(
                 user = new User({
                         google:{
                             email: profile._json.email,
-                            picture: profile._json.picture
+                            // picture: profile._json.picture
                         },
                         fistname: profile._json.family_name,
-                        lastname: profile._json.given_name
+                        lastname: profile._json.given_name,
+                        picture: profile._json.picture
                 });
         
                // console.log(user);
@@ -56,6 +57,8 @@ passport.use(
     }
     )
 )
+
+//facebook
 passport.use(
     new facebookStrategy (
         {

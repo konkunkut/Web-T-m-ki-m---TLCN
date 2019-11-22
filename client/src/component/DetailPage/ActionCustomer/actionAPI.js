@@ -3,8 +3,6 @@ import {API_URL} from '../../../config';
 import {CONFIG_NAME} from '../../../action/constants';
 
 export function getProfile(token){
-
-    console.log(token);
     const config = {
         headers: {
             'Accept': 'application/json',
@@ -15,7 +13,7 @@ export function getProfile(token){
 
     return axios.get(`${API_URL}/user/ViewProfile`,config)
                 .then(res =>{
-                    console.log(res.data);
+                    //console.log(res.data);
                     return res.data
                 })
                 .catch(err=>{
@@ -39,7 +37,7 @@ export const editProfile = (body,token) => dispatch => {
                         type : CONFIG_NAME,
                         payload : {lastName: res.data.data.lastName, firstName: res.data.data.firstName}
                     })
-                    console.log(res.data);
+                    //console.log(res.data);
                     return res.data
                 })
                 .catch(err=>{

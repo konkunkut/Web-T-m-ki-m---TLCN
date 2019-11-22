@@ -2,7 +2,7 @@ import React from 'react';
 import 'antd/dist/antd.css';
 import './style.scss'
 
-import { Form, Row, Col, Input } from 'antd';
+import { Row } from 'antd';
 
 class StepThree extends React.Component{
     state = {

@@ -3,7 +3,7 @@ import 'antd/dist/antd.css';
 import './style.scss'
 import UploadPics from '../../../UploadPic/UploadPic';
 
-import { Form, Row, Col, Input } from 'antd';
+import { Row } from 'antd';
 
 class StepTwo extends React.Component{
     state = {

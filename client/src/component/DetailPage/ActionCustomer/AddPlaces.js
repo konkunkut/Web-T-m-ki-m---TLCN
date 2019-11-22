@@ -6,7 +6,11 @@ import StepOne from './StepSignPlace/StepOne';
 import StepTwo from './StepSignPlace/StepTwo';
 import StepThree from './StepSignPlace/StepThree';
 
-import { Col, Row, Divider, BackTop, Layout, Icon, Steps, message, Button } from 'antd';
+import {connect} from 'react-redux';
+import {storeTempData, storeTempPic} from '../../../action/storeTempInfo';
+import {registerPlace} from '../../../action/uploadPlace';
+
+import { Row, Layout, Icon, Steps, message, Button } from 'antd';
 
 const { Content } = Layout;
 
@@ -37,10 +41,47 @@ class AddPlaces extends React.Component {
     }
 
     onSigned = () => {
-        message.success('Processing complete!', 2);
+
+        let formData = new FormData();
+        // formData.append("name", this.state.fileList[0].originFileObj);
+        // const direct_place = {
+        //     stress: this.props.stress,
+        //     dictrict: this.props.district,
+        //     city: this.props.city,
+        // }
+
+        formData.set("name_place",this.props.namePlace);
+        formData.set("phone",this.props.tel);
+        formData.set("stress",this.props.stress);
+        formData.set("dictrict",this.props.district);
+        formData.set("city",this.props.city);
+        formData.set("id_type_place",this.props.typePlace);
+        formData.set("lat","");
+        formData.set("lng","");
+        formData.set("decription",this.props.decription);
+        formData.set("createBy", sessionStorage.getItem("userID"));
+
+        for(let i=0;i<this.props.pics.length;i++)
+        {
+            formData.append("listPics", this.props.pics[i].originFileObj);
+        }
+        // console.log(this.props.pics);
+
+        // message.success('Processing complete!', 2);
         setTimeout(() => {
-            this.props.callback();
+            registerPlace(formData, sessionStorage.getItem("token"))
+            .then((data)=>{
+                if(!data.success){
+                }
+                else{
+                    // console.log(data.data.picture);
+                    message.success(data.message, 2);
+
+                    this.setSign();
+                }
+            });
           }, 500);
+
     }
 
     constructor(props) {
@@ -109,7 +150,7 @@ class AddPlaces extends React.Component {
         else {
             return (
                 <Content style={{ backgroundColor: '#FFFFFF', minHeight: 300, paddingLeft: 20, paddingTop: 10 }}>
-                    <p style={{ textAlign: "left" }} >Bạn chưa đăng địa điểm nào!</p>
+                    <p style={{ textAlign: "left" }} >Quảng bá địa điểm của bạn đến mọi người!</p>
                     <Button type="primary" ghost style={{ float: "left" }} onClick={this.setSign} >
                         <Icon type="form" />Đăng địa điểm
                     </Button>
@@ -119,4 +160,21 @@ class AddPlaces extends React.Component {
     }
 }
 
-export default AddPlaces;
+function mapStateToProp(state){
+    return{
+        typePlace : state.config.tempData.typePlace,
+        namePlace : state.config.tempData.namePlace,
+        tel : state.config.tempData.tel,
+        stress : state.config.tempData.stress,
+        district : state.config.tempData.district,
+        city : state.config.tempData.city,
+        decription : state.config.tempData.decription,
+
+        pics : state.config.tempPics.pic,
+    }
+}
+
+// const EditProfile = Form.create()(EditProfiles);
+export default connect(mapStateToProp, {storeTempData, storeTempPic})(AddPlaces);
+
+// export default AddPlaces;

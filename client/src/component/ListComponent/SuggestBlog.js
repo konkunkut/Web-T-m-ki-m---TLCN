@@ -1,7 +1,7 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 import {Link } from 'react-router-dom';
-import {Col, List, Avatar, Icon, Row, Card} from 'antd';
+import {Col, Card} from 'antd';
 import PropTypes from "prop-types";
 
 const { Meta } = Card;

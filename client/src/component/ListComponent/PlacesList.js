@@ -1,20 +1,25 @@
 import React from "react";
 import 'antd/dist/antd.css';
-import { Card, Col, Rate, Row, Pagination } from 'antd';
 import SuggestPlaces from './SuggestPlaces';
 
-function PlacesList(props) {
-  return (
-    <div>
-        {props.contacts.map(c => 
-            <SuggestPlaces  key={c.id}
-                            name={c.name}
-                            add={c.add}
-                            tel={c.tel}
-            />
+class PlacesList extends React.Component {
+
+  render() {
+    return (
+      <div>
+        {this.props.contacts.map(c => 
+          <SuggestPlaces key={c._id}
+            name={c.name_place}
+            stress={c.stress}
+            dictrict={c.dictrict}
+            city={c.city}
+            picture={c.picture[0]}
+            tel={c.phone}
+          />
         )}
-    </div>
-  );
+      </div>
+    );
+  };
 }
 
 export default PlacesList;

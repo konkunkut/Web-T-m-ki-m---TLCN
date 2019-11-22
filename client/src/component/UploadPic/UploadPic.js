@@ -2,21 +2,41 @@ import React from "react";
 import axios from "axios";
 import "antd/dist/antd.css";
 import "./UploadPic.scss";
-import { Upload, Button, Icon, Modal, Col, Row } from "antd";
+import { API_URL } from '../../config';
+
+import { connect } from 'react-redux';
+import { storeTempPic } from '../../action/storeTempInfo';
+import { updateAvatar, validAvatar } from '../../action/uploadPlace';
+
+import { Upload, Button, Icon, Modal, message } from "antd";
+
+function getBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
+}
 
 class PicturesWall extends React.Component {
   state = {
     previewVisible: false,
     previewImage: "",
-    fileList: []
+    fileList: this.props.filePics || [],
+    isLoading: false
   };
 
   handleCancel = () => this.setState({ previewVisible: false });
 
-  handlePreview = file => {
+  handlePreview = async file => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+
     this.setState({
-      previewImage: file.thumbUrl,
-      previewVisible: true
+      previewImage: file.url || file.preview,
+      previewVisible: true,
     });
   };
 
@@ -27,9 +47,11 @@ class PicturesWall extends React.Component {
     // but the structure is a bit different that the original file
     // the original file is located at the `originFileObj` key of each of this files
     // so `event.target.files[0]` is actually fileList[0].originFileObj
-    console.log("fileList", fileList);
+    // console.log("fileList", fileList);
 
     // you store them in state, so that you can make a http req with them later
+    // console.log(fileList);
+    this.props.storeTempPic(fileList);
     this.setState({ fileList });
   };
 
@@ -39,20 +61,42 @@ class PicturesWall extends React.Component {
     let formData = new FormData();
     // add one or more of your files in FormData
     // again, the original file is located at the `originFileObj` key
-    formData.append("file", this.state.fileList[0].originFileObj);
+    formData.append("name", this.state.fileList[0].originFileObj);
 
-    axios
-      .post("http://api.foo.com/bar", formData)
-      .then(res => {
-        console.log("res", res);
+    updateAvatar(formData, sessionStorage.getItem("token"))
+      .then((data) => {
+        if (!data.success) {
+          message.error(data.message, 2);
+        }
+        else {
+          message.success(data.message, 2);
+          console.log(data.data.avatar);
+
+          this.props.validAvatar(sessionStorage.getItem("token"))
+          .then((data) => {
+            if (!data.success) {
+              message.error(data.message, 2);
+            }
+            else {
+              // message.success(data.message, 2);
+              // console.log(data.data.avatar);
+              sessionStorage.removeItem("userAvatar");
+              const filePath = `${API_URL}` + data.data.avatar;
+              sessionStorage.setItem("userAvatar", filePath);
+
+              this.props.storeTempPic(null);
+            }
+          })
+
+        }
       })
-      .catch(err => {
-        console.log("err", err);
-      });
+
+    this.setState({ fileList: [] });
   };
 
   render() {
-    const { previewVisible, previewImage, fileList } = this.state;
+    const { previewVisible, previewImage, fileList, isLoading } = this.state;
+    const test = this.props.filePics;
     const uploadButton = (
       <div>
         <Icon type="plus" />
@@ -61,22 +105,22 @@ class PicturesWall extends React.Component {
     );
     return (
       <div className="upload-pic">
-        <div
-          visible={this.props.isVisible}
-        >
-        <Button className="btn-cfmUpload"
-          onClick={this.handleSubmit}
-           // this button click will trigger the manual upload
-        >
-          Xác nhận
-        </Button>
-        </div>
+        {this.props.isVisible ?
+          <div>
+            <Button className="btn-cfmUpload"
+              onClick={this.handleSubmit}
+            // this button click will trigger the manual upload
+            >
+              Xác nhận
+          </Button>
+          </div> : <div></div>
+        }
         <Upload
           className="btn-upload"
           listType="picture-card"
           fileList={fileList}
-          onPreview={this.handlePreview}
           onChange={this.handleUpload}
+          onPreview={this.handlePreview}
           beforeUpload={() => false} // return false so that antd doesn't upload the picture right away
         >
           {fileList.length >= this.props.length ? null : uploadButton}
@@ -93,4 +137,12 @@ class PicturesWall extends React.Component {
   }
 }
 
-export default PicturesWall
+function mapStateToProp(state) {
+  return {
+    filePics: state.config.tempPics.pic,
+  }
+}
+// const PicturesWalls = Form.create()(PicturesWall);
+export default connect(mapStateToProp, { storeTempPic, validAvatar })(PicturesWall);
+
+// export default PicturesWall

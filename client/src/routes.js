@@ -8,7 +8,6 @@ import Contact from './component/Contact';
 
 import PlacesDetail from './component/DetailPage/Places-Detail';
 import BlogsDetail from './component/DetailPage/Blogs-Detail';
-
 import CusProfile from './component/DetailPage/CustommerPage';
 
 const Routing = () =>(

@@ -4,11 +4,12 @@ import './EditProfile.scss';
 import {connect} from 'react-redux';
 
 import {getProfile, editProfile} from './actionAPI';
+import {validAvatar} from '../../../action/identifyData';
 
 import ChangePass from './ChangePass';
 import UploadPics from '../../UploadPic/UploadPic';
 
-import {Col, Row, Divider, BackTop, Layout, Icon, Avatar, Form, Input, Button, message, Modal} from 'antd';
+import {Col, Row, Divider, Layout, Avatar, Form, Input, Button, message} from 'antd';
 
 const {Content} = Layout;
 
@@ -210,7 +211,7 @@ class EditProfiles extends React.Component
                     {/* đổi ảnh đại diện */}
                     <Col span={9} className="edit-avatar" >
                         <Row>
-                            <Avatar shape="square" size={256} icon="user" />
+                            <Avatar shape="square" size={256} src={this.props.avatar} />
                         </Row>
                         <Divider></Divider>
                         {/* upload component */}
@@ -237,9 +238,10 @@ class EditProfiles extends React.Component
 function mapStateToProp(state){
     return{
         lastName: state.config.fullName.lastName,
-        firstName: state.config.fullName.firstName
+        firstName: state.config.fullName.firstName,
+        avatar : state.config.valid.avatar
     }
 }
 
 const EditProfile = Form.create()(EditProfiles);
-export default connect(mapStateToProp, {editProfile})(EditProfile);
+export default connect(mapStateToProp, {editProfile, validAvatar})(EditProfile);

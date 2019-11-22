@@ -9,6 +9,9 @@ const { acl_config } = require('./configs/acl.config');
 app.use(cors());
 app.use(bodyPaser.json());
 app.use(passport.initialize());
+
+app.use('/pics', express.static('pics'));
+
 //console.log(new Date(2012,11,10) < new Date(2012, 11, 9));
 mongoose.connect('mongodb://localhost:27017/peg')
     .then(()=>{

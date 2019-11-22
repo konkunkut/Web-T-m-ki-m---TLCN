@@ -1,35 +1,57 @@
 const mongoose = require('mongoose');
 const Place = new mongoose.Schema({
-    name_place:{
-        type:String,
-        require:true,
-        trim:true
-    },
-    phone:{
-        type:String,
+    name_place: {
+        type: String,
         require: true,
         trim: true
     },
-    direct_place:{
-        type:String,
+    phone: {
+        type: String,
         require: true,
-        trim:true
+        trim: true
     },
-    id_User:{
+    stress: {
+        type: String,
+        require: true,
+        trim: true
+    },
+    dictrict: {
+        type: String,
+        require: true,
+        trim: true
+    },
+    city: {
+        type: String,
+        require: true,
+        trim: true
+    },
+    createBy: {
         type: mongoose.Schema.ObjectId,
-        ref:'User'
+        ref: 'User'
     },
-    id_type_place:{
-        type:mongoose.Schema.ObjectId,
-        ref:'TypePlace'
+    id_type_place: {
+        type: String,
+        require: true,
+        trim: true
     },
-    lat:{
-        type: mongoose.Types.Decimal128,
-        require: true
+    lat: {
+        // type: mongoose.Types.Decimal128,
+        type: String,
+        require: false
     },
-    ing:{
-        type:mongoose.Types.Decimal128,
-        require:true
-    }
+    lng: {
+        // type: mongoose.Types.Decimal128,
+        type: String,
+        require: false
+    },
+    decription: {
+        type: String,
+        require: false,
+        trim: true
+    },
+    picture: [{
+        type: String,
+        require: false
+    }]
 })
-module.exports = mongoose.model('Place',Place);
+module.exports = mongoose.model('Place', Place);

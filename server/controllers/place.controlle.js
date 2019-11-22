@@ -1,29 +1,61 @@
 const Place = require('../models/place.model');
 const Address = require('../models/address.model');
+const formidable = require('formidable');
+const User = require('../models/User.model');
 
 const createPlace = (req, res, next) => {
 
-    req.body.id_User = req.decoded._id;
-    const newPlace = new Place(req.body);
-    newPlace.save(
-        (err, result) => {
-            if (err) {
-                return res.status('404').json(err);
+    var id_user = req.decoded._id;
+
+    var form = new formidable.IncomingForm();
+
+    // form.parse(req);
+    // form.maxFileSize = 200 * 1024 * 1024;
+    form.uploadDir = "./pics/";
+    form.multiples = true;
+    form.keepExtensions = true;
+
+    form.parse(req, function(err, fields, files) {
+        // ...
+        // console.log(fields);
+        const newPlace = new Place(fields);
+
+        var listImage = files.listPics;
+        // console.log(listImage);
+        if (listImage) {
+        var listPathImage = [];
+        if (Array.isArray(listImage)) {
+            listImage.forEach(element => {
+            listPathImage.push('/pics/'+element.path.toString().slice(5));
+            });
+        }
+        else {
+            listPathImage.push('/pics/'+listImage.path.toString().slice(5));
+        }
+        newPlace.picture = listPathImage;
+        }
+        newPlace.save((error) => {
+            if (error) {
+                res.status('200').json({
+                    data: {
+
+                    },
+                    message: "Không cập nhật được!",
+                    success: false
+                });
             }
             else {
-                if(result){
-                    req.body.id_place = result._id;
-                    next();
-                }
-                else{
-                    return res.status('204').json({message: "save place failed"})
-                }
-               
+                res.status('200').json({
+                    data: {
+                        picture: newPlace.picture
+                    },
+                    message: 'Đăng địa điểm thành công!',
+                    success: true
+                });
             }
-
-        }
-
-    );
+        });
+        
+    });
 }
 const editPlace = (req, res, next) => {
     const id_address = req.params.id_address;
@@ -48,30 +80,75 @@ const editPlace = (req, res, next) => {
             })
     });
 }
-const getPlace = (req, res) => {
-    const id = req.params.id_place;
-    Place.findById({ _id: id })
+const getAllPlace = (req, res) => {
+    
+    Place.find()
+        // .select('_id name_place phone stress dictrict city picture')
         .exec((err, result) => {
             if (err) {
-                return res.status('400').json(err);
+                return res.status('200').json({
+                    message: "Không lấy được dữ liệu",
+                    success: false
+                });
 
             }
             else {
-                return res.status('200').json(result);
+                return res.status('200').json({
+                    data: result,
+                    message:"Thành công",
+                    success: true
+                });
+                
             }
         })
 }
-const getPlaces = (req, res) => {
-    Place.find()
+const getUserPlaces = (req, res) => {
+
+    var idUser = req.decoded._id;
+    // console.log("a"+idUser);
+    Place.find({createBy: idUser})
+        // .populate('id_User', '')
+        // .select('_id name_place phone stress dictrict city picture')
         .exec((err, result) => {
+            // console.log("aaa"+result);
             if (err) {
-                return res.status('400').json(err);
+                return res.status('200').json({
+                    message : "Không lấy được dữ liệu",
+                    success: false
+                });
             }
             else {
-                return res.status('200').json(result);
+                return res.status('200').json({
+                    data : result,
+                    message: "thành công!",
+                    success: true
+                });
             }
         })
 }
+
+const getDetailPlaces = (req, res) => {
+    var idPlace = req.params.id_place;
+
+    Place.findById(idPlace)
+        .populate('id_User', 'fistname lastname tel picture')
+        .exec((err, result)=>{
+            if (err) {
+                return res.status('200').json({
+                    message : "Không lấy được dữ liệu",
+                    success: false
+                });
+            }
+            else{
+                return res.status('200').json({
+                    data: result,
+                    message : "Không lấy được dữ liệu",
+                    success: false
+                });
+            }
+        })
+}
+
 const deletePlace = (req, res, next) => {
     
     if (req.body.id_place !== null) {
@@ -123,8 +200,10 @@ const find_id_place = (req, res, next )=> {
 module.exports = {
     createPlace: createPlace,
     editPlace: editPlace,
-    getPlace: getPlace,
-    getPlaces: getPlaces,
+    getAllPlace: getAllPlace,
+    getUserPlaces: getUserPlaces,
     deletePlace: deletePlace,
-    find_id_place:find_id_place
+    find_id_place:find_id_place,
+    getDetailPlaces:getDetailPlaces,
+
 }

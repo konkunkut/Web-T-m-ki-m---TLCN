@@ -5,7 +5,7 @@ import './Blogs-Detail.scss';
 import MyTags from '../ListComponent/ListTags';
 import MyLstLastNews from '../NewsComponent/ListLastestNews';
 
-import {Layout, Col, BackTop, Row, Divider, Pagination, Icon} from 'antd';
+import {Layout, Col, BackTop, Row, Divider, Icon} from 'antd';
 
 const {Content} = Layout;
 

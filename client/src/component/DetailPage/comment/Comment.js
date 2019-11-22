@@ -21,7 +21,7 @@ const CommentList = ({ comments }) => (
 const Editor = ({ onChange, onSubmit, submitting, value }) => (
   <div>
     <Form.Item>
-      <TextArea rows={4} onChange={onChange} value={value} />
+      <TextArea rows={2} onChange={onChange} value={value} />
     </Form.Item>
     <Form.Item>
       <Button htmlType="submit" loading={submitting} onClick={onSubmit} type="primary" style={{float:"left"}}>
@@ -53,7 +53,7 @@ class MyComment extends React.Component {
         value: '',
         comments: [
           {
-            author: 'Han Solo',
+            author: 'Anh Sang',
             avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
             content: <p>{this.state.value}</p>,
             datetime: moment().fromNow(),

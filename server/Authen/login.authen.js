@@ -29,7 +29,7 @@ const signin = (req,res) =>{
         }
         // when success login
         const token = tokena.sign({_id: user._id},config.jwtSecret);
-        console.log(user);
+        // console.log(user);
        // console.log('token local: '+token);
         res.cookie('token',token, {exqire: new Date()+3000});
         return res.json({
@@ -37,7 +37,8 @@ const signin = (req,res) =>{
                         userID: user._id,
                         firstName: user.fistname,
                         lastName: user.lastname,
-                        isLocal: "isLocal"
+                        isLocal: "isLocal",
+                        avatar: user.picture
                     },
                 message:"Đăng nhập thành công!",
                 success: true   

@@ -1,9 +1,9 @@
 import React from 'react';
 import './Footer.scss';
-import { Row, Col } from 'antd';
+import { Col } from 'antd';
 import 'antd/dist/antd.css';
-import { Layout ,Menu} from 'antd';
-import { Button, Icon } from 'antd';
+import { Layout } from 'antd';
+import logo from '../public/dog-paw-logo.png';
 const { Footer } = Layout;
 
 export default function MyFooter()
@@ -39,7 +39,7 @@ export default function MyFooter()
             <Col span={2}></Col>
             <Col span={8}>
                 <div className="logo-footer">
-                    <img class="img-responsive-footer" src="dog-paw-logo.png" width="100" height="100"></img>
+                    <img className="img-responsive-footer" src={logo} width="100" height="100"></img>
                     <h1 className='text-logo-footer'>For Pet</h1>
                     <h3>
                         Lựa chọn tốt nhất cho thú cưng nhà bạn

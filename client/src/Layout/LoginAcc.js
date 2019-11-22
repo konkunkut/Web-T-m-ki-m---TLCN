@@ -1,14 +1,11 @@
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import 'antd/dist/antd.css';
 import {logIn, saveSessionStorage} from './authAPI';
 
 import NewAcc from './NewAcc';
 
-import { Drawer, Form, Button, Col, Row, Input, Select, DatePicker, Icon, message } from 'antd';
-
-const { Option } = Select;
+import { Drawer, Form, Button, Col, Row, Input, Select, Icon, message } from 'antd';
 
 class DrawerForm extends React.Component {
   state = { 
@@ -24,6 +21,7 @@ class DrawerForm extends React.Component {
     this.setState({
       visible: true,
     });
+    this.props.form.resetFields();
   };
 
   onClose = () => {

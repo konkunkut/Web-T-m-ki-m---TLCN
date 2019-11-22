@@ -16,4 +16,6 @@ route.get('/ViewProfile',login.checkOauthToken,usercontroller.Viewprofile);
 route.get('/authFacebook', passport.authenticate('facebook',{scope:'email'}));
 route.get('/HomeFace',  passport.authenticate('facebook'),login.callback);
 route.put('/editUserProfile',login.checkOauthToken,usercontroller.editProfile);
+route.put('/updateAvatar',login.checkOauthToken,usercontroller.updateAvatar);
+route.get('/ViewAvatar',login.checkOauthToken,usercontroller.ViewAvatar);
 module.exports=route;

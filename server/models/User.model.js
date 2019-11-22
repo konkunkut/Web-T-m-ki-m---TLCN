@@ -14,10 +14,6 @@ const User = new mongoose.Schema({
         },
         hash_password:{
             type: String
-        },
-        picture:{
-            type: String,
-            require: false
         }
         
     },
@@ -26,10 +22,6 @@ const User = new mongoose.Schema({
             type:String,
             trim:true,
             sparse:true
-        },
-        picture:{
-            require:false,
-            type:String
         }
     },
     facebook:{
@@ -42,10 +34,6 @@ const User = new mongoose.Schema({
             type:String,
             trim:true,
             sparse:true
-        },
-        picture:{
-            require:false,
-            type:String
         }
     },
     fistname:{
@@ -65,6 +53,10 @@ const User = new mongoose.Schema({
     id_place:{
         type: String,
         trim: true
+    },
+    picture:{
+        type: String,
+        require: false
     }
 });
 User

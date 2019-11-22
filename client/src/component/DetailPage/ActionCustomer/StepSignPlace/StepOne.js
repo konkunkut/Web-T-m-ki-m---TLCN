@@ -99,10 +99,10 @@ class StepOneTab extends React.Component {
                                     rules: [{ required: true, message: 'Không bỏ trống phần này!' }],
                                     initialValue : this.props.type
                                 })(
-                                <Select defaultValue={this.props.type} onChange={this.getType} >
+                                <Select onChange={this.getType} >
                                     {
                                         this.state.typePlaces.map(typePlace =>(
-                                            <Option value={typePlace.type} >
+                                            <Option key={typePlace.type} >
                                                 {typePlace.type}
                                             </Option>
                                         ))
@@ -144,7 +144,7 @@ class StepOneTab extends React.Component {
                                 <Select onChange={this.setDataDistrict}>
                                     {
                                         this.state.city.map(cities =>(
-                                            <Option value={cities.name} >
+                                            <Option key={cities.name} >
                                                 {cities.name}
                                             </Option>
                                         ))
@@ -162,7 +162,7 @@ class StepOneTab extends React.Component {
                                 <Select onChange={this.getDataDistrict} >
                                     {
                                         this.state.district.map(districts =>(
-                                            <Option value={districts.name} >
+                                            <Option key={districts.name} >
                                                 {districts.name}
                                             </Option>
                                         ))

@@ -2,7 +2,7 @@ import React from 'react';
 import 'antd/dist/antd.css';
 import {Link } from 'react-router-dom';
 
-import {Col, Row, Card, Divider, Avatar} from 'antd';
+import {Col, Card, Divider} from 'antd';
 
 const {Meta} = Card;
 

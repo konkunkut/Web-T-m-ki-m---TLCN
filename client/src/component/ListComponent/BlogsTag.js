@@ -1,6 +1,6 @@
 import React from 'react';
 import 'antd/dist/antd.css';
-import {Tag, Icon, Col, Row} from 'antd';
+import {Tag, Icon, Col } from 'antd';
 
 export default function BlogsTag(props)
 {

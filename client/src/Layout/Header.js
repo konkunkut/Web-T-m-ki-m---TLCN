@@ -7,7 +7,8 @@ import Account from './Account';
 import 'antd/dist/antd.css'; //impotant! import trong scss
 
 import { Layout ,Menu} from 'antd';
-import { Button, Icon } from 'antd';
+import logo from '../public/dog-paw-logo.png';
+
 const { Header } = Layout;
 
 export default function MyHeader()
@@ -15,7 +16,7 @@ export default function MyHeader()
     return(
         <Header className="header-app">
             {/* thẻ logo */}
-            <div className="logo"><img class="img-responsive" src="dog-paw-logo.png" width="50" height="50"></img><h1 className='text-logo'>For Pet</h1></div>
+            <div className="logo"><img className="img-responsive" src={logo} width="50" height="50"></img><h1 className='text-logo'>For Pet</h1></div>
             
             {/* menu điều hướng */}
             <Menu className="menu-app"

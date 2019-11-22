@@ -8,7 +8,6 @@ import MyNewBlogs from './NewsComponent/ListNewBlogs';
 import {Layout, Col, Input, BackTop, Row, Divider, Pagination} from 'antd';
 
 const {Content} = Layout;
-const {Search} = Input;
 
 const lstTags=[
     {id: 1, tags: "thú cưng" },

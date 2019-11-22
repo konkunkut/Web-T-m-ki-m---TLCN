@@ -1,6 +1,5 @@
 import React from 'react';
 import 'antd/dist/antd.css';
-import {Col, Button} from 'antd';
 import SuggestButton from './SuggestButton';
 
 function ButtonList(props) {

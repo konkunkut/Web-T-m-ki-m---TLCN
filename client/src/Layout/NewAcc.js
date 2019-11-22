@@ -40,6 +40,7 @@ class NewAccount extends React.Component {
             setTimeout(() => {
               this.setState({ loading: false});
               message.success('Tạo tài khoản thành công !', 2);
+              this.props.form.resetFields();
               this.props.callback();
             }, 2500);
             //  this.props.callback();
@@ -52,6 +53,7 @@ class NewAccount extends React.Component {
 
   handleCancel = () => {
     this.setState({ visible: false });
+    this.props.form.resetFields();
     this.props.callback();
   };
   
