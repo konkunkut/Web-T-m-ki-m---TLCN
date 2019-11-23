@@ -7,6 +7,7 @@ import MyCarousel from './Carousel/Carousel';
 import MySuggestList from './ListComponent/PlacesList';
 
 import { getAllPlaces } from '../action/getInfoPlaces';
+import {districsHCM, districsHN, typePlace} from '../config';
 
 const { Content } = Layout;
 const { Option } = Select;
@@ -17,7 +18,53 @@ class Places extends React.Component {
         super();
         this.state = {
             contacts: [],
+
+            typePlaces: typePlace,
+            city: [
+                {id: "default", name: "Chọn tỉnh/thành phố"},
+                {id: "hcm", name: "Tp.Hồ Chí Minh"},
+                {id: "hn", name: "Hà Nội"}
+            ],
+            district: [
+                {id: "default", name: "Chọn quận/huyện"}
+            ],
+
         }
+    }
+
+    setDataDistrict = (value) => {
+        this.setState({citiesValue: value})
+        this.props.form.setFieldsValue({
+            districts: undefined
+        })
+        // console.log(value);
+        switch(value){
+            case "Tp.Hồ Chí Minh":
+                this.setState({
+                    district : districsHCM
+                });
+                return;
+            case "Hà Nội":
+                this.setState({
+                    district: districsHN
+                });
+                return;
+            default :
+                this.setState({
+                    district: [
+                        {id: "default", name: "Chọn quận/huyện"}
+                    ]
+                });
+                return;
+        }
+    }
+
+    getDataDistrict = (value) =>{
+        this.setState({districtsValue: value});
+    }
+
+    getType = (value) =>{
+        this.setState({typePlaceValue: value});
     }
 
     componentDidMount() {
@@ -51,19 +98,58 @@ class Places extends React.Component {
                                 <Form>
                                     <Row gutter={5}>
                                         <Col span={8}>
-                                            <Select defaultValue="default">
-                                                <Option value="default">Loại địa điểm</Option>
-                                            </Select>
+                                            <Form.Item label="Loại địa điểm">
+                                                {getFieldDecorator('type-Place', {
+                                                    rules: [{}],
+                                                    initialValue : this.state.typePlaces[0].type
+                                                })(
+                                                <Select onChange={this.getType} >
+                                                    {
+                                                        this.state.typePlaces.map(typePlace =>(
+                                                            <Option key={typePlace.type} >
+                                                                {typePlace.type}
+                                                            </Option>
+                                                        ))
+                                                    }
+                                                </Select>
+                                                )}
+                                            </Form.Item>
                                         </Col>
                                         <Col span={8}>
-                                            <Select defaultValue="default">
-                                                <Option value="default">Chọn tỉnh/thành phố</Option>
-                                            </Select>
+                                            <Form.Item label="Tỉnh/Thành phố">
+                                                {getFieldDecorator('cities', {
+                                                    rules: [{}],
+                                                    initialValue : this.state.city[0].name
+                                                })(
+                                                <Select onChange={this.setDataDistrict}>
+                                                    {
+                                                        this.state.city.map(cities =>(
+                                                            <Option key={cities.name} >
+                                                                {cities.name}
+                                                            </Option>
+                                                        ))
+                                                    }
+                                                </Select>
+                                                )}
+                                            </Form.Item>
                                         </Col>
                                         <Col span={8}>
-                                            <Select defaultValue="default">
-                                                <Option value="default">Chọn quận/huyện</Option>
-                                            </Select>
+                                            <Form.Item label="Quận/Huyện">
+                                                {getFieldDecorator('districts', {
+                                                    rules: [{ }],
+                                                    initialValue : this.state.district[0].name
+                                                })(
+                                                <Select onChange={this.getDataDistrict} >
+                                                    {
+                                                        this.state.district.map(districts =>(
+                                                            <Option key={districts.name} >
+                                                                {districts.name}
+                                                            </Option>
+                                                        ))
+                                                    }
+                                                </Select>
+                                                )}
+                                            </Form.Item>
                                         </Col>
                                     </Row>
                                 </Form>

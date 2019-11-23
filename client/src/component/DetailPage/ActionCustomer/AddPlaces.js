@@ -1,6 +1,7 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 import './AddPlaces.scss';
+import {HOME_URL} from '../../../config';
 
 import StepOne from './StepSignPlace/StepOne';
 import StepTwo from './StepSignPlace/StepTwo';
@@ -37,7 +38,8 @@ class AddPlaces extends React.Component {
     // }
 
     setSign = () => {
-        this.setState({ checkSign: !this.state.checkSign, current: 0 })
+        this.setState({ checkSign: !this.state.checkSign, current: 0 });
+        
     }
 
     onSigned = () => {
@@ -65,7 +67,7 @@ class AddPlaces extends React.Component {
         {
             formData.append("listPics", this.props.pics[i].originFileObj);
         }
-        // console.log(this.props.pics);
+        // console.log(formData);
 
         // message.success('Processing complete!', 2);
         setTimeout(() => {
@@ -78,6 +80,7 @@ class AddPlaces extends React.Component {
                     message.success(data.message, 2);
 
                     this.setSign();
+                    window.location.href= `${HOME_URL}/profile/${sessionStorage.getItem("userID")}`
                 }
             });
           }, 500);

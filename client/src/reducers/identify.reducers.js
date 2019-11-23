@@ -3,6 +3,7 @@ import {
     TEMP_INFO,
     TEMP_PICS,
     VALID_AVATAR,
+    STORE_ID_PLACE,
 } from '../action/constants';
 
 const identifyData = {
@@ -11,7 +12,8 @@ const identifyData = {
     fullName: {},
     tempData: {},
     tempPics:[],
-    valid : {}
+    valid : {},
+    storeIdPlace: null,
 }
 
 export default function(state = identifyData, action) {
@@ -35,6 +37,11 @@ export default function(state = identifyData, action) {
             return{
                 ...state,
                 valid: action.payload
+            }
+        case STORE_ID_PLACE:
+            return{
+                ...state,
+                storeIdPlace : action.payload
             }
         default:
             return state;

@@ -128,10 +128,10 @@ const getUserPlaces = (req, res) => {
 }
 
 const getDetailPlaces = (req, res) => {
-    var idPlace = req.params.id_place;
+    var idPlace = req.params.id_Place;
 
     Place.findById(idPlace)
-        .populate('id_User', 'fistname lastname tel picture')
+        .populate('createBy', 'fistname lastname tel picture')
         .exec((err, result)=>{
             if (err) {
                 return res.status('200').json({
@@ -140,11 +140,14 @@ const getDetailPlaces = (req, res) => {
                 });
             }
             else{
+                console.log("aaa"+result);
                 return res.status('200').json({
                     data: result,
-                    message : "Không lấy được dữ liệu",
-                    success: false
+                    message : "thành công",
+                    success: true
+                    
                 });
+                
             }
         })
 }

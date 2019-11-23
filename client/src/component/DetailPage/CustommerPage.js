@@ -62,12 +62,12 @@ class CustommerPage extends React.Component {
 
                     <Row className="content-profile">
                         <Tabs defaultActiveKey={this.props.location.state.currentID} tabPosition="left">
-                            <TabPane tab="Thông tin chi tiết" key="1">
-                                <EditProfile />
-                            </TabPane>
-                            <TabPane tab="Địa điểm của tôi" key="2">
+                            <TabPane tab="Địa điểm của tôi" key="1">
                                 <OwnPlaces />
                                     {/* <AddPlaces callback={this.setOwn} /> */}
+                            </TabPane>
+                            <TabPane tab="Thông tin cá nhân" key="2">
+                                <EditProfile />
                             </TabPane>
                             <TabPane tab="Thêm địa điểm" key="3">
                                 <AddPlaces />

@@ -1,15 +1,21 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 
+import { API_URL } from '../../../../config';
 import UploadPics from '../../../UploadPic/UploadPic';
 import ListComment from './ListComment';
+import SlideshowGallery from '../../../Carousel/slideshow-gallery';
 import { districsHCM, districsHN, typePlace } from '../../../../config';
+import { storeIdPlace, getDetailPlaces } from '../../../../action/getInfoPlaces';
+import { connect } from 'react-redux';
 
 import { Col, Row, Divider, Layout, Form, Input, Button, message, Select, Progress } from 'antd';
 
 const { Content } = Layout;
 const { Option } = Select;
 const { TextArea } = Input;
+
+const collection = [];
 
 class EditPlace extends React.Component {
     constructor() {
@@ -28,13 +34,17 @@ class EditPlace extends React.Component {
                 { id: "default", name: "Chọn quận/huyện" }
             ],
 
-            typePlaceValue: null,
-            citiesValue: null,
-            districtsValue: null,
-            telValue: null,
-            namePlaceValue: null,
-            stressPlaceValue: null,
-            decripttionValue: null
+            name_place: null,
+            phone: null,
+            stressvalue: null,
+            dictrictvalue: null,
+            cityvalue: null,
+            createBy: null,
+            id_type_place: null,
+            lat: null,
+            lng: null,
+            decription: null,
+            picture: [],
 
         }
     }
@@ -98,7 +108,39 @@ class EditPlace extends React.Component {
         this.props.form.resetFields();
     }
 
+    componentDidMount() {
+        getDetailPlaces(this.props.idPlace).then((data) => {
+            if (!data.success) {
+                message.error(data.message, 2);
+            }
+            else {
+                this.setState({
+                    name_place: data.data.name_place,
+                    phone: data.data.phone,
+                    stressvalue: data.data.stress,
+                    dictrictvalue: data.data.dictrict,
+                    cityvalue: data.data.city,
+                    // createBy: data.data.createBy,
+                    id_type_place: data.data.id_type_place,
+                    lat: data.data.lat,
+                    lng: data.data.lng,
+                    decription: data.data.decription,
+                    picture: data.data.picture,
+                });
+            };
+            while (collection.length) {
+                collection.pop();
+            }
+            for (let i = 0; i < this.state.picture.length; i++) {
+                collection.push({
+                    src: `${API_URL}` + this.state.picture[i], caption: ""
+                })
+            }
+        });
+    }
+
     render() {
+        // console.log(this.state.name_place);
         const { form: { getFieldDecorator } } = this.props;
         return (
             <Content style={{ padding: 5 }}>
@@ -116,7 +158,7 @@ class EditPlace extends React.Component {
                                     <Form.Item label="Loại địa điểm">
                                         {getFieldDecorator('type-Place', {
                                             rules: [{ required: true, message: 'Không bỏ trống phần này!' }],
-                                            initialValue: this.state.typePlaces[0].type
+                                            initialValue: this.state.id_type_place
                                         })(
                                             <Select onChange={this.getType} >
                                                 {
@@ -134,7 +176,7 @@ class EditPlace extends React.Component {
                                     <Form.Item label="Tên địa điểm">
                                         {getFieldDecorator('name-Place', {
                                             rules: [{ required: true, message: 'Không bỏ trống phần này!' }],
-                                            //initialValue : 
+                                            initialValue: this.state.name_place,
                                         })(
                                             <Input name="namePlaceValue" onChange={this.inputChange} />
                                         )}
@@ -146,7 +188,7 @@ class EditPlace extends React.Component {
                                     <Form.Item label="Địa chỉ cụ thể">
                                         {getFieldDecorator('address', {
                                             rules: [{ required: true, message: 'Không bỏ trống phần này!' }],
-                                            //initialValue :
+                                            initialValue: this.state.stressvalue,
                                         })(
                                             <Input name="stressPlaceValue" onChange={this.inputChange} />,
                                         )}
@@ -158,7 +200,7 @@ class EditPlace extends React.Component {
                                     <Form.Item label="Tỉnh/Thành phố">
                                         {getFieldDecorator('cities', {
                                             rules: [{ required: true, message: 'Không bỏ trống phần này!' }],
-                                            initialValue: this.state.city[0].name
+                                            initialValue: this.state.cityvalue
                                         })(
                                             <Select onChange={this.setDataDistrict}>
                                                 {
@@ -176,7 +218,7 @@ class EditPlace extends React.Component {
                                     <Form.Item label="Quận/Huyện">
                                         {getFieldDecorator('districts', {
                                             rules: [{ required: true, message: 'Không bỏ trống phần này!' }],
-                                            initialValue: this.state.district[0].name
+                                            initialValue: this.state.dictrictvalue
                                         })(
                                             <Select onChange={this.getDataDistrict} >
                                                 {
@@ -196,7 +238,7 @@ class EditPlace extends React.Component {
                                     <Form.Item label="Số điện thoại">
                                         {getFieldDecorator('sdt', {
                                             rules: [{ required: true, message: 'Không bỏ trống phần này!' }],
-                                            //initialValue:
+                                            initialValue: this.state.phone,
                                         })(
                                             <Input name="telValue" onChange={this.inputChange} />,
                                         )}
@@ -208,7 +250,7 @@ class EditPlace extends React.Component {
                                     <Form.Item label="Mô tả">
                                         {getFieldDecorator('decripttion', {
                                             rules: [{ required: true, message: 'Không bỏ trống phần này!' }],
-                                            //initialValue:
+                                            initialValue: this.state.decription
                                         })(
                                             <TextArea name="decripttionValue" rows={4} onChange={this.inputChange} />
                                         )}
@@ -230,7 +272,17 @@ class EditPlace extends React.Component {
 
                     {/* edit pics */}
                     <Col span={9}>
-                        <UploadPics length={"10"} />
+                        {/* pics slider */}
+                        <SlideshowGallery
+                            input={collection}
+                            ratio={`3:2`}
+                            mode={`automatic`}
+                            timeout={`3000`}
+                        />
+                        <Divider></Divider>
+
+                        <p>Cập nhật ảnh mới:</p>
+                        <UploadPics length={"10"} isVisible={false} />
                     </Col>
                 </Row>
 
@@ -295,12 +347,12 @@ class EditPlace extends React.Component {
     }
 }
 
-// function mapStateToProp(state){
-//     return{
-
-//     }
-// }
+function mapStateToProp(state) {
+    return {
+        idPlace: state.config.storeIdPlace.idPlace
+    }
+}
 
 const EditPlaces = Form.create()(EditPlace);
-// export default connect(mapStateToProp, {editProfile})(EditPlaces);
-export default EditPlaces;
+export default connect(mapStateToProp, { storeIdPlace })(EditPlaces);
+// export default EditPlaces;

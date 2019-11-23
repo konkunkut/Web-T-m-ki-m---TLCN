@@ -1,5 +1,6 @@
 import {API_URL} from '../config';
 import axios from 'axios';
+import {STORE_ID_PLACE} from './constants';
 
 export const getAllPlaces=()=>{
     return axios.get(`${API_URL}/Places/getAllPlace`)
@@ -33,11 +34,19 @@ export const getUserPlaces =(token) =>{
 }
 
 export const getDetailPlaces=(id_Place)=>{
-    return axios.get()
+    return axios.get(`${API_URL}/Places/getDetailPlaces/`+id_Place)
                 .then(res=>{
                     return res.data;
                 })
                 .catch(err=>{
                     console.log(err);
                 })
+}
+
+export const storeIdPlace =(id_Places)=> dispatch =>{
+    const idPlace = id_Places;
+    dispatch({
+        type: STORE_ID_PLACE,
+        payload: {idPlace}
+    });
 }

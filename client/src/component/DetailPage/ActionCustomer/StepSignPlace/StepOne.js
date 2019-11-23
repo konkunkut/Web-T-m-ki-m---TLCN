@@ -25,6 +25,7 @@ class StepOneTab extends React.Component {
             district: [
                 {id: "default", name: "Chọn quận/huyện"}
             ],
+            
             typePlaceValue: null,
             citiesValue: null,
             districtsValue: null,
