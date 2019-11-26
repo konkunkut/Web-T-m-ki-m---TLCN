@@ -56,26 +56,60 @@ const createPlace = (req, res, next) => {
     });
 }
 const editPlace = (req, res, next) => {
-    const id_address = req.params.id_address;
-    var id_place;
-    Address.findById(id_address).select('id_place').exec((err, result) => {
-        id_place = result.id_place;
-        req.body.id_User = req.decoded._id;
-        Place.updateOne({ _id: id_place, id_User: req.decoded._id }, req.body)
-            .exec((err,result) => {
+    const id_Places = req.params.id_place;
+    // console.log("id_Place: " + id_Places);
+
+    var id_user = req.decoded._id;
+
+    var form = new formidable.IncomingForm();
+    form.uploadDir = "./pics/";
+    form.multiples = true;
+    form.keepExtensions = true;
+
+    form.parse(req, function(err, fields, files) {
+        // ...
+        // console.log(fields);
+        const newPlace = fields;
+
+        newPlace.createBy = id_user;
+        var listImage = files.listPics;
+        // console.log(listImage);
+        if (listImage) {
+            var listPathImage = [];
+            if (Array.isArray(listImage)) {
+                listImage.forEach(element => {
+                listPathImage.push('/pics/'+element.path.toString().slice(5));
+                });
+            }
+            else {
+                listPathImage.push('/pics/'+listImage.path.toString().slice(5));
+            }
+            newPlace.picture = listPathImage;
+        }
+        console.log(newPlace);
+
+        Place.update({'_id': id_Places}, newPlace)
+            .exec((err,result) =>{
                 if (err) {
-                    return res.status('400').json(err);;
+                    res.status('200').json({
+                        data: {
+
+                        },
+                        message: "Không cập nhật được!",
+                        success: false
+                    });
                 }
-                else{
-                    if(result){
-                        next();
-                    }
-                    else{
-                        return res.status('204').json({message:"edit place unsuccessful"});
-                    }
+                else {
+                    res.status('200').json({
+                        data: {
+                            picture: newPlace.picture
+                        },
+                        message: 'Đăng địa điểm thành công!',
+                        success: true
+                    });
                 }
-               
             })
+        
     });
 }
 const getAllPlace = (req, res) => {
@@ -126,10 +160,10 @@ const getUserPlaces = (req, res) => {
 }
 
 const getDetailPlaces = (req, res) => {
-    var idPlace = req.params.id_place;
+    var idPlace = req.params.id_Place;
 
     Place.findById(idPlace)
-        .populate('id_User', 'fistname lastname tel picture')
+        .populate('createBy', 'fistname lastname tel picture')
         .exec((err, result)=>{
             if (err) {
                 return res.status('200').json({
@@ -138,11 +172,14 @@ const getDetailPlaces = (req, res) => {
                 });
             }
             else{
+                // console.log("aaa"+result);
                 return res.status('200').json({
                     data: result,
-                    message : "Không lấy được dữ liệu",
-                    success: false
+                    message : "thành công",
+                    success: true
+                    
                 });
+                
             }
         })
 }

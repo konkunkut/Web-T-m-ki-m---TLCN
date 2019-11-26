@@ -2,6 +2,7 @@ import React from 'react';
 import 'antd/dist/antd.css';
 import { Link } from 'react-router-dom';
 
+import {HOME_URL} from '../config';
 import {connect} from 'react-redux';
 import {configName} from '../action/identifyData';
 
@@ -19,6 +20,7 @@ class ShowAcc extends React.Component {
 
   onLogout = () => {
     sessionStorage.clear();
+    window.location.href= `${HOME_URL}`;
     this.props.callback();
   };
 
@@ -29,14 +31,14 @@ class ShowAcc extends React.Component {
           <Menu.Item key="0">
             <Link to={{
               pathname: `/profile/${sessionStorage.getItem("userID")}`,
-              state: { currentID: "1" }
+              state: { currentID: "2" }
             }}
             >Tài khoản</Link>
           </Menu.Item>
           <Menu.Item key="1">
             <Link to={{
               pathname: `/profile/${sessionStorage.getItem("userID")}`,
-              state: { currentID: "2" }
+              state: { currentID: "1" }
             }}>Địa điểm của tôi</Link>
           </Menu.Item>
           <Menu.Divider />

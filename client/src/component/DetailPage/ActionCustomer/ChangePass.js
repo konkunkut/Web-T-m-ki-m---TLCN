@@ -27,6 +27,7 @@ class MyChangePass extends React.Component
         this.setState({
           visible: true,
         });
+        this.props.form.resetFields();
     };
 
     handleOkModel = (e) => {
@@ -69,6 +70,7 @@ class MyChangePass extends React.Component
         this.setState({
           visible: false,
         });
+        this.props.form.resetFields();
     };
 
     passChange = event =>{

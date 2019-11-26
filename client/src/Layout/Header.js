@@ -22,7 +22,7 @@ export default function MyHeader()
             <Menu className="menu-app"
                 theme="dark"
                 mode="horizontal"
-                defaultSelectedKeys={['1']}
+                // defaultSelectedKeys={['']}
             >
                 <Menu.Item key="1"><Link className='link-nav' to='/'>Trang chủ</Link></Menu.Item>
                 <Menu.Item key="2"><Link className='link-nav' to='/places'>Cơ sở chăm sóc</Link></Menu.Item>

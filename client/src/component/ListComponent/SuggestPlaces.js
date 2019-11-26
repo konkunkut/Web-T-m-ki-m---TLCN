@@ -13,11 +13,7 @@ class SuggestPlaces extends React.Component {
             <Row style={{ marginBottom: 10 }}>
                 <Link
                     to={{
-                        pathname: `/detailPlaces/${this.props.name}`,
-                        state: {
-                            __id: this.props.key,
-
-                        }
+                        pathname: `/detailPlaces/${this.props.idPlace}`
                     }}
                 >
 

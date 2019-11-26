@@ -5,6 +5,9 @@ import { Card, Col, Rate, Row, Icon } from 'antd';
 import { Link } from 'react-router-dom';
 import PropTypes from "prop-types";
 
+import {connect} from 'react-redux';
+import {storeIdPlace} from '../../../../action/getInfoPlaces';
+
 class CardPlace extends React.Component {
 
     constructor() {
@@ -15,10 +18,12 @@ class CardPlace extends React.Component {
     }
 
     handleClick = () => {
+        this.props.storeIdPlace(this.props.idPlace);
         this.props.callback();
     }
 
     render() {
+        // console.log(this.props.idPlace);
         return (
             <Row style={{ marginBottom: 10, margin: 20 }}>
                 <Card className="card-places"
@@ -27,9 +32,8 @@ class CardPlace extends React.Component {
                     actions={[
                         <Link
                             to={{
-                                pathname: `/detailPlaces/${this.props.name}`,
+                                pathname: `/detailPlaces/${this.props.idPlace}`,
                                 state: {
-                                    __id: this.props.key,
                                 }
                             }}
                         >
@@ -69,4 +73,10 @@ CardPlace.propTypes = {
     name: PropTypes.string.isRequired
 };
 
-export default CardPlace;
+function mapStateToProp(state){
+    return{
+        
+    }
+}
+
+export default connect(mapStateToProp, {storeIdPlace})(CardPlace);

@@ -34,6 +34,8 @@ export function saveSessionStorage(data)
     sessionStorage.setItem("firstName", data.data.firstName);
     sessionStorage.setItem("lastName", data.data.lastName);
     sessionStorage.setItem("isLocal", data.data.isLocal);
-    const filePath = `${API_URL}` + data.data.avatar
+    const filePath = `${API_URL}` + data.data.avatar;
     sessionStorage.setItem("userAvatar", filePath);
 }
+
+

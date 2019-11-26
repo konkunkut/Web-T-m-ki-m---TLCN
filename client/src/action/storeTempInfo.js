@@ -1,6 +1,6 @@
 import axios from 'axios';
 import API_URL from '../config';
-import {TEMP_INFO, TEMP_PICS} from './constants'
+import {TEMP_INFO, TEMP_PICS, TEMP_latLng} from './constants'
 
 export const storeTempData = (
                             typeplace,
@@ -30,4 +30,13 @@ export const storeTempPic = (pics) => dispatch => {
         type : TEMP_PICS,
         payload : {pic}
     })
+}
+
+export const storeTemplatLng = (latValue, lngValue)=> dispatch =>{
+    const lat = latValue;
+    const lng = lngValue;
+    dispatch({
+        type : TEMP_latLng,
+        payload : {lat, lng},
+    });
 }

@@ -1,13 +1,14 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 import './AddPlaces.scss';
+import {HOME_URL} from '../../../config';
 
 import StepOne from './StepSignPlace/StepOne';
 import StepTwo from './StepSignPlace/StepTwo';
 import StepThree from './StepSignPlace/StepThree';
 
 import {connect} from 'react-redux';
-import {storeTempData, storeTempPic} from '../../../action/storeTempInfo';
+import {storeTempData, storeTempPic, storeTemplatLng} from '../../../action/storeTempInfo';
 import {registerPlace} from '../../../action/uploadPlace';
 
 import { Row, Layout, Icon, Steps, message, Button } from 'antd';
@@ -32,12 +33,16 @@ const steps = [
 ];
 
 class AddPlaces extends React.Component {
-    // state = {
-    //     checkSign: false
-    // }
+    constructor(props) {
+        super(props);
+        this.state = {
+            current: 0,
+            checkSign: false
+        };
+    }
 
     setSign = () => {
-        this.setState({ checkSign: !this.state.checkSign, current: 0 })
+        this.setState({ checkSign: !this.state.checkSign, current: 0 });  
     }
 
     onSigned = () => {
@@ -56,8 +61,8 @@ class AddPlaces extends React.Component {
         formData.set("dictrict",this.props.district);
         formData.set("city",this.props.city);
         formData.set("id_type_place",this.props.typePlace);
-        formData.set("lat","");
-        formData.set("lng","");
+        formData.set("lat",this.props.lat);
+        formData.set("lng",this.props.lng);
         formData.set("decription",this.props.decription);
         formData.set("createBy", sessionStorage.getItem("userID"));
 
@@ -65,7 +70,7 @@ class AddPlaces extends React.Component {
         {
             formData.append("listPics", this.props.pics[i].originFileObj);
         }
-        // console.log(this.props.pics);
+        // console.log(formData);
 
         // message.success('Processing complete!', 2);
         setTimeout(() => {
@@ -76,20 +81,15 @@ class AddPlaces extends React.Component {
                 else{
                     // console.log(data.data.picture);
                     message.success(data.message, 2);
-
+                    this.props.storeTempData(null,null,null,null,null,null,null);
+                    this.props.storeTempPic(null);
+                    this.props.storeTemplatLng(null,null);
                     this.setSign();
+                    window.location.href= `${HOME_URL}/profile/${sessionStorage.getItem("userID")}`
                 }
             });
           }, 500);
 
-    }
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            current: 0,
-            checkSign: false
-        };
     }
 
     next() {
@@ -108,7 +108,6 @@ class AddPlaces extends React.Component {
         if (this.state.checkSign) {
             return (
                 <Content className="content-parent">
-                    <Row>
                         <div className="step-title">
                             <Steps current={current}>
                                 {steps.map(item => (
@@ -143,7 +142,6 @@ class AddPlaces extends React.Component {
                                 Huỷ bỏ
                             </Button>
                         </div>
-                    </Row>
                 </Content>
             );
         }
@@ -171,10 +169,13 @@ function mapStateToProp(state){
         decription : state.config.tempData.decription,
 
         pics : state.config.tempPics.pic,
+
+        lat : state.config.templatLng.lat,
+        lng : state.config.templatLng.lng,
     }
 }
 
 // const EditProfile = Form.create()(EditProfiles);
-export default connect(mapStateToProp, {storeTempData, storeTempPic})(AddPlaces);
+export default connect(mapStateToProp, {storeTempData, storeTempPic, storeTemplatLng})(AddPlaces);
 
 // export default AddPlaces;

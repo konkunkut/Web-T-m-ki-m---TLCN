@@ -5,21 +5,14 @@ import BlogList from './ListComponent/BlogList';
 import ButtonList from './ListComponent/ButtonList';
 import 'antd/dist/antd.css';
 
-import {Layout, Col, Input, BackTop} from 'antd';
+import { getAllPlaces } from '../action/getInfoPlaces';
+
+import {Layout, Col, Input, BackTop, message} from 'antd';
 const {Content} = Layout;
 const {Search} = Input;
 
 // dự liệu test list địa điểm
-const contacts = [];
-for (let j = 0; j < 5; j++)
-{
-    contacts.push({
-        id: `${j}`,
-        name : `PET House ${j}`,
-        add : 'Địa chỉ: 99 Lê Văn Việt, Quận 9, Tp.HCM',
-        tel : 'Liện hệ: 012 345 6789'
-    });
-}
+// const contacts = [];
 
 //dữ liệu test blog
 const listData = [];
@@ -45,8 +38,27 @@ for (let k = 0; k < 9; k++)
     });
 }
 
-export default function Home()
+class Home extends React.Component
 {
+    constructor(){
+        super();
+        this.state={
+            contacts : [],
+        }
+    }
+
+    componentDidMount(){
+        getAllPlaces().then((data) => {
+            if (!data.success) {
+                message.error(data.message, 2);
+            }
+            else {
+                this.setState({ contacts: data.data });
+            }
+        })
+    }
+
+    render(){
     return(
         <Content style={{ padding: '20px' }}>
 
@@ -76,7 +88,7 @@ export default function Home()
                 {/* danh sách địa điểm */}
                 <Col span={9} className="list-col">
                     <ul>
-                        <PlacesList contacts={contacts} />
+                        <PlacesList contacts={this.state.contacts} />
                     </ul>
                 </Col>
 
@@ -99,4 +111,7 @@ export default function Home()
             </div>
         </Content>
     );
+    }
 }
+
+export default Home;

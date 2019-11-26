@@ -1,4 +1,6 @@
 export const API_URL = 'http://localhost:3100';
+export const HOME_URL = 'http://localhost:3000';
+export const REACT_APP_GOOGLE_KEY = 'AIzaSyAjGW9JSqElvLyeRBibC9VYhciXH7CUsZM';
 
 export const districsHCM = [
     {id: "default", name: "Chọn quận/huyện"},
@@ -55,6 +57,7 @@ export const districsHN = [
 ]
 
 export const typePlace = [
+    {id: "default", type: "Tất cả địa điểm"},
     {id: "thuy", type: "Thú y"},
     {id: "cscs", type: "Cơ sở chăm sóc"},
     {id: "chpk", type: "Cửa hàng"}

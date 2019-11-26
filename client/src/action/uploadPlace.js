@@ -65,3 +65,21 @@ export function registerPlace(formData, token){
                     return err;
                 });
 }
+
+export function editPlace(id_Place, formData, token){
+    const config = {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        }
+    }
+    return axios.put(`${API_URL}/Places/editPlace/`+id_Place, formData, config)
+                .then(res=>{
+                    return res.data;
+                })
+                .catch(err=>{
+                    console.log(err);
+                    return err;
+                })
+}

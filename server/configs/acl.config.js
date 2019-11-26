@@ -20,6 +20,10 @@ function acl_config(dbconnect){
                     resources:'/News/editNews',
                     permissions:'put'
                 }
+            ],
+            roles: 'admin',
+            allows: [
+                
             ]
         }
     ]);

@@ -14,12 +14,14 @@ import { Col, Row, BackTop, Layout, Avatar, Tabs, message } from 'antd';
 
 const { Content } = Layout;
 const { TabPane } = Tabs;
+var jwt = require('jsonwebtoken');
 
 class CustommerPage extends React.Component {
     constructor() {
         super();
         this.state = {
             checkOwn: false,
+            isAdmin : false,
             // userAvatar: null,
             userID: sessionStorage.getItem("userID")||null,
             // firstName: sessionStorage.getItem("firstName")||null,
@@ -45,6 +47,12 @@ class CustommerPage extends React.Component {
         });
         this.props.configName();
         this.props.validAvatar();
+
+        var decoded = jwt.verify(sessionStorage.getItem("token"), 'Sang_oc_cho_haha');
+        if(decoded.isAdmin){
+            this.setState({isAdmin : decoded.isAdmin});
+            // console.log(decoded);
+        }
     }
 
     render() {
@@ -62,16 +70,21 @@ class CustommerPage extends React.Component {
 
                     <Row className="content-profile">
                         <Tabs defaultActiveKey={this.props.location.state.currentID} tabPosition="left">
-                            <TabPane tab="Thông tin chi tiết" key="1">
-                                <EditProfile />
-                            </TabPane>
-                            <TabPane tab="Địa điểm của tôi" key="2">
+                            <TabPane tab="Địa điểm của tôi" key="1">
                                 <OwnPlaces />
                                     {/* <AddPlaces callback={this.setOwn} /> */}
+                            </TabPane>
+                            <TabPane tab="Thông tin cá nhân" key="2">
+                                <EditProfile />
                             </TabPane>
                             <TabPane tab="Thêm địa điểm" key="3">
                                 <AddPlaces />
                             </TabPane>
+                            {!this.state.isAdmin ? <div></div>:
+                                <TabPane tab="Thêm bài biết" key="4">
+                                    Thêm bài viết ở đây
+                                </TabPane>
+                            }
                         </Tabs>
                     </Row>
                 </Col>

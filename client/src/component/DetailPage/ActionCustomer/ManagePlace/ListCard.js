@@ -12,6 +12,7 @@ class ListCard extends React.Component {
       <div>
         {this.props.contacts.map(c =>
           <Cards key={c._id}
+            idPlace={c._id}
             name={c.name_place}
             stress={c.stress}
             dictrict={c.dictrict}
