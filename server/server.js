@@ -22,12 +22,14 @@ mongoose.connect('mongodb://localhost:27017/peg')
         const typePlace = require('./router/typePlace.route');
         const Place = require('./router/place.route');
         const Address = require('./router/address.route');
+        const rate = require('./router/rate.route');
         app.use('/user', userRoute);
         app.use('/', userRoute);
         app.use('/News', postRoute);
         app.use('/typePlace',typePlace);
         app.use('/Places',Place);
         app.use('/Address',Address);
+        app.use('/Rate',rate);
     })
     .catch((err)=>{
         console.log(err);

@@ -4,9 +4,8 @@ const formidable = require('formidable');
 const User = require('../models/User.model');
 
 const createPlace = (req, res, next) => {
-
+    console.log(req.body)
     var id_user = req.decoded._id;
-
     var form = new formidable.IncomingForm();
 
     // form.parse(req);
@@ -14,12 +13,11 @@ const createPlace = (req, res, next) => {
     form.uploadDir = "./pics/";
     form.multiples = true;
     form.keepExtensions = true;
-
     form.parse(req, function(err, fields, files) {
+        console.log(fields)
         // ...
         // console.log(fields);
         const newPlace = new Place(fields);
-
         var listImage = files.listPics;
         // console.log(listImage);
         if (listImage) {

@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 const Rate = new mongoose.Schema({
     id_place:{
-        type: String,
-        require: true
+        type: mongoose.Schema.ObjectId, 
+        ref:"Place"
     },
     id_user:{
-        type: String,
-        require: true
+        type: mongoose.Schema.ObjectId,
+        ref:"User"
     },
     rate:{
         require:true,
