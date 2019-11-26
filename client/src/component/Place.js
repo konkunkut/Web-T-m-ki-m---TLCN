@@ -5,13 +5,14 @@ import { Layout, Col, BackTop, Pagination, Row, Divider, Form, Select, Button, m
 
 import MyCarousel from './Carousel/Carousel';
 import MySuggestList from './ListComponent/PlacesList';
+import PrivateMAp from './CurentLocation/privateMap';
 
 import { getAllPlaces } from '../action/getInfoPlaces';
 import {districsHCM, districsHN, typePlace} from '../config';
 
 const { Content } = Layout;
 const { Option } = Select;
-
+var dataMaps = [];
 
 class Places extends React.Component {
     constructor() {
@@ -73,6 +74,15 @@ class Places extends React.Component {
                 message.error(data.message, 2);
             }
             else {
+                for(let i=0; i< data.data.length; i++)
+                {
+                    dataMaps.push({
+                        lat : data.data[i].lat, 
+                        lng : data.data[i].lng, 
+                        name : data.data[i].name_place, 
+                        phone : data.data[i].phone
+                    });
+                }
                 this.setState({ contacts: data.data });
             }
         })
@@ -170,10 +180,10 @@ class Places extends React.Component {
                                 </div>
                             </Col>
 
-                            {/* gợi ý và quảng cáo */}
-                            <Col className="suggest-and-ad" span={10}>
-                                bản đồ ở đây
-                    </Col>
+                            {/* bản đồ */}
+                            <Col className="suggest-and-ad" span={11} style={{height:400}}>
+                                <PrivateMAp  dataMap={dataMaps} />
+                            </Col>
                         </Row>
                     </div>
                 </Col>

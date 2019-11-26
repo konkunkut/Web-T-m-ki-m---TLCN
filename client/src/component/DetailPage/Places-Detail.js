@@ -2,6 +2,7 @@ import React from 'react';
 import { API_URL } from '../../config';
 
 import SlideshowGallery from '../Carousel/slideshow-gallery';
+import PrivateMAp from '../CurentLocation/privateMap';
 
 import 'antd/dist/antd.css';
 import './Places-Detail.scss';
@@ -21,6 +22,7 @@ const collection = [
     // { src: "https://images.unsplash.com/photo-1550596334-7bb40a71b6bc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80", caption: "Caption four" },
     // { src: "https://images.unsplash.com/photo-1550640964-4775934de4af?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80", caption: "Caption five" },
 ];
+var dataMaps =[];
 
 
 class DetailPlaces extends React.Component {
@@ -59,6 +61,16 @@ class DetailPlaces extends React.Component {
                 message.error(data.message, 2);
             }
             else {
+                while (dataMaps.length) {
+                    dataMaps.pop();
+                }
+                dataMaps.push({
+                    lat : data.data.lat, 
+                    lng : data.data.lng, 
+                    name : data.data.name_place, 
+                    phone : data.data.phone
+                });
+
                 this.setState({
                     name_place: data.data.name_place,
                     phone: data.data.phone,
@@ -127,26 +139,28 @@ class DetailPlaces extends React.Component {
                             </Row>
 
                             <Row className="decription-full">
-                                <p>
-                                    <Icon type="environment" /> {this.state.stress}, {this.state.dictrict}, {this.state.city}
-                                </p>
-                                <p>
-                                    <Icon type="phone" /> {this.state.phone}
-                                </p>
-                                <p>
-                                    Mô tả:
-                            </p>
-                                <p>
-                                    {this.state.decription}
-                                </p>
+                                <Col>
+                                    <p>
+                                        <Icon type="environment" /> {this.state.stress}, {this.state.dictrict}, {this.state.city}
+                                    </p>
+                                    <p>
+                                        <Icon type="phone" /> {this.state.phone}
+                                    </p>
+                                    <p>
+                                        Mô tả:
+                                    </p>
+                                    <p>
+                                        {this.state.decription}
+                                    </p>
+                                </Col>
                             </Row>
                         </Row>
 
                         {/* location on map */}
                         <Row>
-                            <div style={{ backgroundColor: '#636363' }}>
-                                bản đồ ở đây
-                        </div>
+                            <Col style={{ backgroundColor: '#636363', height: 400 }}>
+                                <PrivateMAp  dataMap={dataMaps} />
+                            </Col>
 
                             <Divider></Divider>
                         </Row>

@@ -5,6 +5,7 @@ const config = require('../configs/config')
 const key = require('../configs/key.config');
 const googleStrategy = require('passport-google-oauth20');
 const passport =  require('passport');
+const { Aclclass } = require('../helper/acl_store.heiper');
 
 
 
@@ -28,21 +29,30 @@ const signin = (req,res) =>{
             });
         }
         // when success login
-        const token = tokena.sign({_id: user._id},config.jwtSecret);
-        // console.log(user);
-       // console.log('token local: '+token);
-        res.cookie('token',token, {exqire: new Date()+3000});
-        return res.json({
-                data: { token:token,
-                        userID: user._id,
-                        firstName: user.fistname,
-                        lastName: user.lastname,
-                        isLocal: "isLocal",
-                        avatar: user.picture
-                    },
-                message:"Đăng nhập thành công!",
-                success: true   
-          })
+        const acl = Aclclass.getAcl;
+        acl.hasRole(user._id.toString(), 'admin', (err, result)=>{
+            if(err){
+                console.log(err);
+            }
+            
+            const token = tokena.sign({_id: user._id, isAdmin: result},config.jwtSecret);
+            // console.log(user);
+            // console.log('token local: '+token);
+            res.cookie('token',token, {exqire: new Date()+3000});
+            return res.json({
+                    data: { token:token,
+                            userID: user._id,
+                            firstName: user.fistname,
+                            lastName: user.lastname,
+                            isLocal: "isLocal",
+                            isAdmin : result,
+                            avatar: user.picture
+                        },
+                    message:"Đăng nhập thành công!",
+                    success: true   
+            })
+        })
+
     })
 }
 

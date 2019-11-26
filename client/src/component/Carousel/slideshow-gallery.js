@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Skeleton } from 'antd';
 import './slideshow-gallery.scss';
 
 export default class SlideshowGallery extends React.Component {
@@ -67,7 +68,7 @@ export default class SlideshowGallery extends React.Component {
   // Xác định slideIndex nào sẽ được active
   setSlideIndex(index) {
     this.setState({
-      slideIndex: index
+      slideIndex: index,
     })
   }
 
