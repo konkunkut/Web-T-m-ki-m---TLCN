@@ -13,6 +13,25 @@ export function signUp(body){
                 })
 }
 
+export function loginGoogle(){
+    const config = {
+        headers: {
+            'Access-Control-Allow-Origin': 'http://localhost',
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          }
+    }
+
+    return axios.get(`${API_URL}/user/authGoogle`, config)
+                .then(res=>{
+                    // return res.data
+                })
+                .catch(err=>{
+                    console.log(err);
+                    // return err
+                })
+}
+
 export function logIn (body)
 {
     return axios.post(`${API_URL}/user/singin`, body)
@@ -37,5 +56,3 @@ export function saveSessionStorage(data)
     const filePath = `${API_URL}` + data.data.avatar;
     sessionStorage.setItem("userAvatar", filePath);
 }
-
-

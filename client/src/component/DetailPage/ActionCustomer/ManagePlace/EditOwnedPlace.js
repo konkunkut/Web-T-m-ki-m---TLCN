@@ -225,34 +225,34 @@ class EditPlace extends React.Component {
             this.state.decription
         );
 
-        getDetailPlaces(this.props.idPlace).then((data) => {
-            if (!data.success) {
-                message.error(data.message, 2);
-            }
-            else {
-                this.setState({
-                    name_place: data.data.name_place,
-                    phone: data.data.phone,
-                    stressvalue: data.data.stress,
-                    dictrictvalue: data.data.dictrict,
-                    cityvalue: data.data.city,
-                    // createBy: data.data.createBy,
-                    id_type_place: data.data.id_type_place,
-                    lat: data.data.lat,
-                    lng: data.data.lng,
-                    decription: data.data.decription,
-                    picture: data.data.picture,
-                });
-            };
-            while (collection.length) {
-                collection.pop();
-            }
-            for (let i = 0; i < this.state.picture.length; i++) {
-                collection.push({
-                    src: `${API_URL}` + this.state.picture[i], caption: ""
-                })
-            }
-        });
+        // getDetailPlaces(this.props.idPlace).then((data) => {
+        //     if (!data.success) {
+        //         message.error(data.message, 2);
+        //     }
+        //     else {
+        //         this.setState({
+        //             name_place: data.data.name_place,
+        //             phone: data.data.phone,
+        //             stressvalue: data.data.stress,
+        //             dictrictvalue: data.data.dictrict,
+        //             cityvalue: data.data.city,
+        //             // createBy: data.data.createBy,
+        //             id_type_place: data.data.id_type_place,
+        //             lat: data.data.lat,
+        //             lng: data.data.lng,
+        //             decription: data.data.decription,
+        //             picture: data.data.picture,
+        //         });
+        //     };
+        //     while (collection.length) {
+        //         collection.pop();
+        //     }
+        //     for (let i = 0; i < this.state.picture.length; i++) {
+        //         collection.push({
+        //             src: `${API_URL}` + this.state.picture[i], caption: ""
+        //         })
+        //     }
+        // });
     }
 
     render() {

@@ -85,16 +85,20 @@ const checkOathToken = (req,res,next )=>{
 
 // use login with google, facebook
 const callback = (req,res, next)=>{
-    const token = tokena.sign({_id: req.user._id},config.jwtSecret);
+    const token = tokena.sign({_id: req.user._id, isAdmin: result},config.jwtSecret);
     res.cookie('token',token, {exqire: new Date()+3000});
     return res.json({
-        message: "Login success",
+        message: "Đăng nhập thành công !",
         data:{
-            token: token,
-            profile: req.user
+            token:token,
+            userID: req.user._id,
+            firstName: req.user.fistname,
+            lastName: req.user.lastname,
+            isLocal: "isFB_GG",
+            isAdmin : result,
+            avatar: req.user.picture
         },
         success: true
-        
     })
 }
 

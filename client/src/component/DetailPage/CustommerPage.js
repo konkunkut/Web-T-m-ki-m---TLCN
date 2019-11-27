@@ -85,6 +85,16 @@ class CustommerPage extends React.Component {
                                     Thêm bài viết ở đây
                                 </TabPane>
                             }
+                            {!this.state.isAdmin ? <div></div>:
+                                <TabPane tab="Quản lý người dùng" key="5">
+                                    Xem người dùng ở đây
+                                </TabPane>
+                            }
+                            {!this.state.isAdmin ? <div></div>:
+                                <TabPane tab="Thống kê" key="6">
+                                    Thống kê ở đây
+                                </TabPane>
+                            }
                         </Tabs>
                     </Row>
                 </Col>

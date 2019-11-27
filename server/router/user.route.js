@@ -5,10 +5,20 @@ const login = require('../Authen/login.authen');
 passport =  require('passport');
 const passportSetup =  require('../configs/passport-setup.config');
 
+// var cors = require('cors');
+// var corsOptions = {
+//     origin: 'http://localhost:3000/user/authGoogle',
+//     optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204,
+//     // credentials:true
+//     allowedHeaders: ["Content-Type", "Authorization"],
+//     method: this.get,
+//   }, cors(corsOptions)
+
 route.post('/singup',usercontroller.signup);
 route.post('/singin',login.signin);
 
 route.get('/authGoogle',passport.authenticate('google',{
+route.get('/authGoogle', passport.authenticate('google',{
     scope:['profile', 'email']
 }));
 route.get('/Home',passport.authenticate('google'),login.callback);

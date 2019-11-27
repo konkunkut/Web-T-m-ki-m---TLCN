@@ -14,10 +14,17 @@ const User = require('../models/User.model');
 
 //google
 passport.use(
+
+    // res.header("Access-Control-Allow-Origin", "http://localhost");
+    // res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+    // res.header('Access-Control-Allow-Headers', "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+    // //Auth Each API Request created by user.
+    // next();
+
     new googleStrategy({
         clientID:key.google.clientID,
         clientSecret:key.google.clientSecret,
-        callbackURL:'http://localhost:3000'
+        callbackURL:'/Home'
 
     },( accessToken, refreshToken, profile,  done) =>{
       //  console.log(profile);
@@ -65,7 +72,7 @@ passport.use(
             
             clientID:key.facebook.clientID,
             clientSecret:key.facebook.clientSecret,
-            callbackURL:'http://localhost:3000',
+            callbackURL:'/HomeFace',
             profileFields: ['id', 'displayName', 'email','photos','name']
         }, (accessToken, refreshToken,profile,done)=>{
             console.log(profile);

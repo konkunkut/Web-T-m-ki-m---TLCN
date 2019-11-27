@@ -1,7 +1,6 @@
-
 import React from 'react';
 import 'antd/dist/antd.css';
-import {logIn, saveSessionStorage} from './authAPI';
+import {logIn, saveSessionStorage, loginGoogle} from './authAPI';
 
 import NewAcc from './NewAcc';
 
@@ -85,6 +84,20 @@ class DrawerForm extends React.Component {
     this.setState({ [event.target.name] : event.target.value});
   }
 
+  loginGG = ()=>{
+    loginGoogle().then((data)=>{
+      // if(!data.success){
+      //   console.log(data.message);
+      // }
+      // else{
+      //   saveSessionStorage(data);
+      //   message.success(data.message, 2);
+      //   this.onClose();
+      //   this.props.callback();
+      // }
+    })
+  }
+
   render() {
     const { getFieldDecorator } = this.props.form;
     return (
@@ -159,13 +172,13 @@ class DrawerForm extends React.Component {
 
               <Form layout="vertical" style={{textAlign: 'center'}}>
                 <Row style={{paddingTop: '10px'}}>
-                  <Button type="primary" size="large" ghost>
+                  <Button type="primary" size="large" ghost >
                     <Icon type="facebook" theme="filled" />
                     Đăng nhập với Facebook
                   </Button>
                 </Row>
                 <Row style={{paddingTop: '10px'}}>
-                  <Button type="danger" size="large" ghost>
+                  <Button type="danger" size="large" ghost onClick={this.loginGG} >
                   <Icon type="google-square" theme="filled" />
                     Đăng nhập với Google
                   </Button>

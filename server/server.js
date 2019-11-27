@@ -12,6 +12,21 @@ app.use(passport.initialize());
 
 app.use('/pics', express.static('pics'));
 
+// var cors = require ('cors');
+// app.use(cors({
+//     origin:'http://localhost',
+//     credentials:true
+// }));
+
+// app.use(function (req, res, next) {
+
+//   res.header('Access-Control-Allow-Origin', 'http://localhost');
+//   res.header('Access-Control-Allow-Headers', true);
+//   res.header('Access-Control-Allow-Credentials', true);
+//   res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+//   next();
+// });
+
 //console.log(new Date(2012,11,10) < new Date(2012, 11, 9));
 mongoose.connect('mongodb://localhost:27017/peg')
     .then(()=>{
