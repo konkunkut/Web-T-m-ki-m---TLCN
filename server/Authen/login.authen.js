@@ -88,7 +88,13 @@ const callback = (req,res, next)=>{
     const token = tokena.sign({_id: req.user._id},config.jwtSecret);
     res.cookie('token',token, {exqire: new Date()+3000});
     return res.json({
-        token
+        message: "Login success",
+        data:{
+            token: token,
+            profile: req.user
+        },
+        success: true
+        
     })
 }
 

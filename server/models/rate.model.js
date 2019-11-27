@@ -13,5 +13,5 @@ const Rate = new mongoose.Schema({
         type: Number
     }
 });
-
+//Rate.index({id_place:1,id_user:1},{unique:true});
 module.exports = mongoose.model('Rate',Rate);

@@ -17,7 +17,7 @@ passport.use(
     new googleStrategy({
         clientID:key.google.clientID,
         clientSecret:key.google.clientSecret,
-        callbackURL:'/Home'
+        callbackURL:'http://localhost:3000'
 
     },( accessToken, refreshToken, profile,  done) =>{
       //  console.log(profile);
@@ -65,7 +65,7 @@ passport.use(
             
             clientID:key.facebook.clientID,
             clientSecret:key.facebook.clientSecret,
-            callbackURL:'/HomeFace',
+            callbackURL:'http://localhost:3000',
             profileFields: ['id', 'displayName', 'email','photos','name']
         }, (accessToken, refreshToken,profile,done)=>{
             console.log(profile);

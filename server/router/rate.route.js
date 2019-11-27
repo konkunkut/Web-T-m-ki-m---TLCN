@@ -5,5 +5,6 @@ const route = app.Router();
 
 route.post('/createRate',auth.checkOauthToken,rate.createRate);
 route.put('/updateRate',auth.checkOauthToken,rate.upDateRate);
-route.get('/getRate',auth.checkOauthToken,rate.getRate);
+route.get('/getRatePlace/:id_place',rate.getRatePlace);
+route.get('/getRateUser/:id_place', auth.checkOauthToken, rate.getRateUser);
 module.exports=route;
