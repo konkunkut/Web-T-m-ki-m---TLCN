@@ -36,6 +36,7 @@ export const getUserPlaces =(token) =>{
 export const getDetailPlaces=(id_Place)=>{
     return axios.get(`${API_URL}/Places/getDetailPlaces/`+id_Place)
                 .then(res=>{
+                    console.log(res.data)
                     return res.data;
                 })
                 .catch(err=>{

@@ -10,11 +10,17 @@ const createRate = (req, res) => {
             return res.status('400').json(err);
         }
         if (rte) {
-            return res.status('200').json({ massage: 'created Rate success', success: true });
+            return res.status('200').json({
+                message: 'created Rate success',
+                success: true 
+            });
 
         }
         else {
-            return res.status('200').json({ massage: 'not created rate', success: false });
+            return res.status('200').json({ 
+                message: 'not created rate', 
+                success: false 
+            });
         }
     })
 }
@@ -26,7 +32,9 @@ const upDateRate = (req, res) => {
         if (err) {
             return res.status('400').json(err);
         }
-        else return res.status('200').json({ massage: 'updated reate success' });
+        else return res.status('200').json({ 
+            message: 'updated reate success' 
+        });
     })
 
 
@@ -35,6 +43,7 @@ const upDateRate = (req, res) => {
 const getRateUser = (req, res) => {
     const id_place = req.params.id_place;
     const id_user = req.decoded._id;
+    // console.log('aa'+id_place, id_user);
     const rate = [{
         $match: { id_place: ObjectId(id_place.toString()), id_user: ObjectId(id_user.toString()) }
     },{
@@ -45,20 +54,21 @@ const getRateUser = (req, res) => {
     ]
     Rate.aggregate(rate).exec((err, result) => {
         if (err) {
-
+            // console.log(err);
             return res.status('400').json(err);
         }
         else {
             if (!result) {
                 return res.status('200').json({
-                    massage: "User not yet rated",
+                    message: "User not yet rated",
                     data: null,
                     success: false
                 })
             }
             else {
+                // console.log("aa"+result);
                 return res.status('200').json({
-                    massage: "get rated",
+                    message: "get rated",
                     data: result,
                     success: true
                 })
@@ -78,27 +88,26 @@ const getRatePlace = (req, res) => {
             _id: { rate: "$rate", id_place: "$id_place" },
             count: { $sum: 1 }
         }
-    }
-    ]
+    }]
     Rate.aggregate(aggregatorRate).exec((err, result) => {
         if (err) {
             console.log(err);
             return res.status('400').json(err);
         }
         else {
-            console.log(result);
+            //console.log(result);
             if (!result) {
                 return res.status('200').json({
-                    massage: "Place has no rate yet",
-                    success: true,
+                    message: "Place has no rate yet",
+                    success: false,
                     data: null
                 });
             }
             else {
                 return res.status('200').json({
-                    massage: "get rate place",
+                    message: "get rate place",
                     data: result,
-                    succsess: true
+                    success: true
                 });
             }
         }

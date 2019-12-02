@@ -5,6 +5,8 @@ import {
     VALID_AVATAR,
     STORE_ID_PLACE,
     TEMP_latLng,
+    LOGIN_SUCCESS,
+    CONFIM_LOGOUT,
 } from '../action/constants';
 
 const identifyData = {
@@ -16,6 +18,7 @@ const identifyData = {
     valid : {},
     storeIdPlace: null,
     templatLng : {},
+    checkLogin : false,
 }
 
 export default function(state = identifyData, action) {
@@ -49,6 +52,16 @@ export default function(state = identifyData, action) {
             return{
                 ...state,
                 templatLng : action.payload
+            }
+        case LOGIN_SUCCESS:
+            return{
+                ...state,
+                checkLogin : true
+            }
+        case CONFIM_LOGOUT:
+            return{
+                ...state,
+                checkLogin : false
             }
         default:
             return state;

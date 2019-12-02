@@ -2,6 +2,9 @@ import React from 'react';
 import 'antd/dist/antd.css';
 import {logIn, saveSessionStorage, loginGoogle} from './authAPI';
 
+import {connect} from 'react-redux';
+import {CheckLogin} from '../action/identifyData';
+
 import NewAcc from './NewAcc';
 
 import { Drawer, Form, Button, Col, Row, Input, Select, Icon, message } from 'antd';
@@ -50,6 +53,7 @@ class DrawerForm extends React.Component {
           else{
             // save on session
             saveSessionStorage(data);
+            this.props.CheckLogin();
 
             // console.log('Received values of form: ', values);
             this.setState({ loading: true });
@@ -219,6 +223,14 @@ class DrawerForm extends React.Component {
   }
 }
 
+function mapStateToProp(state){
+  return{
+
+  }
+}
+
 const LoginAcc = Form.create()(DrawerForm);
 
-export default LoginAcc;
+export default connect(mapStateToProp, {CheckLogin})(LoginAcc);
+
+// export default LoginAcc;
