@@ -9,7 +9,6 @@ const createAddress =  (req,res)=>{
             return res.status('200').json({message:"created success address"});
         }
     })
-    
 }
 const editAddress = (req,res)=>{
     Address.updateOne({_id:req.params.id_address},req.body,(err,result)=>{

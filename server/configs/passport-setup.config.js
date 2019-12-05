@@ -30,6 +30,7 @@ passport.use(
       //  console.log(profile);
         
        User.findOne({'google.email':profile._json.email},(err,user)=>{
+           //console.log(profile._json.picture)
            
             if(!user){
                 user = new User({
@@ -59,6 +60,7 @@ passport.use(
                 });    
               
             }    
+            //console.log(user);
             done(null,user); 
        });
     }

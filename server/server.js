@@ -38,6 +38,8 @@ mongoose.connect('mongodb://localhost:27017/peg')
         const Place = require('./router/place.route');
         const Address = require('./router/address.route');
         const rate = require('./router/rate.route');
+        const Comment = require('./router/comment.route');
+        const subComment = require('./router/subComment.router');
         app.use('/user', userRoute);
         app.use('/', userRoute);
         app.use('/News', postRoute);
@@ -45,6 +47,8 @@ mongoose.connect('mongodb://localhost:27017/peg')
         app.use('/Places',Place);
         app.use('/Address',Address);
         app.use('/Rate',rate);
+        app.use('/Comment',Comment);
+        app.use('/subComment',subComment);
     })
     .catch((err)=>{
         console.log(err);

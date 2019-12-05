@@ -17,7 +17,7 @@ const passportSetup =  require('../configs/passport-setup.config');
 route.post('/singup',usercontroller.signup);
 route.post('/singin',login.signin);
 
-route.get('/authGoogle',passport.authenticate('google',{
+
 route.get('/authGoogle', passport.authenticate('google',{
     scope:['profile', 'email']
 }));
