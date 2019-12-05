@@ -1,6 +1,11 @@
 const User = require('../models/User.model');
+<<<<<<< HEAD
 const fs = require('fs');
 const tokena = require('jsonwebtoken');
+=======
+const fs= require('fs');
+const jwt = require('jsonwebtoken');
+>>>>>>> 6c869f9f943fd603d1fe088465d55210bcb1b351
 const config = require('../configs/config')
 const key = require('../configs/key.config');
 const googleStrategy = require('passport-google-oauth20');
@@ -34,9 +39,17 @@ const signin = (req, res) => {
             if (err) {
                 console.log(err);
             }
+<<<<<<< HEAD
 
             const token = tokena.sign({ _id: user._id, isAdmin: result }, config.jwtSecret);
             res.cookie('token', token, { exqire: new Date() + 3000 });
+=======
+            
+            const token = jwt.sign({_id: user._id, isAdmin: result}, config.jwtSecret, { expiresIn: 60 * 2 });
+            // console.log(user);
+            // console.log('token local: '+token);
+            res.cookie('token',token, {exqire: new Date()+3000});
+>>>>>>> 6c869f9f943fd603d1fe088465d55210bcb1b351
             return res.json({
                 data: {
                     token: token,
@@ -119,6 +132,7 @@ const signGoogle = (req, res) => {
                 })
             })
         }
+<<<<<<< HEAD
     });
 }
 
@@ -134,6 +148,11 @@ const checkOathToken = (req, res, next) => {
         tokena.verify(token, config.jwtSecret, function (err, decoded) {
             if (err) {
                 return res.status(401).json({ message: 'failed authencation token' });
+=======
+        jwt.verify(token,config.jwtSecret,function(err,decoded){
+            if(err){
+                return res.status('200').json({message:'Vui lòng đăng nhập!'});
+>>>>>>> 6c869f9f943fd603d1fe088465d55210bcb1b351
             }
             else {
                 req.session = { userId: decoded._id }
@@ -143,15 +162,26 @@ const checkOathToken = (req, res, next) => {
             }
         });
     }
+<<<<<<< HEAD
     else {
         return res.status(401).json({ massage: 'not token' });
+=======
+    else{
+        return res.status(401).json({massage:'error'});
+>>>>>>> 6c869f9f943fd603d1fe088465d55210bcb1b351
     }
 }
 
 // use login with google, facebook
+<<<<<<< HEAD
 const callback = (req, res, next) => {
     const token = tokena.sign({ _id: req.user._id }, config.jwtSecret);
     res.cookie('token', token, { exqire: new Date() + 3000 });
+=======
+const callback = (req,res, next)=>{
+    const token = jwt.sign({_id: req.user._id, isAdmin: result},config.jwtSecret);
+    res.cookie('token',token, {exqire: new Date()+3000});
+>>>>>>> 6c869f9f943fd603d1fe088465d55210bcb1b351
     return res.json({
         message: "Đăng nhập thành công !",
         data: {
@@ -167,6 +197,7 @@ const callback = (req, res, next) => {
 }
 
 module.exports =
+<<<<<<< HEAD
     {
         callback: callback,
         signin: signin,
@@ -174,3 +205,10 @@ module.exports =
 
 
     };
+=======
+{
+    callback:callback,
+    signin:signin,
+    checkOauthToken:checkOathToken
+};
+>>>>>>> 6c869f9f943fd603d1fe088465d55210bcb1b351

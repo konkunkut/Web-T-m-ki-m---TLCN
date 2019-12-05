@@ -13,22 +13,22 @@ export function signUp(body){
                 })
 }
 
-export function loginGoogle(){
-    const config = {
-        headers: {
-            'Access-Control-Allow-Origin': 'http://localhost',
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }
-    }
+export function loginGoogle(body){
+    // const config = {
+    //     headers: {
+    //         'Access-Control-Allow-Origin': 'http://localhost',
+    //         'Accept': 'application/json',
+    //         'Content-Type': 'application/json',
+    //       }
+    // }
 
-    return axios.get(`${API_URL}/user/authGoogle`, config)
+    return axios.post(`${API_URL}/user/singinGG`,body)
                 .then(res=>{
-                    // return res.data
+                    return res.data
                 })
                 .catch(err=>{
                     console.log(err);
-                    // return err
+                    return err
                 })
 }
 

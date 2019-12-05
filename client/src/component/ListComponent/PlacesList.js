@@ -7,7 +7,7 @@ class PlacesList extends React.Component {
   render() {
     return (
       <div>
-        {this.props.contacts.map(c => 
+        {this.props.contacts.map(c =>
           <SuggestPlaces key={c._id}
             idPlace={c._id}
             name={c.name_place}

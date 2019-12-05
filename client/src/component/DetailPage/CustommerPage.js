@@ -2,7 +2,8 @@ import React from 'react';
 import 'antd/dist/antd.css';
 import './CustommerPage.scss';
 import {connect} from 'react-redux';
-import {configName, validAvatar} from '../../action/identifyData';
+import {configName, validAvatar, logOut} from '../../action/identifyData';
+import {HOME_URL} from '../../config';
 
 import { getProfile } from './ActionCustomer/actionAPI';
 
@@ -30,16 +31,25 @@ class CustommerPage extends React.Component {
         }
     }
 
-
     setOwn = () => {
         this.setState({ checkOwn: !this.state.checkOwn })
+    }
+
+    reLogin = (data)=>{
+        message.error(data,2);
+        sessionStorage.clear();
+        this.props.logOut();
+    
+        window.location.href= `${HOME_URL}`;
+        //this.props.callback();
     }
 
     componentDidMount() {
 
         getProfile(this.state.userToken).then((data) => {
             if (!data.success) {
-                message.error(data.message, 2);
+                // message.error(, 2);
+                this.reLogin(data.message);
             }
             else {
                 // this.setState({ userAvatar: data.data.avatar });
@@ -64,7 +74,10 @@ class CustommerPage extends React.Component {
                 {/* khung nội dung chính */}
                 <Col span={20}>
                     <Row className="info-profile" >
-                        <Avatar className="avatar-user" size={64} src={this.props.avatar} />
+                        {this.props.avatar !="http://localhost:3100undefined" ? 
+                        <Avatar className="avatar-user" size={64} src={this.props.avatar} />:
+                        <Avatar className="avatar-user" size={64} icon="user" />
+                        }
                         <h2>{this.props.firstName} {this.props.lastName}</h2>
                     </Row>
 
@@ -119,4 +132,4 @@ function mapStateToProp(state){
     }
 }
 
-export default connect(mapStateToProp, {configName, validAvatar})(CustommerPage);
+export default connect(mapStateToProp, {configName, validAvatar, logOut})(CustommerPage);

@@ -2,7 +2,11 @@ import React from 'react';
 import 'antd/dist/antd.css';
 import {logIn, saveSessionStorage, loginGoogle} from './authAPI';
 
+import {connect} from 'react-redux';
+import {CheckLogin} from '../action/identifyData';
+
 import NewAcc from './NewAcc';
+import LoginWithGoogle from './GGLogin';
 
 import { Drawer, Form, Button, Col, Row, Input, Select, Icon, message } from 'antd';
 
@@ -30,6 +34,14 @@ class DrawerForm extends React.Component {
     this.props.form.resetFields();
   };
 
+  onCloseGGLogin =()=>{
+    this.setState({
+      visible: false,
+    });
+    this.props.form.resetFields();
+    this.props.callback();
+  }
+
   onSubmit = (e) => {
     // this.onClose();
     // this.props.callback();
@@ -50,6 +62,7 @@ class DrawerForm extends React.Component {
           else{
             // save on session
             saveSessionStorage(data);
+            this.props.CheckLogin();
 
             // console.log('Received values of form: ', values);
             this.setState({ loading: true });
@@ -70,6 +83,7 @@ class DrawerForm extends React.Component {
   onClicku = () => {
     this.setState({visibleX:true});
   }
+
   newState= () => {
     this.setState({visibleX:false});
   }
@@ -82,20 +96,6 @@ class DrawerForm extends React.Component {
 
   inputChange = event =>{
     this.setState({ [event.target.name] : event.target.value});
-  }
-
-  loginGG = ()=>{
-    loginGoogle().then((data)=>{
-      // if(!data.success){
-      //   console.log(data.message);
-      // }
-      // else{
-      //   saveSessionStorage(data);
-      //   message.success(data.message, 2);
-      //   this.onClose();
-      //   this.props.callback();
-      // }
-    })
   }
 
   render() {
@@ -178,10 +178,11 @@ class DrawerForm extends React.Component {
                   </Button>
                 </Row>
                 <Row style={{paddingTop: '10px'}}>
-                  <Button type="danger" size="large" ghost onClick={this.loginGG} >
+                  {/* <Button type="danger" size="large" ghost onClick={} >
                   <Icon type="google-square" theme="filled" />
                     Đăng nhập với Google
-                  </Button>
+                  </Button> */}
+                  <LoginWithGoogle callback={this.onCloseGGLogin} />
                 </Row>
               </Form>
           </div>
@@ -219,6 +220,14 @@ class DrawerForm extends React.Component {
   }
 }
 
+function mapStateToProp(state){
+  return{
+
+  }
+}
+
 const LoginAcc = Form.create()(DrawerForm);
 
-export default LoginAcc;
+export default connect(mapStateToProp, {CheckLogin})(LoginAcc);
+
+// export default LoginAcc;

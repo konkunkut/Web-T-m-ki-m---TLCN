@@ -4,8 +4,10 @@ import 'antd/dist/antd.css';
 import ListCards from './ListCard';
 
 import {Layout, message} from 'antd';
-
+import {connect} from 'react-redux';
 import {getAllPlaces, getUserPlaces} from '../../../../action/getInfoPlaces';
+import {logOut} from '../../../../action/identifyData';
+import {HOME_URL} from '../../../../config';
 
 const {Content} = Layout;
 
@@ -23,10 +25,20 @@ class ShowPlace extends React.Component{
         this.props.callback();
     }
 
+    reLogin = (data)=>{
+        message.error(data,2);
+        sessionStorage.clear();
+        this.props.logOut();
+    
+        window.location.href= `${HOME_URL}`;
+        //this.props.callback();
+    }
+
     componentDidMount(){
         getUserPlaces(sessionStorage.getItem("token")).then((data)=>{
             if(!data.success){
-                message.error(data.message, 2);
+                // message.error(data.message, 2);
+                this.reLogin(data.message);
             }
             else{
                 this.setState({contacts: data.data});
@@ -45,12 +57,12 @@ class ShowPlace extends React.Component{
         );
     }
 }
-// function mapStateToProp(state){
-//     return{
+function mapStateToProp(state){
+    return{
         
-//     }
-// }
+    }
+}
 
 // const ShowPlaces = Form.create()(ShowPlace);
-// export default connect(mapStateToProp, {editProfile})(EditPlaces);
-export default ShowPlace;
+export default connect(mapStateToProp, {logOut})(ShowPlace);
+// export default ShowPlace;

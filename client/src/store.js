@@ -1,5 +1,6 @@
 import {createStore, compose, applyMiddleware} from 'redux';
 import rootReducer from './reducers';
+import {LOGIN_SUCCESS} from './action/constants'
 import thunk from 'redux-thunk';
 const initialState = {}
 
@@ -11,5 +12,10 @@ const store = createStore(
   initialState,
   composeEnhancers(applyMiddleware(...middleWare))
 );
+
+var data = sessionStorage.getItem("token");
+if(data){
+  store.dispatch({type : LOGIN_SUCCESS});
+}
 
 export default store;

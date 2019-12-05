@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import {HOME_URL} from '../config';
 import {connect} from 'react-redux';
-import {configName} from '../action/identifyData';
+import {configName, logOut } from '../action/identifyData';
 
 import { Menu, Dropdown, Icon } from 'antd';
 
@@ -20,6 +20,8 @@ class ShowAcc extends React.Component {
 
   onLogout = () => {
     sessionStorage.clear();
+    this.props.logOut();
+
     window.location.href= `${HOME_URL}`;
     this.props.callback();
   };
@@ -62,4 +64,4 @@ function mapStateToProp(state){
   }
 }
 
-export default connect(mapStateToProp, {configName})(ShowAcc);
+export default connect(mapStateToProp, {configName, logOut})(ShowAcc);

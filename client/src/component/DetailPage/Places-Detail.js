@@ -1,5 +1,5 @@
 import React from 'react';
-import { API_URL } from '../../config';
+import { API_URL, HOME_URL } from '../../config';
 
 import SlideshowGallery from '../Carousel/slideshow-gallery';
 import PrivateMAp from '../CurentLocation/privateMap';
@@ -7,23 +7,27 @@ import PrivateMAp from '../CurentLocation/privateMap';
 import 'antd/dist/antd.css';
 import './Places-Detail.scss';
 
+import {connect} from 'react-redux';
+import { CheckLogin, logOut } from '../../action/identifyData';
+
 import MyComment from './comment/Comment';
 import { getDetailPlaces } from '../../action/getInfoPlaces';
+import { getAllRate, getRateOfUser, createRate, updateRate } from '../../action/getSetRate';
 
-import { Col, Row, Divider, BackTop, Layout, Rate, Icon, Progress, Avatar, Tag, message } from 'antd';
+import { Col, Row, Divider, BackTop, Layout, Rate, Icon, Progress, Avatar, Tag, message, Affix } from 'antd';
+import { fileToObject } from 'antd/lib/upload/utils';
 
 
 const { Content } = Layout;
 
-const collection = [
+var collection = [
     // { src: "https://images.unsplash.com/photo-1559666126-84f389727b9a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1356&q=80", caption: "Caption one" },
     // { src: "https://images.unsplash.com/photo-1557389352-e721da78ad9f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80", caption: "Caption two" },
     // { src: "https://images.unsplash.com/photo-1553969420-fb915228af51?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1049&q=80", caption: "Caption three" },
     // { src: "https://images.unsplash.com/photo-1550596334-7bb40a71b6bc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80", caption: "Caption four" },
     // { src: "https://images.unsplash.com/photo-1550640964-4775934de4af?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80", caption: "Caption five" },
 ];
-var dataMaps =[];
-
+var dataMaps = [];
 
 class DetailPlaces extends React.Component {
     constructor(props) {
@@ -41,21 +45,64 @@ class DetailPlaces extends React.Component {
             decription: null,
             picture: [],
 
+            onceRate: null,
+            twoRate: null,
+            threeRate: null,
+            fourRate: null,
+            fiveRate: null,
+            totalRate: null,
+            nonRate: null,
+
             userFirstName: null,
             userLastName: null,
             userTel: null,
             userAvatar: "",
-
-            // images : [],
-
-            index: 0,
-            setIndex: null,
         }
         this.match = props.match;
     }
 
+    reLogin = (data)=>{
+        message.error(data,2);
+        sessionStorage.clear();
+        this.props.logOut();
+    
+        window.location.href= `${HOME_URL}`;
+        //this.props.callback();
+    }
+
+    onChangeRate = (value) => {
+        //create new rate
+        if(this.state.nonRate == null){
+            this.setState({ nonRate: value });
+            var body={
+                id_place: this.match.params.name,
+                rate : value,
+            }
+            createRate(sessionStorage.getItem("token"), body).then((data)=>{
+                if(!data.success){
+                    this.reLogin(data.message);
+                }
+            });
+        }
+        //update rate
+        else{
+            this.setState({ nonRate: value });
+            var body={
+                id_place: this.match.params.name,
+                rate : value,
+            }
+            updateRate(sessionStorage.getItem("token"), body).then((data)=>{
+                //message.error(data.message, 2)
+                if(!data.success){
+                    this.reLogin(data.message);
+                }
+            })
+        }
+    }
 
     componentDidMount = () => {
+        //get data place
+        //console.log("aaaa");
         getDetailPlaces(this.match.params.name).then((data) => {
             if (!data.success) {
                 message.error(data.message, 2);
@@ -65,10 +112,10 @@ class DetailPlaces extends React.Component {
                     dataMaps.pop();
                 }
                 dataMaps.push({
-                    lat : data.data.lat, 
-                    lng : data.data.lng, 
-                    name : data.data.name_place, 
-                    phone : data.data.phone
+                    lat: data.data.lat,
+                    lng: data.data.lng,
+                    name: data.data.name_place,
+                    phone: data.data.phone
                 });
 
                 this.setState({
@@ -98,12 +145,79 @@ class DetailPlaces extends React.Component {
                     })
                 }
             }
-        })
+        });
+
+        //  console.log("aa" + this.props.isLogin);
+        //get rate of user
+        if(this.props.isLogin){
+            getRateOfUser(sessionStorage.getItem("token"), this.match.params.name).then((data)=>{
+                if(!data.data[0]){
+                    console.log("chưa rate");
+                    // message.error(data.message);
+                    this.setState({nonRate : null});
+                    
+                }
+                else{
+                    this.setState({nonRate : data.data[0].rate});
+                    // console.log(data.data);
+                }
+            })
+        }
+
+        //get all rate
+        getAllRate(this.match.params.name).then((data)=>{
+            if(!data.success){
+                message.error(data.message, 2);
+            }
+            else{
+                if(data.data)
+                if(data.data.length >0)
+                // console.log("Số sao : " + data.data[0]._id.rate, data.data[0].count);
+                for(let i=0; i< data.data.length; i++){
+                    if(data.data[i]._id.rate == 1){
+                        this.setState({onceRate : data.data[i].count,
+                            totalRate : this.state.totalRate +1});
+                    }
+                    else{
+                        this.setState({onceRate : 0});
+                    }
+                    if(data.data[i]._id.rate == 2){
+                        this.setState({twoRate : data.data[i].count,
+                            totalRate : this.state.totalRate +1});
+                    }
+                    else{
+                        this.setState({twoRate : 0});
+                    }
+                    if(data.data[i]._id.rate == 3){
+                        this.setState({threeRate : data.data[i].count,
+                            totalRate : this.state.totalRate +1});
+                    }
+                    else{
+                        this.setState({threeRate : 0});
+                    }
+                    if(data.data[i]._id.rate == 4){
+                        this.setState({fourRate : data.data[i].count,
+                            totalRate : this.state.totalRate +1});
+                    }
+                    else{
+                        this.setState({fourRate : 0});
+                    }
+                    if(data.data[i]._id.rate == 5){
+                        this.setState({fiveRate : data.data[i].count,
+                            totalRate : this.state.totalRate +1});
+                    }
+                    else{
+                        this.setState({fiveRate : 0});
+                    }
+                }
+            }
+        });
+
     }
 
 
     render() {
-        // console.log(this.props.location.state.__id);
+        //console.log("aaa"+this.state.nonRate);
         return (
             <Content style={{ padding: '20px', marginTop: 60 }}>
                 {/* tạo cho đẹp */}
@@ -149,7 +263,7 @@ class DetailPlaces extends React.Component {
                                     <p>
                                         Mô tả:
                                     </p>
-                                    <p>
+                                    <p style={{whiteSpace : "pre"}}>
                                         {this.state.decription}
                                     </p>
                                 </Col>
@@ -159,7 +273,7 @@ class DetailPlaces extends React.Component {
                         {/* location on map */}
                         <Row>
                             <Col style={{ backgroundColor: '#636363', height: 400 }}>
-                                <PrivateMAp  dataMap={dataMaps} />
+                                <PrivateMAp dataMap={dataMaps} />
                             </Col>
 
                             <Divider></Divider>
@@ -171,27 +285,34 @@ class DetailPlaces extends React.Component {
                             <div style={{ paddingBottom: 10 }}>
                                 <Col>
                                     <Progress type="circle" strokeColor={{ '100%': '#f5e60f' }} style={{ float: "left", marginRight: 20 }}
-                                        percent={80}
-                                        format={percent => `${percent / 20} /5`} />
+                                        percent={((this.state.onceRate+
+                                            this.state.twoRate*2+
+                                            this.state.threeRate*3+
+                                            this.state.fourRate*4+
+                                            this.state.fiveRate*5)/this.state.totalRate)/5*100}
+                                        format={percent => `${percent*5/100} /5`} />
 
                                     <div style={{ width: 170, float: "left" }}>
-                                        <Progress percent={30} strokeColor={{ '0%': '#f5e60f', '100%': '#f5e60f' }} size="small" status="normal"
-                                            format={percent => `${percent / percent} sao`} />
-                                        <Progress percent={50} strokeColor={{ '0%': '#f5e60f', '100%': '#f5e60f' }} size="small" status="normal"
-                                            format={percent => `${percent / percent * 2} sao`} />
-                                        <Progress percent={70} strokeColor={{ '0%': '#f5e60f', '100%': '#f5e60f' }} size="small" status="normal"
-                                            format={percent => `${percent / percent * 3} sao`} />
-                                        <Progress percent={100} strokeColor={{ '0%': '#f5e60f', '100%': '#f5e60f' }} size="small" status="normal"
-                                            format={percent => `${percent / percent * 4} sao`} />
-                                        <Progress percent={100} strokeColor={{ '0%': '#f5e60f', '100%': '#f5e60f' }} size="small" status="normal"
-                                            format={percent => `${percent / percent * 5} sao`} />
+                                        <Progress percent={(this.state.onceRate/this.state.totalRate)*100} strokeColor={{ '0%': '#f5e60f', '100%': '#f5e60f' }} size="small" status="normal"
+                                            format={() => '1 sao'} />
+                                        <Progress percent={(this.state.twoRate/this.state.totalRate)*100} strokeColor={{ '0%': '#f5e60f', '100%': '#f5e60f' }} size="small" status="normal"
+                                            format={() => '2 sao'} />
+                                        <Progress percent={(this.state.threeRate/this.state.totalRate)*100} strokeColor={{ '0%': '#f5e60f', '100%': '#f5e60f' }} size="small" status="normal"
+                                            format={() => '3 sao'} />
+                                        <Progress percent={(this.state.fourRate/this.state.totalRate)*100} strokeColor={{ '0%': '#f5e60f', '100%': '#f5e60f' }} size="small" status="normal"
+                                            format={() => '4 sao'} />
+                                        <Progress percent={(this.state.fiveRate/this.state.totalRate)*100} strokeColor={{ '0%': '#f5e60f', '100%': '#f5e60f' }} size="small" status="normal"
+                                            format={() => '5 sao'} />
                                     </div>
                                 </Col>
 
                                 {/* rate */}
                                 <Col span={6} offset={4}>
-                                    <h3>Đánh giá</h3>
-                                    <Rate disabled defaultValue={4} />
+                                    <h3>Đánh giá của bạn</h3>
+                                    {this.props.isLogin ?
+                                    <Rate onChange={this.onChangeRate} value={this.state.nonRate} /> :
+                                    <Rate disabled value={0} />
+                                    }
                                 </Col>
 
                             </div>
@@ -206,20 +327,27 @@ class DetailPlaces extends React.Component {
                     </Col>
 
                     {/* thông tin người đăng */}
+
                     <Col span={8} className="owner-decription">
-                        <p style={{}}>Người đăng</p>
-                        <Divider style={{ marginTop: 21 }}></Divider>
-                        <Row>
-                            <Avatar size={48} src={this.state.userAvatar} style={{ float: "left" }} />
-                            <span style={{ float: "left", fontWeight: "bolder", marginLeft: 15, marginTop: 5, fontSize: 20 }}>
-                                {this.state.userFirstName} {this.state.userLastName}
-                            </span>
-                        </Row>
-                        <Divider></Divider>
-                        <Row>
-                            <Tag color="#87d068"><Icon type="phone" style={{ fontSize: 20 }} /> <span style={{ fontSize: 20 }}>{this.state.userTel}</span></Tag>
-                        </Row>
+                        <Affix offsetTop={80}>
+                            <p style={{}}>Người đăng</p>
+                            <Divider style={{ marginTop: 21 }}></Divider>
+                            <Row>
+                                {this.state.userAvatar !="http://localhost:3100undefined" ?
+                                    <Avatar size={48} src={this.state.userAvatar} style={{ float: "left" }} />:
+                                    <Avatar size={48} icon="user" style={{ float: "left" }} />
+                                }
+                                <span style={{ float: "left", fontWeight: "bolder", marginLeft: 15, marginTop: 5, fontSize: 20 }}>
+                                    {this.state.userFirstName} {this.state.userLastName}
+                                </span>
+                            </Row>
+                            <Divider></Divider>
+                            <Row>
+                                <Tag color="#87d068"><Icon type="phone" style={{ fontSize: 20 }} /> <span style={{ fontSize: 20 }}>{this.state.userTel}</span></Tag>
+                            </Row>
+                        </Affix>
                     </Col>
+
                 </Col>
 
                 {/* tạo cho đẹp */}
@@ -234,4 +362,12 @@ class DetailPlaces extends React.Component {
     }
 }
 
-export default DetailPlaces;
+function mapStateToProp(state){
+    return{
+        isLogin : state.config.checkLogin
+    }
+  }
+  
+export default connect(mapStateToProp, {CheckLogin, logOut})(DetailPlaces);
+
+// export default DetailPlaces;
