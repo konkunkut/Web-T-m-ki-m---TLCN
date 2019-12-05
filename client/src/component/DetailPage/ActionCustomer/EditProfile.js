@@ -2,9 +2,10 @@ import React from 'react';
 import 'antd/dist/antd.css';
 import './EditProfile.scss';
 import {connect} from 'react-redux';
+import {HOME_URL} from '../../../config';
 
 import {getProfile, editProfile} from './actionAPI';
-import {validAvatar} from '../../../action/identifyData';
+import {validAvatar, logOut} from '../../../action/identifyData';
 
 import ChangePass from './ChangePass';
 import UploadPics from '../../UploadPic/UploadPic';
@@ -37,10 +38,20 @@ class EditProfiles extends React.Component
         this.loadItem();
     } 
 
+    reLogin = (data)=>{
+        message.error(data,2);
+        sessionStorage.clear();
+        this.props.logOut();
+    
+        window.location.href= `${HOME_URL}`;
+        //this.props.callback();
+    }
+
     loadItem(){
         getProfile(this.state.userToken).then((data) => {
             if (!data.success) {
-                message.error(data.message, 2);
+                // message.error(data.message, 2);
+                this.reLogin(data.message);
             }
             else {
                 this.setState({
@@ -62,7 +73,8 @@ class EditProfiles extends React.Component
           };
         this.props.editProfile(body, this.state.userToken).then((data) =>{
             if(!data.success){
-                message.error(data.message, 2);
+                // message.error(data.message, 2);
+                this.reLogin(data.message);
             }
             else{
                 message.success(data.message, 2);
@@ -211,7 +223,10 @@ class EditProfiles extends React.Component
                     {/* đổi ảnh đại diện */}
                     <Col span={9} className="edit-avatar" >
                         <Row>
-                            <Avatar shape="square" size={256} src={this.props.avatar} />
+                        {this.props.avatar !="http://localhost:3100undefined" ?
+                            <Avatar shape="square" size={256} src={this.props.avatar} />:
+                            <Avatar shape="square" size={256} icon="user" />
+                        }
                         </Row>
                         <Divider></Divider>
                         {/* upload component */}
@@ -244,4 +259,4 @@ function mapStateToProp(state){
 }
 
 const EditProfile = Form.create()(EditProfiles);
-export default connect(mapStateToProp, {editProfile, validAvatar})(EditProfile);
+export default connect(mapStateToProp, {editProfile, validAvatar, logOut})(EditProfile);

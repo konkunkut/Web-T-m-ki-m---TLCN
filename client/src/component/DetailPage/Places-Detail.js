@@ -1,5 +1,5 @@
 import React from 'react';
-import { API_URL } from '../../config';
+import { API_URL, HOME_URL } from '../../config';
 
 import SlideshowGallery from '../Carousel/slideshow-gallery';
 import PrivateMAp from '../CurentLocation/privateMap';
@@ -8,7 +8,7 @@ import 'antd/dist/antd.css';
 import './Places-Detail.scss';
 
 import {connect} from 'react-redux';
-import { CheckLogin } from '../../action/identifyData';
+import { CheckLogin, logOut } from '../../action/identifyData';
 
 import MyComment from './comment/Comment';
 import { getDetailPlaces } from '../../action/getInfoPlaces';
@@ -61,6 +61,15 @@ class DetailPlaces extends React.Component {
         this.match = props.match;
     }
 
+    reLogin = (data)=>{
+        message.error(data,2);
+        sessionStorage.clear();
+        this.props.logOut();
+    
+        window.location.href= `${HOME_URL}`;
+        //this.props.callback();
+    }
+
     onChangeRate = (value) => {
         //create new rate
         if(this.state.nonRate == null){
@@ -69,7 +78,11 @@ class DetailPlaces extends React.Component {
                 id_place: this.match.params.name,
                 rate : value,
             }
-            createRate(sessionStorage.getItem("token"), body);
+            createRate(sessionStorage.getItem("token"), body).then((data)=>{
+                if(!data.success){
+                    this.reLogin(data.message);
+                }
+            });
         }
         //update rate
         else{
@@ -80,6 +93,9 @@ class DetailPlaces extends React.Component {
             }
             updateRate(sessionStorage.getItem("token"), body).then((data)=>{
                 //message.error(data.message, 2)
+                if(!data.success){
+                    this.reLogin(data.message);
+                }
             })
         }
     }
@@ -162,21 +178,36 @@ class DetailPlaces extends React.Component {
                         this.setState({onceRate : data.data[i].count,
                             totalRate : this.state.totalRate +1});
                     }
+                    else{
+                        this.setState({onceRate : 0});
+                    }
                     if(data.data[i]._id.rate == 2){
                         this.setState({twoRate : data.data[i].count,
                             totalRate : this.state.totalRate +1});
+                    }
+                    else{
+                        this.setState({twoRate : 0});
                     }
                     if(data.data[i]._id.rate == 3){
                         this.setState({threeRate : data.data[i].count,
                             totalRate : this.state.totalRate +1});
                     }
+                    else{
+                        this.setState({threeRate : 0});
+                    }
                     if(data.data[i]._id.rate == 4){
                         this.setState({fourRate : data.data[i].count,
                             totalRate : this.state.totalRate +1});
                     }
+                    else{
+                        this.setState({fourRate : 0});
+                    }
                     if(data.data[i]._id.rate == 5){
                         this.setState({fiveRate : data.data[i].count,
                             totalRate : this.state.totalRate +1});
+                    }
+                    else{
+                        this.setState({fiveRate : 0});
                     }
                 }
             }
@@ -302,7 +333,10 @@ class DetailPlaces extends React.Component {
                             <p style={{}}>Người đăng</p>
                             <Divider style={{ marginTop: 21 }}></Divider>
                             <Row>
-                                <Avatar size={48} src={this.state.userAvatar} style={{ float: "left" }} />
+                                {this.state.userAvatar !="http://localhost:3100undefined" ?
+                                    <Avatar size={48} src={this.state.userAvatar} style={{ float: "left" }} />:
+                                    <Avatar size={48} icon="user" style={{ float: "left" }} />
+                                }
                                 <span style={{ float: "left", fontWeight: "bolder", marginLeft: 15, marginTop: 5, fontSize: 20 }}>
                                     {this.state.userFirstName} {this.state.userLastName}
                                 </span>
@@ -334,6 +368,6 @@ function mapStateToProp(state){
     }
   }
   
-export default connect(mapStateToProp, {CheckLogin})(DetailPlaces);
+export default connect(mapStateToProp, {CheckLogin, logOut})(DetailPlaces);
 
 // export default DetailPlaces;

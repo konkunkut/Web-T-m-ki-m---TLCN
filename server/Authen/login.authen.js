@@ -1,6 +1,6 @@
 const User = require('../models/User.model');
 const fs= require('fs');
-const tokena = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 const config = require('../configs/config')
 const key = require('../configs/key.config');
 const googleStrategy = require('passport-google-oauth20');
@@ -35,7 +35,7 @@ const signin = (req,res) =>{
                 console.log(err);
             }
             
-            const token = tokena.sign({_id: user._id, isAdmin: result},config.jwtSecret);
+            const token = jwt.sign({_id: user._id, isAdmin: result}, config.jwtSecret, { expiresIn: 60 * 2 });
             // console.log(user);
             // console.log('token local: '+token);
             res.cookie('token',token, {exqire: new Date()+3000});
@@ -65,9 +65,9 @@ const checkOathToken = (req,res,next )=>{
             token = token.slice(7,token.length);
             
         }
-        tokena.verify(token,config.jwtSecret,function(err,decoded){
+        jwt.verify(token,config.jwtSecret,function(err,decoded){
             if(err){
-                return res.status(401).json({message:'failed authencation token'});
+                return res.status('200').json({message:'Vui lòng đăng nhập!'});
             }
             else{
                req.session = {userId:decoded._id}
@@ -79,13 +79,13 @@ const checkOathToken = (req,res,next )=>{
         });
     }
     else{
-        return res.status(401).json({massage:'not token'});
+        return res.status(401).json({massage:'error'});
     }
 }
 
 // use login with google, facebook
 const callback = (req,res, next)=>{
-    const token = tokena.sign({_id: req.user._id, isAdmin: result},config.jwtSecret);
+    const token = jwt.sign({_id: req.user._id, isAdmin: result},config.jwtSecret);
     res.cookie('token',token, {exqire: new Date()+3000});
     return res.json({
         message: "Đăng nhập thành công !",
@@ -107,6 +107,4 @@ module.exports =
     callback:callback,
     signin:signin,
     checkOauthToken:checkOathToken
-    
-    
 };

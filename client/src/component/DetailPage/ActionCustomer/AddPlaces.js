@@ -7,9 +7,11 @@ import StepOne from './StepSignPlace/StepOne';
 import StepTwo from './StepSignPlace/StepTwo';
 import StepThree from './StepSignPlace/StepThree';
 
+
 import {connect} from 'react-redux';
 import {storeTempData, storeTempPic, storeTemplatLng} from '../../../action/storeTempInfo';
 import {registerPlace} from '../../../action/uploadPlace';
+import {logOut} from '../../../action/identifyData';
 
 import { Row, Layout, Icon, Steps, message, Button } from 'antd';
 
@@ -45,6 +47,15 @@ class AddPlaces extends React.Component {
         this.setState({ checkSign: !this.state.checkSign, current: 0 });  
     }
 
+    reLogin = (data)=>{
+        message.error(data,2);
+        sessionStorage.clear();
+        this.props.logOut();
+    
+        window.location.href= `${HOME_URL}`;
+        //this.props.callback();
+    }
+
     onSigned = () => {
 
         let formData = new FormData();
@@ -77,6 +88,7 @@ class AddPlaces extends React.Component {
             registerPlace(formData, sessionStorage.getItem("token"))
             .then((data)=>{
                 if(!data.success){
+                    this.reLogin(data.message);
                 }
                 else{
                     // console.log(data.data.picture);
@@ -176,6 +188,6 @@ function mapStateToProp(state){
 }
 
 // const EditProfile = Form.create()(EditProfiles);
-export default connect(mapStateToProp, {storeTempData, storeTempPic, storeTemplatLng})(AddPlaces);
+export default connect(mapStateToProp, {storeTempData, storeTempPic, storeTemplatLng, logOut})(AddPlaces);
 
 // export default AddPlaces;

@@ -8,6 +8,7 @@ import SlideshowGallery from '../../../Carousel/slideshow-gallery';
 import { districsHCM, districsHN, typePlace } from '../../../../config';
 import { storeIdPlace, getDetailPlaces } from '../../../../action/getInfoPlaces';
 import { storeTempData, storeTempPic, storeTemplatLng } from '../../../../action/storeTempInfo';
+import {getAllRate} from '../../../../action/getSetRate';
 import { editPlace } from '../../../../action/uploadPlace';
 import { connect } from 'react-redux';
 import UpdateLocation from '../StepSignPlace/StepThree';
@@ -50,6 +51,13 @@ class EditPlace extends React.Component {
             lng: null,
             decription: null,
             picture: [],
+
+            onceRate: null,
+            twoRate: null,
+            threeRate: null,
+            fourRate: null,
+            fiveRate: null,
+            totalRate: null,
 
         }
     }
@@ -185,6 +193,7 @@ class EditPlace extends React.Component {
     }
 
     componentDidMount() {
+        //lấy thông tin chi tiết
         getDetailPlaces(this.props.idPlace).then((data) => {
             if (!data.success) {
                 message.error(data.message, 2);
@@ -213,6 +222,55 @@ class EditPlace extends React.Component {
                 })
             }
         });
+
+        //lấy đánh giá
+        getAllRate(this.props.idPlace).then((data)=>{
+            if(!data.success){
+                message.error(data.message, 2);
+            }
+            else{
+                if(data.data)
+                if(data.data.length >0)
+                // console.log("Số sao : " + data.data[0]._id.rate, data.data[0].count);
+                for(let i=0; i< data.data.length; i++){
+                    if(data.data[i]._id.rate == 1){
+                        this.setState({onceRate : data.data[i].count,
+                            totalRate : this.state.totalRate +1});
+                    }
+                    else{
+                        this.setState({onceRate : 0});
+                    }
+                    if(data.data[i]._id.rate == 2){
+                        this.setState({twoRate : data.data[i].count,
+                            totalRate : this.state.totalRate +1});
+                    }
+                    else{
+                        this.setState({twoRate : 0});
+                    }
+                    if(data.data[i]._id.rate == 3){
+                        this.setState({threeRate : data.data[i].count,
+                            totalRate : this.state.totalRate +1});
+                    }
+                    else{
+                        this.setState({threeRate : 0});
+                    }
+                    if(data.data[i]._id.rate == 4){
+                        this.setState({fourRate : data.data[i].count,
+                            totalRate : this.state.totalRate +1});
+                    }
+                    else{
+                        this.setState({fourRate : 0});
+                    }
+                    if(data.data[i]._id.rate == 5){
+                        this.setState({fiveRate : data.data[i].count,
+                            totalRate : this.state.totalRate +1});
+                    }
+                    else{
+                        this.setState({fiveRate : 0});
+                    }
+                }
+            }
+        });
     }
 
     componentDidUpdate() {
@@ -224,35 +282,6 @@ class EditPlace extends React.Component {
             this.state.cityvalue,
             this.state.decription
         );
-
-        // getDetailPlaces(this.props.idPlace).then((data) => {
-        //     if (!data.success) {
-        //         message.error(data.message, 2);
-        //     }
-        //     else {
-        //         this.setState({
-        //             name_place: data.data.name_place,
-        //             phone: data.data.phone,
-        //             stressvalue: data.data.stress,
-        //             dictrictvalue: data.data.dictrict,
-        //             cityvalue: data.data.city,
-        //             // createBy: data.data.createBy,
-        //             id_type_place: data.data.id_type_place,
-        //             lat: data.data.lat,
-        //             lng: data.data.lng,
-        //             decription: data.data.decription,
-        //             picture: data.data.picture,
-        //         });
-        //     };
-        //     while (collection.length) {
-        //         collection.pop();
-        //     }
-        //     for (let i = 0; i < this.state.picture.length; i++) {
-        //         collection.push({
-        //             src: `${API_URL}` + this.state.picture[i], caption: ""
-        //         })
-        //     }
-        // });
     }
 
     render() {
@@ -434,40 +463,40 @@ class EditPlace extends React.Component {
                         {/* 5 sao */}
                         <Row>
                             <Progress type="circle" strokeColor={{ '100%': '#f5e60f' }}
-                                percent={45}
-                                format={percent => `${percent} /100`}
+                                percent={(this.state.fiveRate/this.state.totalRate)*100}
+                                format={() => `${this.state.fiveRate}/${this.state.totalRate}`}
                             />
                             <p>5 sao</p>
                         </Row>
                         {/* 4 sao */}
                         <Row>
                             <Progress type="circle" strokeColor={{ '100%': '#f5e60f' }}
-                                percent={18}
-                                format={percent => `${percent} /100`}
+                                percent={(this.state.fourRate/this.state.totalRate)*100}
+                                format={() => `${this.state.fourRate}/${this.state.totalRate}`}
                             />
                             <p>4 sao</p>
                         </Row>
                         {/* 3 sao */}
                         <Row>
                             <Progress type="circle" strokeColor={{ '100%': '#f5e60f' }}
-                                percent={25}
-                                format={percent => `${percent} /100`}
+                                percent={(this.state.threeRate/this.state.totalRate)*100}
+                                format={() => `${this.state.threeRate}/${this.state.totalRate}`}
                             />
                             <p>3 sao</p>
                         </Row>
                         {/* 2 sao */}
                         <Row>
                             <Progress type="circle" strokeColor={{ '100%': '#f5e60f' }}
-                                percent={10}
-                                format={percent => `${percent} /100`}
+                                percent={(this.state.twoRate/this.state.totalRate)*100}
+                                format={() => `${this.state.twoRate}/${this.state.totalRate}`}
                             />
                             <p>2 sao</p>
                         </Row>
                         {/* 1 sao */}
                         <Row>
                             <Progress type="circle" strokeColor={{ '100%': '#f5e60f' }}
-                                percent={1}
-                                format={percent => `${percent} /100`}
+                                percent={(this.state.onceRate/this.state.totalRate)*100}
+                                format={() => `${this.state.onceRate}/${this.state.totalRate}`}
                             />
                             <p>1 sao</p>
                         </Row>
