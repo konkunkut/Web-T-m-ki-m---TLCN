@@ -25,14 +25,14 @@ class OwnPlaces extends React.Component
     {
         if(!this.state.isEdit){
             return(
-                <Content>
+                <Content style={{ backgroundColor: '#FFFFFF', minHeight: 300}}>
                     <ShowPlaces callback={this.isEdited} />
                 </Content>
             );
         }
         else{
             return(
-                <Content>
+                <Content style={{ backgroundColor: '#FFFFFF', minHeight: 300}}>
                     <EditPlaces callback={this.isEdited} />
                 </Content>
             );

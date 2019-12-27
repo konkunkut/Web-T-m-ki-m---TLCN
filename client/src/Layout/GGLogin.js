@@ -61,8 +61,7 @@ class LoginWithGoogle extends Component {
     }
 }
 const mapStateToProps = state => ({
-    isAuthenticated: state.auth.isAuthenticated,
-    error: state.error
+
 });
 
 // export default LoginWithGoogle;

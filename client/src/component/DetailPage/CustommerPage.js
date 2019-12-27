@@ -10,6 +10,7 @@ import { getProfile } from './ActionCustomer/actionAPI';
 import EditProfile from './ActionCustomer/EditProfile';
 import OwnPlaces from './ActionCustomer/OwnPlaces';
 import AddPlaces from './ActionCustomer/AddPlaces';
+import AddBlogs from './ActionCustomer/AddBlogs';
 
 import { Col, Row, BackTop, Layout, Avatar, Tabs, message } from 'antd';
 
@@ -23,6 +24,7 @@ class CustommerPage extends React.Component {
         this.state = {
             checkOwn: false,
             isAdmin : false,
+            isEditor : false,
             // userAvatar: null,
             userID: sessionStorage.getItem("userID")||null,
             // firstName: sessionStorage.getItem("firstName")||null,
@@ -36,7 +38,7 @@ class CustommerPage extends React.Component {
     }
 
     reLogin = (data)=>{
-        message.error(data,2);
+        message.error(data,3);
         sessionStorage.clear();
         this.props.logOut();
     
@@ -62,6 +64,9 @@ class CustommerPage extends React.Component {
         if(decoded.isAdmin){
             this.setState({isAdmin : decoded.isAdmin});
             // console.log(decoded);
+        }
+        if(decoded.isEditor){
+            this.setState({isEditor : decoded.isEditor});
         }
     }
 
@@ -93,21 +98,21 @@ class CustommerPage extends React.Component {
                             <TabPane tab="Thêm địa điểm" key="3">
                                 <AddPlaces />
                             </TabPane>
-                            {!this.state.isAdmin ? <div></div>:
+                            {!this.state.isAdmin||!this.state.isEditor ? <div></div>:
                                 <TabPane tab="Thêm bài biết" key="4">
-                                    Thêm bài viết ở đây
+                                    <AddBlogs />
                                 </TabPane>
                             }
-                            {!this.state.isAdmin ? <div></div>:
+                            {/* {!this.state.isAdmin||!this.state.isEditor ? <div></div>:
                                 <TabPane tab="Quản lý người dùng" key="5">
                                     Xem người dùng ở đây
                                 </TabPane>
                             }
-                            {!this.state.isAdmin ? <div></div>:
+                            {!this.state.isAdmin||!this.state.isEditor ? <div></div>:
                                 <TabPane tab="Thống kê" key="6">
                                     Thống kê ở đây
                                 </TabPane>
-                            }
+                            } */}
                         </Tabs>
                     </Row>
                 </Col>

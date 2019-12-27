@@ -62,7 +62,7 @@ class DetailPlaces extends React.Component {
     }
 
     reLogin = (data)=>{
-        message.error(data,2);
+        message.error(data,3);
         sessionStorage.clear();
         this.props.logOut();
     
@@ -152,7 +152,7 @@ class DetailPlaces extends React.Component {
         if(this.props.isLogin){
             getRateOfUser(sessionStorage.getItem("token"), this.match.params.name).then((data)=>{
                 if(!data.data[0]){
-                    console.log("chưa rate");
+                    //console.log("chưa rate");
                     // message.error(data.message);
                     this.setState({nonRate : null});
                     
@@ -178,36 +178,21 @@ class DetailPlaces extends React.Component {
                         this.setState({onceRate : data.data[i].count,
                             totalRate : this.state.totalRate +1});
                     }
-                    else{
-                        this.setState({onceRate : 0});
-                    }
                     if(data.data[i]._id.rate == 2){
                         this.setState({twoRate : data.data[i].count,
                             totalRate : this.state.totalRate +1});
-                    }
-                    else{
-                        this.setState({twoRate : 0});
                     }
                     if(data.data[i]._id.rate == 3){
                         this.setState({threeRate : data.data[i].count,
                             totalRate : this.state.totalRate +1});
                     }
-                    else{
-                        this.setState({threeRate : 0});
-                    }
                     if(data.data[i]._id.rate == 4){
                         this.setState({fourRate : data.data[i].count,
                             totalRate : this.state.totalRate +1});
                     }
-                    else{
-                        this.setState({fourRate : 0});
-                    }
                     if(data.data[i]._id.rate == 5){
                         this.setState({fiveRate : data.data[i].count,
                             totalRate : this.state.totalRate +1});
-                    }
-                    else{
-                        this.setState({fiveRate : 0});
                     }
                 }
             }
@@ -247,7 +232,7 @@ class DetailPlaces extends React.Component {
                                     input={collection}
                                     ratio={`3:2`}
                                     mode={`automatic`}
-                                    timeout={`3000`}
+                                    timeout={`6000`}
                                 />
                                 <Divider></Divider>
                             </Row>
@@ -263,9 +248,15 @@ class DetailPlaces extends React.Component {
                                     <p>
                                         Mô tả:
                                     </p>
-                                    <p style={{whiteSpace : "pre"}}>
-                                        {this.state.decription}
-                                    </p>
+                                    {this.state.decription == "null" ? 
+                                        <p style={{whiteSpace : "pre"}}>
+                                            
+                                        </p>
+                                        : 
+                                        <p style={{whiteSpace : "pre"}}>
+                                            {this.state.decription }
+                                        </p>
+                                    }
                                 </Col>
                             </Row>
                         </Row>
@@ -321,7 +312,7 @@ class DetailPlaces extends React.Component {
 
                             {/* comment */}
                             <div>
-                                <MyComment />
+                                <MyComment id={this.match.params.name} />
                             </div>
                         </Row>
                     </Col>

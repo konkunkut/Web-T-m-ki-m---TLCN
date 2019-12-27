@@ -1,11 +1,7 @@
 const User = require('../models/User.model');
-<<<<<<< HEAD
 const fs = require('fs');
-const tokena = require('jsonwebtoken');
-=======
-const fs= require('fs');
 const jwt = require('jsonwebtoken');
->>>>>>> 6c869f9f943fd603d1fe088465d55210bcb1b351
+
 const config = require('../configs/config')
 const key = require('../configs/key.config');
 const googleStrategy = require('passport-google-oauth20');
@@ -39,30 +35,51 @@ const signin = (req, res) => {
             if (err) {
                 console.log(err);
             }
-<<<<<<< HEAD
+            if (result) {
+                const token = jwt.sign({ _id: user._id, isAdmin: result }, config.jwtSecret, { expiresIn: 60 * 60 });
+                // console.log(user);
+                // console.log('token local: '+token);
+                res.cookie('token', token, { exqire: new Date() + 3000 });
 
-            const token = tokena.sign({ _id: user._id, isAdmin: result }, config.jwtSecret);
-            res.cookie('token', token, { exqire: new Date() + 3000 });
-=======
-            
-            const token = jwt.sign({_id: user._id, isAdmin: result}, config.jwtSecret, { expiresIn: 60 * 2 });
-            // console.log(user);
-            // console.log('token local: '+token);
-            res.cookie('token',token, {exqire: new Date()+3000});
->>>>>>> 6c869f9f943fd603d1fe088465d55210bcb1b351
-            return res.json({
-                data: {
-                    token: token,
-                    userID: user._id,
-                    firstName: user.fistname,
-                    lastName: user.lastname,
-                    isLocal: "isLocal",
-                    isAdmin: result,
-                    avatar: user.picture
-                },
-                message: "Đăng nhập thành công!",
-                success: true
-            })
+                return res.json({
+                    data: {
+                        token: token,
+                        userID: user._id,
+                        firstName: user.fistname,
+                        lastName: user.lastname,
+                        isLocal: "isLocal",
+                        isAdmin: result,
+                        avatar: user.picture
+                    },
+                    message: "Đăng nhập thành công!",
+                    success: true
+                })
+            }
+            else{
+                acl.hasRole(user._id.toString(), 'editor', (err, result) => {
+                    if (err) {
+                        console.log(err);
+                    }
+                    const token = jwt.sign({ _id: user._id, isEditor: result, isAdmin:'false'}, config.jwtSecret, { expiresIn: 60 * 60 });
+                    // console.log(user);
+                    // console.log('token local: '+token);
+                    res.cookie('token', token, { exqire: new Date() + 3000 });
+    
+                    return res.json({
+                        data: {
+                            token: token,
+                            userID: user._id,
+                            firstName: user.fistname,
+                            lastName: user.lastname,
+                            isLocal: "isLocal",
+                            isEditor: result,
+                            avatar: user.picture
+                        },
+                        message: "Đăng nhập thành công!",
+                        success: true
+                    })
+                });
+            }
         })
 
     })
@@ -77,7 +94,7 @@ const signGoogle = (req, res) => {
 
                 },
                 fistname: req.body.fistname,
-                lastname: req.body.lastName,
+                lastname: req.body.lastname,
                 picture: req.body.picture
             });
 
@@ -92,18 +109,25 @@ const signGoogle = (req, res) => {
                             console.log(err);
                         }
                     })
-                    const token = tokena.sign({ _id: result._id, isAdmin: result }, config.jwtSecret);
-                    res.cookie('token', token, { exqire: new Date() + 3000 });
-                    return res.json({
-                        data: {
-                            token: token,
-                            userID: result._id,
-                            firstName: result.fistname,
-                            lastName: result.lastname,
-                            avatar: result.picture
-                        },
-                        message: "Đăng nhập thành công!",
-                        success: true
+                    acl.hasRole(user._id.toString(), 'admin', (err, result) => {
+                        if (err) {
+                            console.log(err);
+                        }
+                        const token = jwt.sign({ _id: result._id, isAdmin: result }, config.jwtSecret, { expiresIn: 60 * 2 });
+                        res.cookie('token', token, { exqire: new Date() + 3000 });
+                        return res.json({
+                            data: {
+                                token: token,
+                                userID: user._id,
+                                firstName: user.fistname,
+                                lastName: user.lastname,
+                                isAdmin: result,
+                                isLocal: "isGoogle",
+                                avatar: user.picture
+                            },
+                            message: "Đăng nhập thành công!",
+                            success: true
+                        })
                     })
                 }
             });
@@ -111,11 +135,11 @@ const signGoogle = (req, res) => {
         }
         else {
             const acl = Aclclass.getAcl;
-            acl.hasRole(user._id.toString(), 'admin', (err, tf) => {
+            acl.hasRole(user._id.toString(), 'admin', (err, result) => {
                 if (err) {
                     console.log(err);
                 }
-                const token = tokena.sign({ _id: user._id, isAdmin: tf }, config.jwtSecret);
+                const token = jwt.sign({ _id: user._id, isAdmin: result }, config.jwtSecret);
                 res.cookie('token', token, { exqire: new Date() + 3000 });
                 return res.json({
                     data: {
@@ -124,7 +148,7 @@ const signGoogle = (req, res) => {
                         firstName: user.fistname,
                         lastName: user.lastname,
                         isLocal: "isGoogle",
-                        isAdmin: tf,
+                        isAdmin: result,
                         avatar: user.picture
                     },
                     message: "Đăng nhập thành công!",
@@ -132,7 +156,6 @@ const signGoogle = (req, res) => {
                 })
             })
         }
-<<<<<<< HEAD
     });
 }
 
@@ -145,14 +168,9 @@ const checkOathToken = (req, res, next) => {
             token = token.slice(7, token.length);
 
         }
-        tokena.verify(token, config.jwtSecret, function (err, decoded) {
+        jwt.verify(token, config.jwtSecret, function (err, decoded) {
             if (err) {
-                return res.status(401).json({ message: 'failed authencation token' });
-=======
-        jwt.verify(token,config.jwtSecret,function(err,decoded){
-            if(err){
-                return res.status('200').json({message:'Vui lòng đăng nhập!'});
->>>>>>> 6c869f9f943fd603d1fe088465d55210bcb1b351
+                return res.status('200').json({ message: 'Vui lòng đăng nhập!' });
             }
             else {
                 req.session = { userId: decoded._id }
@@ -162,26 +180,16 @@ const checkOathToken = (req, res, next) => {
             }
         });
     }
-<<<<<<< HEAD
     else {
-        return res.status(401).json({ massage: 'not token' });
-=======
-    else{
-        return res.status(401).json({massage:'error'});
->>>>>>> 6c869f9f943fd603d1fe088465d55210bcb1b351
+        return res.status(401).json({ massage: 'error' });
     }
 }
 
 // use login with google, facebook
-<<<<<<< HEAD
+
 const callback = (req, res, next) => {
-    const token = tokena.sign({ _id: req.user._id }, config.jwtSecret);
+    const token = jwt.sign({ _id: req.user._id, isAdmin: result }, config.jwtSecret);
     res.cookie('token', token, { exqire: new Date() + 3000 });
-=======
-const callback = (req,res, next)=>{
-    const token = jwt.sign({_id: req.user._id, isAdmin: result},config.jwtSecret);
-    res.cookie('token',token, {exqire: new Date()+3000});
->>>>>>> 6c869f9f943fd603d1fe088465d55210bcb1b351
     return res.json({
         message: "Đăng nhập thành công !",
         data: {
@@ -197,18 +205,10 @@ const callback = (req,res, next)=>{
 }
 
 module.exports =
-<<<<<<< HEAD
     {
         callback: callback,
         signin: signin,
-        checkOauthToken: checkOathToken
-
+        checkOauthToken: checkOathToken,
+        signGoogle: signGoogle,
 
     };
-=======
-{
-    callback:callback,
-    signin:signin,
-    checkOauthToken:checkOathToken
-};
->>>>>>> 6c869f9f943fd603d1fe088465d55210bcb1b351

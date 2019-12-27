@@ -62,3 +62,10 @@ export const typePlace = [
     {id: "cscs", type: "Cơ sở chăm sóc"},
     {id: "chpk", type: "Cửa hàng"}
 ]
+
+export const typeBlog = [
+    {id: "thucung", type: "Thú cưng"},
+    {id: "suckhoe", type: "Sức khoẻ"},
+    {id: "review", type: "Review cơ sở"},
+    {id: "other", type: "Khác"},
+]

@@ -8,6 +8,14 @@ function acl_config(dbconnect){
         {
             roles:'user',
             allows:[
+
+            ],
+            roles: 'admin',
+            allows: [
+                
+            ],
+            roles: 'editor',
+            allows: [
                 {
                     resources:'/News/createNewsbyUser',
                     permissions:'post'
@@ -20,10 +28,6 @@ function acl_config(dbconnect){
                     resources:'/News/editNews',
                     permissions:'put'
                 }
-            ],
-            roles: 'admin',
-            allows: [
-                
             ]
         }
     ]);

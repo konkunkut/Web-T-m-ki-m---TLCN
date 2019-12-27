@@ -145,29 +145,28 @@ class EditProfiles extends React.Component
                         
                         <Form layout="vertical" hideRequiredMark >
                             <Row gutter={5}>
-                            <Col span={12}>
-                                <Form.Item label="Họ">
-                                {getFieldDecorator('ho', {
-                                    rules: [{ required: true, message: 'Không bỏ trống phần này!' }],
-                                    initialValue: this.state.firstName
-                                })(
-                                    <Input onChange={this.firstNameChange} />
-                                )}
-                                </Form.Item>
-                            </Col>
-                            <Col span={12}>
-                                <Form.Item label="Tên">
-                                {getFieldDecorator('ten', {
-                                    rules: [{ required: true, message: 'Không bỏ trống phần này!' }],
-                                    initialValue: this.state.lastName
-                                })(
-                                    <Input onChange={this.lastNameChange} />,
-                                    
-                                )}
-                                </Form.Item>
-                            </Col>
+                                <Col span={12}>
+                                    <Form.Item label="Họ">
+                                    {getFieldDecorator('ho', {
+                                        rules: [{ required: true, message: 'Không bỏ trống phần này!' }],
+                                        initialValue: this.state.firstName
+                                    })(
+                                        <Input onChange={this.firstNameChange} />
+                                    )}
+                                    </Form.Item>
+                                </Col>
+                                <Col span={12}>
+                                    <Form.Item label="Tên">
+                                    {getFieldDecorator('ten', {
+                                        rules: [{ required: true, message: 'Không bỏ trống phần này!' }],
+                                        initialValue: this.state.lastName
+                                    })(
+                                        <Input onChange={this.lastNameChange} />,
+                                        
+                                    )}
+                                    </Form.Item>
+                                </Col>
                             </Row>
-
                             <Row gutter={5}>
                             <Col>
                                 <Form.Item label="Email">
@@ -190,26 +189,26 @@ class EditProfiles extends React.Component
                             </Col>
                             </Row>
                             <Row gutter={5}>
-                            <Col span={12}>
-                                <Form.Item label="Số điện thoại">
-                                {getFieldDecorator('sdt', {
-                                    rules: [
-                                    {
-                                        required: true,
-                                        message: 'Không bỏ trống phần này!',
-                                    },
-                                    ],
-                                    initialValue: this.state.tel
-                                })(
-                                    <Input onChange={this.telChange} />
-                                )}
-                                </Form.Item>
-                            </Col>
+                                <Col span={12}>
+                                    <Form.Item label="Số điện thoại">
+                                    {getFieldDecorator('sdt', {
+                                        rules: [
+                                        {
+                                            required: true,
+                                            message: 'Không bỏ trống phần này!',
+                                        },
+                                        ],
+                                        initialValue: this.state.tel
+                                    })(
+                                        <Input onChange={this.telChange} />
+                                    )}
+                                    </Form.Item>
+                                </Col>
 
-                            {/* đổi mật khẩu */}
-                            <Col span={12}>
-                                {sessionStorage.getItem("isLocal")==="isLocal" ? <ChangePass /> : <div></div>}
-                            </Col>
+                                {/* đổi mật khẩu */}
+                                <Col span={12}>
+                                    {sessionStorage.getItem("isLocal")==="isLocal" ? <ChangePass /> : <div></div>}
+                                </Col>
                             </Row>
                         </Form>
                         

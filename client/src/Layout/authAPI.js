@@ -22,7 +22,7 @@ export function loginGoogle(body){
     //       }
     // }
 
-    return axios.post(`${API_URL}/user/singinGG`,body)
+    return axios.post(`${API_URL}/user/signGoogle`,body)
                 .then(res=>{
                     return res.data
                 })

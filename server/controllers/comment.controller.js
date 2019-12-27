@@ -44,7 +44,7 @@ const getPlaceComments = (req, res, next) => {
                     return res.status('200').json({
                         message: 'not found comment',
                         data: null,
-                        success: true
+                        success: false
                     })
                 }
                 else {

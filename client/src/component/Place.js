@@ -30,6 +30,9 @@ class Places extends React.Component {
                 {id: "default", name: "Chọn quận/huyện"}
             ],
 
+            typePlaceValue: null,
+            citiesValue: null,
+            districtsValue: null,
         }
     }
 

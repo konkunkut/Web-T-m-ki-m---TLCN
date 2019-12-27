@@ -90,8 +90,9 @@ export default class SlideshowGallery extends React.Component {
   updateDimensions() {
     this.containerElm.style.height 
       = `${this.containerElm.offsetWidth / this.ratioWH}px`;
-    this.containerBottomElm.style.height 
-      = `${this.containerBottomElm.offsetWidth / this.props.input.length / this.ratioWH}px`;
+    // this.containerBottomElm.style.height 
+    //   = `${this.containerBottomElm.offsetWidth / this.props.input.length / this.ratioWH}px`;
+    this.containerBottomElm.style.height="100px"
   }
 
   /*
@@ -125,7 +126,7 @@ export default class SlideshowGallery extends React.Component {
     window.addEventListener("resize", this.updateDimensions);
 
     if (this.props.mode === "automatic") {
-      const timeout = this.props.timeout || 6000;
+      const timeout = this.props.timeout || 7000;
 
       this.automaticInterval = setInterval(
         () => this.runAutomatic(),

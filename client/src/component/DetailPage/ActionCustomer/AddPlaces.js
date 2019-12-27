@@ -159,7 +159,7 @@ class AddPlaces extends React.Component {
         }
         else {
             return (
-                <Content style={{ backgroundColor: '#FFFFFF', minHeight: 300, paddingLeft: 20, paddingTop: 10 }}>
+                <Content style={{ backgroundColor: '#FFFFFF', minHeight: 300, paddingLeft: 5, paddingTop: 10 }}>
                     <p style={{ textAlign: "left" }} >Quảng bá địa điểm của bạn đến mọi người!</p>
                     <Button type="primary" ghost style={{ float: "left" }} onClick={this.setSign} >
                         <Icon type="form" />Đăng địa điểm

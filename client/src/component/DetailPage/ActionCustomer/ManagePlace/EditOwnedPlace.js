@@ -237,36 +237,21 @@ class EditPlace extends React.Component {
                         this.setState({onceRate : data.data[i].count,
                             totalRate : this.state.totalRate +1});
                     }
-                    else{
-                        this.setState({onceRate : 0});
-                    }
                     if(data.data[i]._id.rate == 2){
                         this.setState({twoRate : data.data[i].count,
                             totalRate : this.state.totalRate +1});
-                    }
-                    else{
-                        this.setState({twoRate : 0});
                     }
                     if(data.data[i]._id.rate == 3){
                         this.setState({threeRate : data.data[i].count,
                             totalRate : this.state.totalRate +1});
                     }
-                    else{
-                        this.setState({threeRate : 0});
-                    }
                     if(data.data[i]._id.rate == 4){
                         this.setState({fourRate : data.data[i].count,
                             totalRate : this.state.totalRate +1});
                     }
-                    else{
-                        this.setState({fourRate : 0});
-                    }
                     if(data.data[i]._id.rate == 5){
                         this.setState({fiveRate : data.data[i].count,
                             totalRate : this.state.totalRate +1});
-                    }
-                    else{
-                        this.setState({fiveRate : 0});
                     }
                 }
             }
@@ -462,42 +447,72 @@ class EditPlace extends React.Component {
                         <Divider style={{ marginTop: 10 }}></Divider>
                         {/* 5 sao */}
                         <Row>
-                            <Progress type="circle" strokeColor={{ '100%': '#f5e60f' }}
-                                percent={(this.state.fiveRate/this.state.totalRate)*100}
-                                format={() => `${this.state.fiveRate}/${this.state.totalRate}`}
-                            />
+                            {this.state.fiveRate != null ? 
+                                <Progress type="circle" strokeColor={{ '100%': '#f5e60f' }}
+                                    percent={(this.state.fiveRate/this.state.totalRate)*100}
+                                    format={() => `${this.state.fiveRate}/${this.state.totalRate}`}
+                                /> :
+                                <Progress type="circle" strokeColor={{ '100%': '#f5e60f' }}
+                                    percent={0}
+                                    format={() => `0/${this.state.totalRate}`}
+                                />
+                            }
                             <p>5 sao</p>
                         </Row>
                         {/* 4 sao */}
                         <Row>
-                            <Progress type="circle" strokeColor={{ '100%': '#f5e60f' }}
-                                percent={(this.state.fourRate/this.state.totalRate)*100}
-                                format={() => `${this.state.fourRate}/${this.state.totalRate}`}
-                            />
+                            {this.state.fourRate != null ? 
+                                <Progress type="circle" strokeColor={{ '100%': '#f5e60f' }}
+                                    percent={(this.state.fourRate/this.state.totalRate)*100}
+                                    format={() => `${this.state.fourRate}/${this.state.totalRate}`}
+                                /> :
+                                <Progress type="circle" strokeColor={{ '100%': '#f5e60f' }}
+                                    percent={0}
+                                    format={() => `0/${this.state.totalRate}`}
+                                />
+                            }
                             <p>4 sao</p>
                         </Row>
                         {/* 3 sao */}
                         <Row>
-                            <Progress type="circle" strokeColor={{ '100%': '#f5e60f' }}
-                                percent={(this.state.threeRate/this.state.totalRate)*100}
-                                format={() => `${this.state.threeRate}/${this.state.totalRate}`}
-                            />
+                            {this.state.threeRate != null ? 
+                                <Progress type="circle" strokeColor={{ '100%': '#f5e60f' }}
+                                    percent={(this.state.threeRate/this.state.totalRate)*100}
+                                    format={() => `${this.state.threeRate}/${this.state.totalRate}`}
+                                /> :
+                                <Progress type="circle" strokeColor={{ '100%': '#f5e60f' }}
+                                    percent={0}
+                                    format={() => `0/${this.state.totalRate}`}
+                                />
+                            }
                             <p>3 sao</p>
                         </Row>
                         {/* 2 sao */}
                         <Row>
-                            <Progress type="circle" strokeColor={{ '100%': '#f5e60f' }}
-                                percent={(this.state.twoRate/this.state.totalRate)*100}
-                                format={() => `${this.state.twoRate}/${this.state.totalRate}`}
-                            />
+                            {this.state.twoRate != null ? 
+                                <Progress type="circle" strokeColor={{ '100%': '#f5e60f' }}
+                                    percent={(this.state.twoRate/this.state.totalRate)*100}
+                                    format={() => `${this.state.twoRate}/${this.state.totalRate}`}
+                                /> :
+                                <Progress type="circle" strokeColor={{ '100%': '#f5e60f' }}
+                                    percent={0}
+                                    format={() => `0/${this.state.totalRate}`}
+                                />
+                            }
                             <p>2 sao</p>
                         </Row>
                         {/* 1 sao */}
                         <Row>
-                            <Progress type="circle" strokeColor={{ '100%': '#f5e60f' }}
-                                percent={(this.state.onceRate/this.state.totalRate)*100}
-                                format={() => `${this.state.onceRate}/${this.state.totalRate}`}
-                            />
+                            {this.state.onceRate != null ? 
+                                <Progress type="circle" strokeColor={{ '100%': '#f5e60f' }}
+                                    percent={(this.state.onceRate/this.state.totalRate)*100}
+                                    format={() => `${this.state.onceRate}/${this.state.totalRate}`}
+                                /> :
+                                <Progress type="circle" strokeColor={{ '100%': '#f5e60f' }}
+                                    percent={0}
+                                    format={() => `0/${this.state.totalRate}`}
+                                />
+                            }
                             <p>1 sao</p>
                         </Row>
                     </Col>
