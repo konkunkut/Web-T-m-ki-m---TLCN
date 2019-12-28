@@ -23,7 +23,7 @@ const CommentList = ({ comments }) => (
             {
                 author: 'Anh Sang',
                 avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-                content: "là lá là la",
+                content: this.props.content,
                 datetime: moment().fromNow(),
             },
             
@@ -35,25 +35,9 @@ const CommentList = ({ comments }) => (
   
     render() {
       const { comments } = this.state;
+      //console.log(this.props.content);
       return (
         <div>
-          {/* <Comment
-            avatar={
-              <Avatar
-                src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-                alt="Han Solo"
-              />
-            }
-            content={
-              <Editor
-                onChange={this.handleChange}
-                onSubmit={this.handleSubmit}
-                submitting={submitting}
-                value={value}
-              />
-            }
-          /> */}
-  
           {comments.length > 0 && <CommentList comments={comments}/>}
         </div>
       );

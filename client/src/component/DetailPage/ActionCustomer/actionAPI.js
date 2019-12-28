@@ -13,7 +13,7 @@ export function getProfile(token){
 
     return axios.get(`${API_URL}/user/ViewProfile`,config)
                 .then(res =>{
-                    //console.log(res.data);
+                    console.log(res.data);
                     return res.data
                 })
                 .catch(err=>{

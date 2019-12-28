@@ -143,24 +143,6 @@ const ViewAvatar = (req, res) => {
 
 const editProfile = (req, res) => {
 
-    // if edit local user =>req.body={fistname, lastname, email, picture}
-    // if edit google user =>req.body={lastname, fistname, picture}
-    // if edit facebook user =>req.body={fullname,picture}
-    //console.log(req.body);  
-
-
-    // User.findByIdAndUpdate(req.decoded._id,
-    //     {local:req.body
-    //     },{new:true}).exec((err,resource)=>{
-    //         console.log(resource)
-    //         if(err){
-    //             res.status('400').json(err);
-    //         }
-    //         else{
-    //             res.status('200').json({massage:'edited success!'});
-    //         }
-    //     });
-
     User.findById(req.decoded._id).exec((err, result) => {
         if (err) {
             res.status('400').json(err);
@@ -251,6 +233,35 @@ const signout = (req, res) => {
     })
 }
 
+const getNamePic = (req, res) =>{
+    //console.log(req);
+    var id = req.params.id_user;
+    //console.log(req.params.id_user);
+    User.findById(id)
+        .exec((err, result) => {
+            //console.log(user)
+            if (err) {
+                return res.status('200')
+                    .json({
+                        message: 'not find user',
+                        success: false
+                    });
+
+            }
+            else {
+                //console.log('result'+ result);
+                return res.status('200')
+                    .json({
+                        data: {
+                            lastName: result.lastname,
+                            avatar: result.picture,
+                        },
+                        message: "successfull",
+                        success: true
+                    });
+            }
+        });
+}
 
 module.exports = {
     signup: signup,
@@ -258,5 +269,6 @@ module.exports = {
     Viewprofile: Viewprofile,
     editProfile: editProfile,
     updateAvatar: updateAvatar,
-    ViewAvatar: ViewAvatar
+    ViewAvatar: ViewAvatar,
+    getNamePic: getNamePic,
 };

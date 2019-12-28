@@ -29,6 +29,17 @@ export const getCmt = (id_place) =>{
                 })
 }
 
+export const getName_Pic = (id_user) =>{
+    return axios.get(`${API_URL}/user/getNamePic/`+id_user)
+                .then(res=>{
+                    //console.log(res.data);
+                    return res.data;
+                })
+                .catch(err=>{
+                    console.log(err);
+                })
+}
+
 export const createSubCmt = () =>{
 
 }

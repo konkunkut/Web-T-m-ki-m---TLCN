@@ -1,7 +1,7 @@
 const comment = require('../models/comment.model');
 
 const createComment = (req, res) => {
-    console.log(req.decoded._id)
+    //console.log(req.decoded._id)
     const Comment = new comment({
         id_User: req.decoded._id
         ,
