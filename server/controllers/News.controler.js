@@ -136,6 +136,25 @@ const getNewNews = (req, res) => {
             }
         });
 }
+
+const getNewsTotal = (req,res)=>{
+    News.estimatedDocumentCount((err,count)=>{
+        if(err){
+            return res.status('400').json({
+                data:null,
+                message:'khong lay duoc',
+                success: false
+            })
+        }
+        else{
+            return res.status('200').json({
+                message:'lay thanh cong',
+                success: true,
+                date: count
+            })
+        }
+    })
+}
 module.exports = {
     createNews: createNews,
     getNewsId: getNewsId,
@@ -144,5 +163,6 @@ module.exports = {
     removeNews: removeNews,
     editNews: editNews,
     getNewsLimit: getNewsLimit,
-    getNewNews: getNewNews
+    getNewNews: getNewNews,
+    getNewsTotal:getNewsTotal
 }

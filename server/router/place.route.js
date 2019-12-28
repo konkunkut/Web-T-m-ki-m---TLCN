@@ -10,4 +10,5 @@ route.get('/getUserPlaces', auth.checkOauthToken,controlPlace.getUserPlaces);
 route.get('/getAllPlace',controlPlace.getAllPlace);
 route.delete('/deletePlace/:id_place', auth.checkOauthToken,controlPlace.deletePlace);
 route.get('/getDetailPlaces/:id_Place',controlPlace.getDetailPlaces);
+route.get('/getPlaceTotal',controlPlace.getPlaceTotal);
 module.exports =route;

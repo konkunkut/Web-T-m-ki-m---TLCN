@@ -115,9 +115,11 @@ const editPlace = (req, res, next) => {
     });
 }
 const getAllPlace = (req, res) => {
-    
+    const pageNumber = req.params.page;
     Place.find()
         // .select('_id name_place phone stress dictrict city picture')
+        .limit(10)
+        .skip(10*(pageNumber - 1))
         .exec((err, result) => {
             if (err) {
                 return res.status('200').json({
@@ -135,6 +137,26 @@ const getAllPlace = (req, res) => {
                 
             }
         })
+}
+
+const getPlaceTotal = (req,res)=>{
+    const abc = Place.estimatedDocumentCount((err,count)=>{
+        if(err){
+            return res.status('400').json({
+                message:'khong lay duoc',
+                success:false,
+                data:null
+            })
+        }
+        else{
+            return res.status('200').json({
+                data:count,
+                success:true,
+                message: 'lay thanh cong'
+            })
+        }
+    });
+    
 }
 const getUserPlaces = (req, res) => {
 
@@ -242,5 +264,6 @@ module.exports = {
     deletePlace: deletePlace,
     find_id_place:find_id_place,
     getDetailPlaces:getDetailPlaces,
+    getPlaceTotal:getPlaceTotal
 
 }

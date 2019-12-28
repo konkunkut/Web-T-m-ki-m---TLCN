@@ -15,5 +15,6 @@ route.get('/getAllTags/:tags',news.getNewsTagsAll);
 route.get('/getAllNews',news.getNewsAll);
 route.get('/getNewsLimit/:page',news.getNewsLimit);
 route.get('/getNewNews',news.getNewNews);
+route.get('/getNewsTotal',news.getNewsTotal)
 
 module.exports = route;
