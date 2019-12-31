@@ -1,22 +1,22 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 import {Link } from 'react-router-dom';
+import { API_URL } from '../../config';
 
 import {Col, Row, Card, Divider, Icon} from 'antd';
 
 const {Meta} = Card;
 
-export default function NewBlogs(props)
+class NewBlogs extends React.Component
 {
+    
+    render(){
     return(
         <Col span={11}  style={{marginTop: 20, marginBottom: 5, marginLeft: 22}}>
             <Link
                 to={
-                    {pathname:`/detailBlogs/${props.title}`,
-                     state: {   title: props.title,
-                                blogger: props.blogger,
-                                date: props.date,
-                                star: props.star
+                    {pathname:`/detailBlogs/${this.props.title}`,
+                     state: {   title: this.props.idBlog
                     }}
                 }
             >
@@ -24,16 +24,16 @@ export default function NewBlogs(props)
             <Card
                 style={{width: '100%', height:'auto'}}
                 cover={[
-                    <img alt="avatar" src={props.avatar} />,
+                    <img alt="avatar" src={`${API_URL}` + this.props.pictures[0]} width="100%" height="224px" />,
                     <Row>
                         <Col span={8}>
-                            <p><Icon type="calendar" />{props.date}</p>
+                            <p><Icon type="calendar" />{this.props.date}</p>
                         </Col>
                         <Col span={8}>
-                            <p><Icon type="star" />{props.star}</p>
+                            <p><Icon type="eye" />{this.props.star}</p>
                         </Col>
                         <Col span={8}>
-                            <p><Icon type="edit" />{props.blogger}</p>
+                            <p><Icon type="edit" />{this.props.blogger}</p>
                         </Col>
                     </Row>
                 ]}
@@ -43,9 +43,9 @@ export default function NewBlogs(props)
                 <Meta
                     title= {
                         <a style={{color:'#636363', fontSize:20}}>
-                            {props.title}
+                            {this.props.title}
                         </a>}
-                    description= {props.description}
+                    description= {this.props.decription}
                     
                     // style={{marginTop: -20}}
                 />
@@ -54,4 +54,7 @@ export default function NewBlogs(props)
             </Link>
         </Col>
     );
+                    }
 }
+
+export default NewBlogs;

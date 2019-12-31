@@ -2,14 +2,24 @@ import {API_URL} from '../config';
 import axios from 'axios';
 import {STORE_ID_PLACE} from './constants';
 
-export const getAllPlaces=()=>{
-    return axios.get(`${API_URL}/Places/getAllPlace`)
+export const getAllPlaces=(page)=>{
+    return axios.get(`${API_URL}/Places/getAllPlace/`+page)
                 .then(res=>{
                     // console.log("thành cÔng");
                     return res.data;
                 })
                 .catch(err=>{
                     console.log("Lỗi");
+                })
+}
+
+export const getPlaceTotal=()=>{
+    return axios.get(`${API_URL}/Places/getPlaceTotal`)
+                .then(res=>{
+                    return res.data;
+                })
+                .catch(err=>{
+                    console.log(err);
                 })
 }
 

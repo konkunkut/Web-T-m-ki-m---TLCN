@@ -3,6 +3,7 @@ import 'antd/dist/antd.css';
 import {Link } from 'react-router-dom';
 import {Col, Card} from 'antd';
 import PropTypes from "prop-types";
+import { API_URL } from '../../config';
 
 const { Meta } = Card;
 
@@ -13,7 +14,7 @@ export default function SuggestBlog(props)
       <Link
         to={
             {pathname:`/detailBlogs/${props.title}`,
-             state: {title: props.title}}
+             state: {title: props.idBlog}}
         }
       >
         
@@ -21,7 +22,7 @@ export default function SuggestBlog(props)
         hoverable
       >
         <div style={{paddingBottom: 15}}>
-          <img alt="example" src={props.avatar} width="100%" height="auto"/>
+          <img alt="example" src={`${API_URL}` + props.avatar} width="100%" height="300px"/>
         </div>
         <Meta 
           title={

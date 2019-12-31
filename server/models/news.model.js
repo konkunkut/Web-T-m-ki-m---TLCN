@@ -12,6 +12,11 @@ const News = new mongoose.Schema({
         trim: true,
         require: true
     },
+    decription: {
+        type: String,
+        require: false,
+        trim: true
+    },
     content:{
         type: String,
         require:true
@@ -28,7 +33,11 @@ const News = new mongoose.Schema({
     },
     pictures:[{
         type: String
-    }]
+    }],
+    view:{
+        type: Number,
+        require: false,
+    }
 });
 
 module.exports = mongoose.model('News',News);

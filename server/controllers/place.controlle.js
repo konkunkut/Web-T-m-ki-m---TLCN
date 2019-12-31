@@ -134,13 +134,12 @@ const getAllPlace = (req, res) => {
                     message:"Thành công",
                     success: true
                 });
-                
             }
         })
 }
 
 const getPlaceTotal = (req,res)=>{
-    const abc = Place.estimatedDocumentCount((err,count)=>{
+    Place.estimatedDocumentCount((err,count)=>{
         if(err){
             return res.status('400').json({
                 message:'khong lay duoc',

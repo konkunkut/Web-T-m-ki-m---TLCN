@@ -50,7 +50,10 @@ class ShowPlace extends React.Component{
         return(
             <Content style={{backgroundColor: '#FFFFFF', padding: 5}}>
                 <h2 style={{textAlign:"left"}}>Các địa điểm bạn đã đăng ký</h2>
-                { this.state.contacts ? this.state.contacts.length > 0 ? <ListCards contacts={this.state.contacts} callback={this.handleClick} /> :
+                { this.state.contacts ? this.state.contacts.length > 0 
+                    ? 
+                    <ListCards contacts={this.state.contacts} callback={this.handleClick} /> 
+                    :
                     <div>Bạn chưa đăng ký địa điểm nào</div> : <div>Bạn chưa đăng ký địa điểm nào</div>
                 }
             </Content>

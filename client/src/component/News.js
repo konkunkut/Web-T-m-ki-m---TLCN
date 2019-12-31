@@ -4,105 +4,135 @@ import 'antd/dist/antd.css';
 import MyTags from './ListComponent/ListTags';
 import MyLstLastNews from './NewsComponent/ListLastestNews';
 import MyNewBlogs from './NewsComponent/ListNewBlogs';
+import MyNewBlogsTest from './NewsComponent/NewBlogs';
 
-import {Layout, Col, Input, BackTop, Row, Divider, Pagination} from 'antd';
+import { getTotalBlogs, getAllBlogs, getNewestNews } from '../action/uploadBlogs';
 
-const {Content} = Layout;
+import { Layout, Col, message, BackTop, Row, Divider, Pagination, List } from 'antd';
 
-const lstTags=[
-    {id: 1, tags: "thú cưng" },
-    {id: 2, tags: "các bệnh thường gặp" },
-    {id: 3, tags: "cơ sở uy tín" },
-    {id: 4, tags: "khác" }
+const { Content } = Layout;
+
+const lstTags = [
+    { id: 1, tags: "thú cưng" },
+    { id: 2, tags: "các bệnh thường gặp" },
+    { id: 3, tags: "cơ sở uy tín" },
+    { id: 4, tags: "khác" }
 ];
 
-const contents=[];
-for (let i = 0; i < 5; i++) {
-    contents.push({
-      href: 'http://ant.design',
-      title: `Tiêu đề blog ${i}`,
-      avatar: 'https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png',
-      description:
-        'Ant Design, a design language for background applications, is refined by Ant UED Team.',
-      content:
-        'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
-    });
-  }
-
-const contentsBlogs=[];
-  for (let i = 0; i < 5; i++) {
-    contentsBlogs.push({
-        href: 'http://ant.design',
-        title: `Tiêu đề blog ${i}`,
-        avatar: 'https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png',
-        description:
-          'Ant Design, a design language for background applications, is refined by Ant UED Team.',
-        content:
-          'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
-        date: 'dd/mm/yyy',
-        star: '123',
-        blogger: 'Nguyễn Văn A',
-      });
+class News extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+            newestBlogs: [],
+            allBlogs: [],
+            totalPage: null,
+            curentPage: 1,
+        }
     }
 
+    changePage = (pageNumber) => {
+        getAllBlogs(pageNumber).then((data) => {
+            if (!data.success) {
+                message.error(data.message, 2);
+            }
+            else {
+                this.setState({ allBlogs: data.data });
+            }
+        })
+    }
 
-export default function News()
-{
-    return(
-        <Content style={{ padding: '20px', marginTop: 60}}>
-            {/* tạo cho đẹp */}
-            <Col span={2}></Col>
+    componentDidMount() {
+        getTotalBlogs().then((data) => {
+            if (!data.success) {
+                message.error(data.message, 2);
+            }
+            else {
+                var avg = Math.ceil(data.data / 10);
+                this.setState({
+                    totalPage: avg
+                });
+            }
+        });
 
-            {/* khung nội dung chính */}
-            <Col span={20}>
-                <Row>
-                    {/* list tin tức */}
-                    <Col className="content-news" span={17}>
-                        <Row>
-                            <MyNewBlogs contentsBlogs={contentsBlogs} />
-                        </Row>
-                        <Row>
-                            {/* phân trang */}
-                            <Pagination 
-                                defaultCurrent={1} 
-                                total={50} 
-                                pageSize={5} 
-                                style={{float: 'left'}}
-                            />
-                        </Row>
-                    </Col>
+        getAllBlogs(this.state.curentPage).then((data) => {
+            if (!data.success) {
+                message.error(data.message, 2);
+            }
+            else {
+                this.setState({ allBlogs: data.data });
+            }
+        })
 
-                    <Col span={1}></Col>
+        getNewestNews().then((data) => {
+            if (!data.success) {
+                message.error(data.message, 2);
+            }
+            else {
+                this.setState({ newestBlogs: data.data });
+            }
+        })
+    }
 
-                    {/* gợi ý và menu */}
-                    <Col className="my-menu" span={6}>
-                        {/* menu */}
-                        <Row className="menu-news">
-                            <h3 style={{marginLeft:10, textAlign: "left"}}>Tags</h3>
-                            <Divider style={{marginTop:5, marginBottom:10}}></Divider>
+    render() {
+        console.log(this.state.newestBlogs);
+        return (
+            <Content style={{ padding: '20px', marginTop: 60 }}>
+                {/* tạo cho đẹp */}
+                <Col span={2}></Col>
 
-                            <MyTags lstTags={lstTags} />
-                        </Row>
+                {/* khung nội dung chính */}
+                <Col span={20}>
+                    <Row>
+                        {/* list tin tức */}
+                        <Col className="content-news" span={17}>
+                            <Row>
+                                <MyNewBlogs contentsBlogs={this.state.allBlogs} />
+                            </Row>
+                            <Row>
+                                {/* phân trang */}
+                                <Pagination
+                                    defaultCurrent={1}
+                                    total={this.state.totalPage}
+                                    pageSize={10}
+                                    onChange={this.changePage}
+                                    style={{ float: 'left' }}
+                                />
+                            </Row>
+                        </Col>
 
-                        {/* bài viết mới */}
-                        <Row className="new-blogs">
-                            <h3 style={{textAlign:"left", marginLeft:10}}>Bài viết mới</h3>
-                            <Divider style={{marginTop:5, marginBottom:10}}></Divider>
+                        <Col span={1}></Col>
 
-                            <MyLstLastNews contents={contents} />
-                        </Row>
+                        {/* gợi ý và menu */}
+                        <Col className="my-menu" span={6}>
+                            {/* menu */}
+                            <Row className="menu-news">
+                                <h3 style={{ marginLeft: 10, textAlign: "left" }}>Tags</h3>
+                                <Divider style={{ marginTop: 5, marginBottom: 10 }}></Divider>
 
-                    </Col>
-                </Row>
-            </Col>
+                                <MyTags lstTags={lstTags} />
+                            </Row>
 
-            {/* tạo cho đẹp */}
-            <Col span={2}></Col>
-                        
-            {/* back top */}
-            <div>
-                <BackTop />
-            </div>
-        </Content>
-    );
+                            {/* bài viết mới */}
+                            <Row className="new-blogs">
+                                <h3 style={{ textAlign: "left", marginLeft: 10 }}>Bài viết mới</h3>
+                                <Divider style={{ marginTop: 5, marginBottom: 10 }}></Divider>
+
+                                <MyLstLastNews contents={this.state.newestBlogs} />
+                            </Row>
+
+                        </Col>
+                    </Row>
+                </Col>
+
+                {/* tạo cho đẹp */}
+                <Col span={2}></Col>
+
+                {/* back top */}
+                <div>
+                    <BackTop />
+                </div>
+            </Content>
+        );
+    }
 }
+export default News;

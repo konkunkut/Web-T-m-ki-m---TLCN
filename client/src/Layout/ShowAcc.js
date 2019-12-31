@@ -8,14 +8,22 @@ import {configName, logOut } from '../action/identifyData';
 
 import { Menu, Dropdown, Icon } from 'antd';
 
+var jwt = require('jsonwebtoken');
 
 class ShowAcc extends React.Component {
 
   state = {
     // name : sessionStorage.getItem("lastName")
+    isAdmin: false,
   }
   componentDidMount(){
     this.props.configName();
+
+    var decoded = jwt.verify(sessionStorage.getItem("token"), 'Sang_oc_cho_haha');
+    if(decoded.isAdmin){
+        this.setState({isAdmin : decoded.isAdmin});
+        //console.log(decoded);
+    }
   }
 
   onLogout = () => {
@@ -27,6 +35,7 @@ class ShowAcc extends React.Component {
   };
 
   render() {
+    //console.log(this.state.isAdmin);
     return (
       <Dropdown overlay={
         <Menu>
@@ -43,8 +52,18 @@ class ShowAcc extends React.Component {
               state: { currentID: "1" }
             }}>Địa điểm của tôi</Link>
           </Menu.Item>
+          {
+            this.state.isAdmin==true ? 
+            <Menu.Item key="1">
+              <Link to={{
+                pathname: `/admin/id642597?=fophabflj`,
+                state: { currentID: "3" }
+              }}><strong>Đến trang quản lý</strong></Link>
+            </Menu.Item>
+            :null
+          }
           <Menu.Divider />
-          <Menu.Item key="3" onClick={this.onLogout}>Đăng xuất</Menu.Item>
+          <Menu.Item key="4" onClick={this.onLogout}>Đăng xuất</Menu.Item>
         </Menu>
       }
         trigger={['click']}

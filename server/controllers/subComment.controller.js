@@ -68,6 +68,9 @@ const getSubcommentList = (req, res, next) => {
     //await getSubComment('ada');
 
 }
+
+
+
 const consolea = (req, res) => {
     console.log(arraySubcomments);
 

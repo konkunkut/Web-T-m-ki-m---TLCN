@@ -85,7 +85,6 @@ class StepOneTab extends React.Component {
                                 this.state.decripttionValue);
     }
 
-
     render() {
         const { form: { getFieldDecorator } } = this.props;
         return (

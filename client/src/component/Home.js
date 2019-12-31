@@ -6,27 +6,11 @@ import ButtonList from './ListComponent/ButtonList';
 import 'antd/dist/antd.css';
 
 import { getAllPlaces } from '../action/getInfoPlaces';
+import {getNewHomepage} from '../action/uploadBlogs';
 
 import {Layout, Col, Input, BackTop, message} from 'antd';
 const {Content} = Layout;
 const {Search} = Input;
-
-// dự liệu test list địa điểm
-// const contacts = [];
-
-//dữ liệu test blog
-const listData = [];
-for (let i = 0; i < 3; i++) {
-  listData.push({
-    href: 'http://ant.design',
-    title: `Tiêu đề blog ${i}`,
-    avatar: 'pic-for-blog.jpg',
-    description:
-      'Ant Design, a design language for background applications, is refined by Ant UED Team.',
-    content:
-      'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
-  });
-}
 
 // dữ liệu tên các quận
 const districList = [];
@@ -44,16 +28,26 @@ class Home extends React.Component
         super();
         this.state={
             contacts : [],
+            listData : [],
         }
     }
 
     componentDidMount(){
-        getAllPlaces().then((data) => {
+        getAllPlaces(1).then((data) => {
             if (!data.success) {
                 message.error(data.message, 2);
             }
             else {
                 this.setState({ contacts: data.data });
+            }
+        })
+
+        getNewHomepage().then((data)=>{
+            if (!data.success) {
+                message.error(data.message, 2);
+            }
+            else {
+                this.setState({ listData: data.data});
             }
         })
     }
@@ -100,7 +94,7 @@ class Home extends React.Component
             <div className="blog-home">
                 <Col span={16} offset={4} style={{paddingTop:50}}>
                     <ul>
-                        <BlogList listData={listData} />
+                        <BlogList listData={this.state.listData} />
                     </ul>
                 </Col>
             </div>

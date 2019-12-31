@@ -40,6 +40,30 @@ export const getName_Pic = (id_user) =>{
                 })
 }
 
-export const createSubCmt = () =>{
+export const createSubCmt = (token, body) =>{
+    const config = {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        }
+    }
+    return axios.post(`${API_URL}/subComment/createSubComment`,body, config)
+                .then(res=>{
+                    return res.data
+                })
+                .catch(err=>{
+                    console.log(err);
+                })
+}
 
+export const getSubCmt = (id_Comment) =>{
+    return axios.get(`${API_URL}/Comment/getListSubCmt/`+id_Comment)
+                .then(res=>{
+                    //console.log( res.data);
+                    return res.data
+                })
+                .catch(err=>{
+                    console.log(err)
+                })
 }

@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 const comment = new mongoose.Schema({
-
     id_User: {
         type: mongoose.Schema.ObjectId,
         ref: 'User',
@@ -16,7 +15,11 @@ const comment = new mongoose.Schema({
         type: String,
         require: true
     },
-    list_Comment:[{type:mongoose.Schema.ObjectId,ref:'SubComment', require:false}]
+    list_Comment:[{
+        type:mongoose.Schema.ObjectId,
+        ref:'SubComment',
+        require:false
+    }]
     ,
     date: {
         type: Date,

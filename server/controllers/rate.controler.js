@@ -1,6 +1,7 @@
 const Rate = require('../models/rate.model');
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
+
 const createRate = (req, res) => {
     //req.body={ id_place,rate}
     req.body.id_user = req.decoded._id;

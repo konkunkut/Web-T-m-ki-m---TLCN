@@ -7,7 +7,7 @@ import MyCarousel from './Carousel/Carousel';
 import MySuggestList from './ListComponent/PlacesList';
 import PrivateMAp from './CurentLocation/privateMap';
 
-import { getAllPlaces } from '../action/getInfoPlaces';
+import { getAllPlaces, getPlaceTotal } from '../action/getInfoPlaces';
 import {districsHCM, districsHN, typePlace} from '../config';
 
 const { Content } = Layout;
@@ -33,6 +33,8 @@ class Places extends React.Component {
             typePlaceValue: null,
             citiesValue: null,
             districtsValue: null,
+            curentPage: 1,
+            totalPage: null,
         }
     }
 
@@ -71,12 +73,13 @@ class Places extends React.Component {
         this.setState({typePlaceValue: value});
     }
 
-    componentDidMount() {
-        getAllPlaces().then((data) => {
+    changePage = (pageNumber) =>{
+        getAllPlaces(pageNumber).then((data) => {
             if (!data.success) {
                 message.error(data.message, 2);
             }
             else {
+                dataMaps = [];
                 for(let i=0; i< data.data.length; i++)
                 {
                     dataMaps.push({
@@ -87,6 +90,38 @@ class Places extends React.Component {
                     });
                 }
                 this.setState({ contacts: data.data });
+            }
+        })
+    }
+
+    componentDidMount() {
+        getAllPlaces(this.state.curentPage).then((data) => {
+            if (!data.success) {
+                message.error(data.message, 2);
+            }
+            else {
+                dataMaps = [];
+                for(let i=0; i< data.data.length; i++)
+                {
+                    dataMaps.push({
+                        lat : data.data[i].lat, 
+                        lng : data.data[i].lng, 
+                        name : data.data[i].name_place, 
+                        phone : data.data[i].phone
+                    });
+                }
+                this.setState({ contacts: data.data });
+            }
+        })
+        getPlaceTotal().then((data)=>{
+            if (!data.success) {
+                message.error(data.message, 2);
+            }
+            else {
+                var avg = Math.ceil(data.data / 10);
+                this.setState({
+                    totalPage : avg
+                });
             }
         })
     };
@@ -176,8 +211,9 @@ class Places extends React.Component {
                                     {/* phân trang */}
                                     <Pagination
                                         defaultCurrent={1}
-                                        total={50}
-                                        pageSize={5}
+                                        total={this.state.totalPage}
+                                        pageSize={10}
+                                        onChange={this.changePage}
                                         style={{ float: 'left' }}
                                     />
                                 </div>

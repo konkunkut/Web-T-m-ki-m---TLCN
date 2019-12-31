@@ -11,6 +11,7 @@ import EditProfile from './ActionCustomer/EditProfile';
 import OwnPlaces from './ActionCustomer/OwnPlaces';
 import AddPlaces from './ActionCustomer/AddPlaces';
 import AddBlogs from './ActionCustomer/AddBlogs';
+import OwnBlogs from './ActionCustomer/OwnBlogs';
 
 import { Col, Row, BackTop, Layout, Avatar, Tabs, message } from 'antd';
 
@@ -99,8 +100,13 @@ class CustommerPage extends React.Component {
                                 <AddPlaces />
                             </TabPane>
                             {!this.state.isAdmin||!this.state.isEditor ? <div></div>:
-                                <TabPane tab="Thêm bài biết" key="4">
+                                <TabPane tab="Thêm bài viết" key="4">
                                     <AddBlogs />
+                                </TabPane>
+                            }
+                            {!this.state.isAdmin||!this.state.isEditor ? <div></div>:
+                                <TabPane tab="Các bài viết đã đăng" key="5">
+                                    <OwnBlogs />
                                 </TabPane>
                             }
                             {/* {!this.state.isAdmin||!this.state.isEditor ? <div></div>:

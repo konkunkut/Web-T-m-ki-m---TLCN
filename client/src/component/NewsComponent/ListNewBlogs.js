@@ -2,21 +2,24 @@ import React from 'react';
 import 'antd/dist/antd.css';
 import NewBlogs from "./NewBlogs";
 
-export default function LstNewBlog(props)
-{
-    return(
-        <div>
-            {props.contentsBlogs.map(c =>
-                <NewBlogs   href={c.href} 
-                            title={c.title} 
-                            avatar={c.avatar} 
-                            description={c.description}
-                            content={c.content}
-                            date={c.date}
-                            star={c.star}
-                            blogger={c.blogger}
-                            />
-            )}
-        </div>
-    );
+class LstNewBlog extends React.Component {
+    render() {
+        return (
+            <div>
+                {this.props.contentsBlogs.map(c =>
+                    <NewBlogs key={c._id}
+                        idBlog={c._id}
+                        title={c.title}
+                        decription={c.decription}
+                        pictures={c.pictures}
+                        content={c.content}
+                        date={c.date}
+                        star={123}
+                        blogger={c.id_user.fistname + " "+ c.id_user.lastname}
+                    />
+                )}
+            </div>
+        );
+    }
 }
+export default LstNewBlog;

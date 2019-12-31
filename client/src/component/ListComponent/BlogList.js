@@ -2,19 +2,23 @@ import React from 'react';
 import 'antd/dist/antd.css';
 import SuggestBlog from './SuggestBlog';
 
-function BlogList(props) {
-  return (
-    <div>
-        {props.listData.map(c => 
-            <SuggestBlog  
-                         href={c.href} 
-                         title={c.title} 
-                         avatar={c.avatar} 
-                         description={c.description}
-                         content={c.content} />
+class BlogList extends React.Component {
+
+  render() {
+    return (
+      <div>
+        {this.props.listData.map(c =>
+          <SuggestBlog
+            key={c._id}
+            idBlog={c._id}
+            title={c.title}
+            content={c.decription}
+            avatar={c.pictures[0]}
+          />
         )}
-    </div>
-  );
+      </div>
+    );
+  }
 }
 
 export default BlogList;
