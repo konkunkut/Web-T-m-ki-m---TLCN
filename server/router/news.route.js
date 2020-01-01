@@ -8,7 +8,7 @@ const acl= Aclclass.getAcl;
 //console.log(acl.Aclclass.getAcl);
 //UserRouterAboveNews
 route.post('/createNews',authentication.checkOauthToken,news.createNews);
-route.delete('/deleteNews/:idNews',authentication.checkOauthToken,acl.middleware(2),news.removeNews);
+//route.delete('/deleteNews/:idNews',authentication.checkOauthToken,acl.middleware(2),news.removeNews);
 route.put('/editNews/:idNews',authentication.checkOauthToken,acl.middleware(2),news.editNews);
 route.get('/getDetailNews/:newsId',news.getNewsId);
 route.get('/getAllTags/:tags',news.getNewsTagsAll);
@@ -18,5 +18,6 @@ route.get('/getNewNews',news.getNewNews);
 route.get('/getNewsTotal',news.getNewsTotal);
 route.put('/upDateView/:newsId',news.upDateView);
 route.get('/getUserBlogs',authentication.checkOauthToken,news.getUserBlogs);
+route.delete('/deleteNews/:id', news.deleteNews);
 
 module.exports = route;

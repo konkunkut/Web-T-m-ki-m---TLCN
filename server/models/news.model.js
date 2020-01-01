@@ -37,6 +37,10 @@ const News = new mongoose.Schema({
     view:{
         type: Number,
         require: false,
+    },
+    deleted:{
+        type: Boolean,
+        default: false
     }
 });
 

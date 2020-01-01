@@ -52,7 +52,7 @@ const createNews = (req, res, next) => {
 const getNewsId = (req, res) => {
     const newsId = req.params.newsId;
     //console.log(req.query.newsId);
-    News.findById(newsId)
+    News.find({_id:newsId,deleted: false})
         .populate({ path: 'id_user', select: ['fistname', 'lastname'] })
         .exec((err, result)=> {
             if (err) {
@@ -62,13 +62,24 @@ const getNewsId = (req, res) => {
                 });
             }
             else{
+                if(!result){
+                    return res.status('200').json({
+                        data: result,
+                        message : "thành công",
+                        success: true
+                        
+                    });
+                }
+                else{
+                    return res.status('200').json({
+                        data: null,
+                        message : "khong co du lieu",
+                        success: false
+                        
+                    });
+                }
                 // console.log("aaa"+result);
-                return res.status('200').json({
-                    data: result,
-                    message : "thành công",
-                    success: true
-                    
-                });
+                
             }
         })
 }
@@ -89,7 +100,7 @@ const getNewsTagsAll = (req, res) => {
 }
 const getNewsAll = (req, res) => {
     const p = req.params.page;
-    News.find()
+    News.find({deleted:false})
         .populate({ path: 'id_user', select: ['fistname', 'lastname'] })
         .limit(10)
         .sort({ date: -1 })
@@ -112,7 +123,7 @@ const getNewsAll = (req, res) => {
         })
 }
 const editNews = (req, res) => {
-    News.updateOne({ _id: req.params.idNews, id_user: req.decoded._id }, req.body, (err, result) => {
+    News.updateOne({ _id: req.params.idNews, id_user: req.decoded._id, deleted:false}, req.body, (err, result) => {
         console.log(req.decoded._id)
         console.log(req.params.idNews)
         console.log(req.body);
@@ -152,7 +163,7 @@ const removeNews = (req, res) => {
 }
 const getNewsLimit = (req, res) => {
     //const p = req.params.page;
-    News.find()
+    News.find({deleted:false})
         .populate({ path: 'id_user', select: ['fistname', 'lastname'] })
         .limit(3)
         .sort({ date: -1 })
@@ -175,7 +186,7 @@ const getNewsLimit = (req, res) => {
 
 }
 const getNewNews = (req, res) => {
-    News.find()
+    News.find({deleted:false})
         .populate({ path: 'id_user', select: ['fistname', 'lastname'] })
         .limit(5)
         .sort({ date: -1 })
@@ -197,7 +208,7 @@ const getNewNews = (req, res) => {
         });
 }
 const getNewsTotal = (req, res) => {
-    News.estimatedDocumentCount((err, count) => {
+    News.countDocuments({deleted:false},(err, count) => {
         if (err) {
             return res.status('400').json({
                 data: null,
@@ -230,7 +241,7 @@ const upDateView = (req, res) => {
 const getUserBlogs =(req,res)=>{
     var idUser = req.decoded._id;
     // console.log("a"+idUser);
-    News.find({id_user: idUser})
+    News.find({id_user: idUser,deleted:false})
         // .populate('id_User', '')
         // .select('_id name_place phone stress dictrict city picture')
         .exec((err, result) => {
@@ -251,6 +262,31 @@ const getUserBlogs =(req,res)=>{
         })
 }
 
+const deleteNews = (req,res)=>{
+    const id = req.params.id;
+    console.log(id)
+    News.findByIdAndUpdate(id,{deleted: true},(err,result)=>{
+        if(err){
+            return res.status('400').json(err);
+        }
+        else{
+            if(result){
+                return res.status('200').json({
+                    success: true,
+                    message: 'deleted News successful'
+                })
+            }
+            else
+            {
+                return res.status('200').json({
+                    success: false,
+                    message: 'xoa khong thanh cong!'
+                })
+            }
+        }
+    })
+}
+
 module.exports = {
     createNews: createNews,
     getNewsId: getNewsId,
@@ -263,5 +299,6 @@ module.exports = {
     getNewsTotal: getNewsTotal,
     upDateView: upDateView,
     getUserBlogs: getUserBlogs,
+    deleteNews:deleteNews
     
 }
