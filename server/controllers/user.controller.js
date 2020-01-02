@@ -49,7 +49,7 @@ const Viewprofile = (req, res) => {
     var id = req.decoded._id;
     //console.log(id);
 
-    User.findById(id, function (err, user) {
+    User.find({_id:id,deleted:false}, function (err, user) {
         //console.log(user)
         if (err) {
 
@@ -116,7 +116,7 @@ const Viewprofile = (req, res) => {
 const ViewAvatar = (req, res) => {
 
     var id = req.decoded._id;
-    User.findById(id)
+    User.find({_id:id,deleted:false})
         .exec((err, result) => {
             //console.log(user)
             if (err) {
@@ -143,7 +143,7 @@ const ViewAvatar = (req, res) => {
 
 const editProfile = (req, res) => {
 
-    User.findById(req.decoded._id).exec((err, result) => {
+    User.find({_id:req.decoded._id,deleted:false}).exec((err, result) => {
         if (err) {
             res.status('400').json(err);
         }
@@ -180,7 +180,7 @@ const editProfile = (req, res) => {
 }
 
 const updateAvatar = (req, res) => {
-    User.findById(req.decoded._id).exec((err, result) => {
+    User.find({_id:req.decoded._id,deleted:false}).exec((err, result) => {
         if (err) {
             // console.log("lỗi nè");
             res.status('400').json(err);
@@ -237,7 +237,7 @@ const getNamePic = (req, res) =>{
     //console.log(req);
     var id = req.params.id_user;
     //console.log(req.params.id_user);
-    User.findById(id)
+    User.find({_id:id,deleted:false})
         .exec((err, result) => {
             //console.log(user)
             if (err) {
@@ -263,6 +263,30 @@ const getNamePic = (req, res) =>{
         });
 }
 
+const deleteUser = (req,res)=>{
+    const id = req.params.id;
+    User.findByIdAndUpdate(id,{deleted: true},(err,result)=>{
+        if(err){
+            return res.status('400').json(err);
+        }
+        else{
+            if(result){
+                return res.status('200').json({
+                    success: true,
+                    message: 'Xoa User thanh cong!'
+                })
+            }
+            else
+            {
+                return res.status('200').json({
+                    success: false,
+                    message: 'xoa khong thanh cong!'
+                })
+            }
+        }
+    })
+}
+
 module.exports = {
     signup: signup,
     signout: signout,
@@ -271,4 +295,5 @@ module.exports = {
     updateAvatar: updateAvatar,
     ViewAvatar: ViewAvatar,
     getNamePic: getNamePic,
+    deleteUser:deleteUser
 };

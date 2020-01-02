@@ -90,7 +90,7 @@ const editPlace = (req, res, next) => {
         }
         console.log(newPlace);
 
-        Place.update({'_id': id_Places}, newPlace)
+        Place.update({'_id': id_Places, deleted: false}, newPlace)
             .exec((err,result) =>{
                 if (err) {
                     res.status('200').json({
@@ -116,7 +116,7 @@ const editPlace = (req, res, next) => {
 }
 const getAllPlace = (req, res) => {
     const pageNumber = req.params.page;
-    Place.find()
+    Place.find({deleted:false})
         // .select('_id name_place phone stress dictrict city picture')
         .limit(10)
         .skip(10*(pageNumber - 1))
@@ -139,7 +139,7 @@ const getAllPlace = (req, res) => {
 }
 
 const getPlaceTotal = (req,res)=>{
-    Place.estimatedDocumentCount((err,count)=>{
+    Place.countDocuments({deleted:false},(err,count)=>{
         if(err){
             return res.status('400').json({
                 message:'khong lay duoc',
@@ -161,7 +161,7 @@ const getUserPlaces = (req, res) => {
 
     var idUser = req.decoded._id;
     // console.log("a"+idUser);
-    Place.find({createBy: idUser})
+    Place.find({deleted:false},{createBy: idUser})
         // .populate('id_User', '')
         // .select('_id name_place phone stress dictrict city picture')
         .exec((err, result) => {
@@ -185,7 +185,7 @@ const getUserPlaces = (req, res) => {
 const getDetailPlaces = (req, res) => {
     var idPlace = req.params.id_Place;
 
-    Place.findById(idPlace)
+    Place.find({_id : idPlace, deleted:false})
         .populate('createBy', 'fistname lastname tel picture')
         .exec((err, result)=>{
             if (err) {
@@ -211,7 +211,7 @@ const deletePlace = (req, res, next) => {
     
     if (req.body.id_place !== null) {
         const id_user = req.decoded._id;
-        Place.find({ _id: req.body.id_place, id_User: id_user })
+        Place.find({ _id: req.body.id_place, id_User: id_user,deleted:false })
             .exec((err, result) => {
                 // console.log(result)
                 if (err) {
@@ -219,7 +219,7 @@ const deletePlace = (req, res, next) => {
                 }
                 else {
                     if (result) {
-                        Place.findOneAndDelete({ _id: req.body.id_place})
+                        Place.findByIdAndUpdate({ _id: req.body.id_place},{deleted:false})
                             .exec((err, result) => {
                                 if (err) {
                                     return res.status('400').json(err);

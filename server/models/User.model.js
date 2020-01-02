@@ -54,6 +54,10 @@ const User = new mongoose.Schema({
         type: String,
         trim: true
     },
+    deleted:{
+        type: Boolean,
+        default: false
+    },
     picture:{
         type: String,
         require: false

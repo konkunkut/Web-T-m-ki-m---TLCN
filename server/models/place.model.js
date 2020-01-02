@@ -49,6 +49,10 @@ const Place = new mongoose.Schema({
         require: false,
         trim: true
     },
+    deleted:{
+        type: Boolean,
+        default: false
+    },
     picture: [{
         type: String,
         require: false
