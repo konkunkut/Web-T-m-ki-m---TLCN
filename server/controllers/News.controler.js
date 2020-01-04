@@ -64,17 +64,18 @@ const getNewsId = (req, res) => {
             else{
                 if(!result){
                     return res.status('200').json({
-                        data: result,
-                        message : "thành công",
-                        success: true
+                        data: null,
+                        message : "khong co du lieu",
+                        success: false
                         
                     });
                 }
                 else{
+
                     return res.status('200').json({
-                        data: null,
-                        message : "khong co du lieu",
-                        success: false
+                        data: result,
+                        message : "thành công",
+                        success: true
                         
                     });
                 }
@@ -273,7 +274,7 @@ const deleteNews = (req,res)=>{
             if(result){
                 return res.status('200').json({
                     success: true,
-                    message: 'deleted News successful'
+                    message: 'deleted successful'
                 })
             }
             else
@@ -287,6 +288,29 @@ const deleteNews = (req,res)=>{
     })
 }
 
+const getAllNews_ad=(req,res)=>{
+    News.find({deleted:false})
+        .populate('id_user', 'fistname lastname')
+        .exec((err, result) => {
+            if (err) {
+                return res.status('200').json({
+                    message: "Không lấy được dữ liệu",
+                    success: false
+                });
+
+            }
+            else {
+                return res.status('200').json({
+                    data: result,
+                    message:"Thành công",
+                    success: true
+                });
+            }
+        })
+}
+
+
+
 module.exports = {
     createNews: createNews,
     getNewsId: getNewsId,
@@ -299,6 +323,7 @@ module.exports = {
     getNewsTotal: getNewsTotal,
     upDateView: upDateView,
     getUserBlogs: getUserBlogs,
-    deleteNews:deleteNews
-    
+    deleteNews:deleteNews,
+    getAllNews_ad: getAllNews_ad,
+
 }

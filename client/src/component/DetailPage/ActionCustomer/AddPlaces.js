@@ -59,12 +59,6 @@ class AddPlaces extends React.Component {
     onSigned = () => {
 
         let formData = new FormData();
-        // formData.append("name", this.state.fileList[0].originFileObj);
-        // const direct_place = {
-        //     stress: this.props.stress,
-        //     dictrict: this.props.district,
-        //     city: this.props.city,
-        // }
 
         formData.set("name_place",this.props.namePlace);
         formData.set("phone",this.props.tel);

@@ -30,7 +30,8 @@ export default function SuggestBlog(props)
               {props.title}
             </a>
             } 
-              description={props.content} style={{fontSize: 18}} 
+            description={props.content} 
+            style={{fontSize: 18}} 
         />
       </Card>
       </Link>

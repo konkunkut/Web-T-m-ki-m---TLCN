@@ -8,6 +8,7 @@ class ListCard extends React.Component {
     this.props.callback();
   }
   render() {
+    console.log(this.props.contacts);
     return (
       <div>
         {this.props.contacts.map(c =>
@@ -17,7 +18,7 @@ class ListCard extends React.Component {
             stress={c.stress}
             dictrict={c.dictrict}
             city={c.city}
-            picture={c.picture[0]}
+            picture={c.picture}
             tel={c.phone}
 
             callback={this.handleClick}

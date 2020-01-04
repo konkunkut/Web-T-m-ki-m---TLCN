@@ -200,17 +200,17 @@ class EditPlace extends React.Component {
             }
             else {
                 this.setState({
-                    name_place: data.data.name_place,
-                    phone: data.data.phone,
-                    stressvalue: data.data.stress,
-                    dictrictvalue: data.data.dictrict,
-                    cityvalue: data.data.city,
+                    name_place: data.data[0].name_place,
+                    phone: data.data[0].phone,
+                    stressvalue: data.data[0].stress,
+                    dictrictvalue: data.data[0].dictrict,
+                    cityvalue: data.data[0].city,
                     // createBy: data.data.createBy,
-                    id_type_place: data.data.id_type_place,
-                    lat: data.data.lat,
-                    lng: data.data.lng,
-                    decription: data.data.decription,
-                    picture: data.data.picture,
+                    id_type_place: data.data[0].id_type_place,
+                    lat: data.data[0].lat,
+                    lng: data.data[0].lng,
+                    decription: data.data[0].decription,
+                    picture: data.data[0].picture,
                 });
             };
             while (collection.length) {
@@ -382,7 +382,7 @@ class EditPlace extends React.Component {
                                             rules: [{ required: true, message: 'Không bỏ trống phần này!' }],
                                             initialValue: this.state.decription
                                         })(
-                                            <TextArea name="decription" rows={4} onChange={this.inputChange} />
+                                            <TextArea name="decription" rows={10} onChange={this.inputChange} />
                                         )}
                                     </Form.Item>
                                 </Col>

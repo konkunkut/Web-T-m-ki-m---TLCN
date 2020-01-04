@@ -13,6 +13,7 @@ import {districsHCM, districsHN, typePlace} from '../config';
 const { Content } = Layout;
 const { Option } = Select;
 var dataMaps = [];
+var body = {};
 
 class Places extends React.Component {
     constructor() {
@@ -30,16 +31,25 @@ class Places extends React.Component {
                 {id: "default", name: "Chọn quận/huyện"}
             ],
 
-            typePlaceValue: null,
-            citiesValue: null,
-            districtsValue: null,
+            typePlaceValue: "default",
+            citiesValue: "default",
+            districtsValue: "default",
             curentPage: 1,
             totalPage: null,
+
+            searchValue: {},
         }
     }
 
     setDataDistrict = (value) => {
-        this.setState({citiesValue: value})
+        if(value=="Chọn tỉnh/thành phố"){
+            this.setState({citiesValue: "default"});
+            body.city ="default";
+        }
+        else{
+            this.setState({citiesValue: value});
+            body.city =value;
+        }
         this.props.form.setFieldsValue({
             districts: undefined
         })
@@ -66,15 +76,51 @@ class Places extends React.Component {
     }
 
     getDataDistrict = (value) =>{
-        this.setState({districtsValue: value});
+        if(value=="Chọn quận/huyện"){
+            this.setState({districtsValue: "default"});
+            body.dictrict ="default";
+        }
+        else{
+            this.setState({districtsValue: value});
+            body.dictrict =value;
+        }
     }
 
     getType = (value) =>{
-        this.setState({typePlaceValue: value});
+        if(value=="Tất cả địa điểm"){
+            this.setState({typePlaceValue: "default"});
+            body.id_type_place ="default";
+        }
+        else{
+            this.setState({typePlaceValue: value});
+            body.id_type_place =value;
+        }
+    }
+
+    onSearch=()=>{
+        console.log(body)
+        getAllPlaces(1, body).then((data) => {
+            if (!data.success) {
+                message.error(data.message, 2);
+            }
+            else {
+                dataMaps = [];
+                for(let i=0; i< data.data.length; i++)
+                {
+                    dataMaps.push({
+                        lat : data.data[i].lat, 
+                        lng : data.data[i].lng, 
+                        name : data.data[i].name_place, 
+                        phone : data.data[i].phone
+                    });
+                }
+                this.setState({ contacts: data.data });
+            }
+        });
     }
 
     changePage = (pageNumber) =>{
-        getAllPlaces(pageNumber).then((data) => {
+        getAllPlaces(pageNumber, body).then((data) => {
             if (!data.success) {
                 message.error(data.message, 2);
             }
@@ -95,7 +141,11 @@ class Places extends React.Component {
     }
 
     componentDidMount() {
-        getAllPlaces(this.state.curentPage).then((data) => {
+        body.id_type_place = this.state.typePlaceValue;
+        body.city = this.state.citiesValue;
+        body.dictrict = this.state.districtsValue;
+
+        getAllPlaces(this.state.curentPage, body).then((data) => {
             if (!data.success) {
                 message.error(data.message, 2);
             }
@@ -201,7 +251,7 @@ class Places extends React.Component {
                                         </Col>
                                     </Row>
                                 </Form>
-                                <Button className="submit-button">Tìm kiếm</Button>
+                                <Button className="submit-button" onClick={this.onSearch}>Tìm kiếm</Button>
                                 <Divider></Divider>
 
                                 <div>

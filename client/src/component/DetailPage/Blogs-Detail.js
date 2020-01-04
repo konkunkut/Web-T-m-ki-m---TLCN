@@ -7,7 +7,7 @@ import MyTags from '../ListComponent/ListTags';
 import MyLstLastNews from '../NewsComponent/ListLastestNews';
 import { getDetailNews, getNewestNews, updateView } from '../../action/uploadBlogs';
 
-import {Layout, Col, BackTop, Row, Divider, Icon, message} from 'antd';
+import {Layout, Col, BackTop, Row, Divider, Icon, message, Typography} from 'antd';
 
 const {Content} = Layout;
 
@@ -54,21 +54,22 @@ class DetailBlogs extends React.Component
                 message.error(data.message, 2);
             }
             else {
-                if(data.data.pictures.length>1){
+                console.log(data.data[0].pictures)
+                if(data.data[0].pictures.length>1){
                     this.setState({
                         hasMorePics : true
                     })
                 }
                 //console.log(data.data);
                 this.setState({ 
-                    title: data.data.title,
-                    decription: data.data.decription,
-                    content: data.data.content,
-                    pics: data.data.pictures,
-                    tags: data.data.tags,
-                    writter: data.data.id_user.fistname+" "+data.data.id_user.lastname,
-                    date: data.data.date,
-                    view: data.data.view,
+                    title: data.data[0].title,
+                    decription: data.data[0].decription,
+                    content: data.data[0].content,
+                    pics: data.data[0].pictures,
+                    tags: data.data[0].tags,
+                    writter: data.data[0].id_user.fistname+" "+data.data[0].id_user.lastname,
+                    date: data.data[0].date,
+                    view: data.data[0].view,
                 });
                 //updateView
                 updateView(this.props.location.state.title).then((data)=>{
@@ -97,7 +98,9 @@ class DetailBlogs extends React.Component
                     <Col className="content-detail-blogs" span={17}>
                         {/* title */}
                         <Row gutter={5}>
-                            <h1>{this.state.title}</h1>
+                            <h1 style={{whiteSpace : "pre-wrap"}} >
+                                {this.state.title}
+                            </h1>
                         </Row>
                         {/* info */}
                         <Row gutter={5}>
@@ -117,7 +120,9 @@ class DetailBlogs extends React.Component
                         {/* decription */}
                         <Row gutter={5}>
                             <h3 style={{padding:20}}>
-                                {this.state.decription}
+                                <span style={{whiteSpace : "pre-wrap"}}>
+                                    {this.state.decription}
+                                </span>
                             </h3>
                         </Row>
                         <Divider></Divider>
@@ -131,8 +136,8 @@ class DetailBlogs extends React.Component
                         }
                         <Row><span><p></p></span></Row>
                         {/* contents */}
-                        <Row gutter={5}>
-                            <span style={{padding:20}}>
+                        <Row gutter={5} >
+                            <span style={{padding:20, whiteSpace : "pre-wrap"}}>
                                 {this.state.content}
                             </span>
                         </Row>

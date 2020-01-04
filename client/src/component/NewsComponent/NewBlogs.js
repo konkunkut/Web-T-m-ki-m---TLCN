@@ -30,7 +30,7 @@ class NewBlogs extends React.Component
                             <p><Icon type="calendar" />{this.props.date}</p>
                         </Col>
                         <Col span={8}>
-                            <p><Icon type="eye" />{this.props.star}</p>
+                            <p><Icon type="eye" />{this.props.view}</p>
                         </Col>
                         <Col span={8}>
                             <p><Icon type="edit" />{this.props.blogger}</p>

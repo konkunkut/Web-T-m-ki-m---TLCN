@@ -5,23 +5,16 @@ const User = require('../models/User.model');
 
 const createPlace = (req, res, next) => {
 
-    var id_user = req.decoded._id;
-
     var form = new formidable.IncomingForm();
 
-    // form.parse(req);
-    // form.maxFileSize = 200 * 1024 * 1024;
     form.uploadDir = "./pics/";
     form.multiples = true;
     form.keepExtensions = true;
 
     form.parse(req, function(err, fields, files) {
-        // ...
-        // console.log(fields);
-        const newPlace = new Place(fields);
-
+        const newPlace = new Place(fields)
         var listImage = files.listPics;
-        // console.log(listImage);
+
         if (listImage) {
         var listPathImage = [];
         if (Array.isArray(listImage)) {
@@ -37,9 +30,7 @@ const createPlace = (req, res, next) => {
         newPlace.save((error) => {
             if (error) {
                 res.status('200').json({
-                    data: {
-
-                    },
+                    data: null,
                     message: "Không cập nhật được!",
                     success: false
                 });
@@ -115,8 +106,24 @@ const editPlace = (req, res, next) => {
     });
 }
 const getAllPlace = (req, res) => {
+    var temp = req.query;
+    //console.log(req.query)
     const pageNumber = req.params.page;
-    Place.find({deleted:false})
+    var search ={};
+    if(temp.id_type_place!='default'){
+        search.id_type_place = temp.id_type_place;
+    }
+    if(temp.city!='default'){
+        search.city = temp.city;
+    }
+    if(temp.dictrict!='default'){
+        search.dictrict= temp.dictrict;
+    }
+
+    search.deleted= false;
+    //console.log(search, pageNumber)
+
+    Place.find(search)
         // .select('_id name_place phone stress dictrict city picture')
         .limit(10)
         .skip(10*(pageNumber - 1))
@@ -161,11 +168,11 @@ const getUserPlaces = (req, res) => {
 
     var idUser = req.decoded._id;
     // console.log("a"+idUser);
-    Place.find({deleted:false},{createBy: idUser})
+    Place.find({deleted:false, createBy: idUser})
         // .populate('id_User', '')
         // .select('_id name_place phone stress dictrict city picture')
         .exec((err, result) => {
-            // console.log("aaa"+result);
+            //console.log("aaa"+result);
             if (err) {
                 return res.status('200').json({
                     message : "Không lấy được dữ liệu",
@@ -209,9 +216,9 @@ const getDetailPlaces = (req, res) => {
 
 const deletePlace = (req, res, next) => {
     
-    if (req.body.id_place !== null) {
+    if (req.params.id_place !== null) {
         const id_user = req.decoded._id;
-        Place.find({ _id: req.body.id_place, id_User: id_user,deleted:false })
+        Place.find({ _id: req.params.id_place, id_User: id_user,deleted:false })
             .exec((err, result) => {
                 // console.log(result)
                 if (err) {
@@ -219,7 +226,7 @@ const deletePlace = (req, res, next) => {
                 }
                 else {
                     if (result) {
-                        Place.findByIdAndUpdate({ _id: req.body.id_place},{deleted:false})
+                        Place.findByIdAndUpdate({ _id: req.params.id_place},{deleted:true})
                             .exec((err, result) => {
                                 if (err) {
                                     return res.status('400').json(err);
@@ -255,6 +262,72 @@ const find_id_place = (req, res, next )=> {
 
 }
 
+const getAllPlaces_ad=(req,res)=>{
+    Place.find({deleted:false})
+        .populate('createBy', 'fistname lastname tel picture')
+        .exec((err, result) => {
+            if (err) {
+                return res.status('200').json({
+                    message: "Không lấy được dữ liệu",
+                    success: false
+                });
+
+            }
+            else {
+                return res.status('200').json({
+                    data: result,
+                    message:"Thành công",
+                    success: true
+                });
+            }
+        })
+}
+const getDeletedPlaces=(req,res)=>{
+    Place.find({deleted:true})
+    .exec((err, result) => {
+        if (err) {
+            return res.status('200').json({
+                message: "Không lấy được dữ liệu",
+                success: false
+            });
+
+        }
+        else {
+            return res.status('200').json({
+                data: result,
+                message:"Thành công",
+                success: true
+            });
+        }
+    })
+}
+
+const deletePlaces_ad=(req,res)=>{
+    const id = req.params.id;
+    console.log(id)
+    Place.findByIdAndUpdate(id,{deleted: true})
+        .exec((err,result)=>{
+        if(err){
+            return res.status('400').json(err);
+        }
+        else{
+            if(result){
+                return res.status('200').json({
+                    success: true,
+                    message: 'deleted successful'
+                })
+            }
+            else
+            {
+                return res.status('200').json({
+                    success: false,
+                    message: 'xoa khong thanh cong!'
+                })
+            }
+        }
+    })
+}
+
 module.exports = {
     createPlace: createPlace,
     editPlace: editPlace,
@@ -263,6 +336,8 @@ module.exports = {
     deletePlace: deletePlace,
     find_id_place:find_id_place,
     getDetailPlaces:getDetailPlaces,
-    getPlaceTotal:getPlaceTotal
-
+    getPlaceTotal:getPlaceTotal,
+    getAllPlaces_ad:getAllPlaces_ad,
+    getDeletedPlaces:getDeletedPlaces,
+    deletePlaces_ad:deletePlaces_ad,
 }

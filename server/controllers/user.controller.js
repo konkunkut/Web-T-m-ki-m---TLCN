@@ -48,8 +48,8 @@ const Viewprofile = (req, res) => {
 
     var id = req.decoded._id;
     //console.log(id);
-
-    User.find({_id:id,deleted:false}, function (err, user) {
+    User.find({_id:id,deleted:false})
+        .exec(function (err, user) {
         //console.log(user)
         if (err) {
 
@@ -60,34 +60,35 @@ const Viewprofile = (req, res) => {
                 });
 
         }
+        //console.log(user)
 
-        if (user.local.email) {
+        if (user[0].local.email) {
 
             return res.status('200')
                 .json({
                     data: {
-                        email: user.local.email,
-                        firstName: user.fistname,
-                        lastName: user.lastname,
-                        avatar: user.picture,
-                        tel: user.tel,
-                        id_place: user.id_place
+                        email: user[0].local.email,
+                        firstName: user[0].fistname,
+                        lastName: user[0].lastname,
+                        avatar: user[0].picture,
+                        tel: user[0].tel,
+                        id_place: user[0].id_place
                     },
                     message: "successfull",
                     success: true
                 });
         }
-        else if (user.google.email) {
+        else if (user[0].google.email) {
 
             return res.status('200')
                 .json({
                     data: {
-                        email: user.google.email,
-                        firstName: user.fistname,
-                        lastName: user.lastname,
-                        avatar: user.picture,
-                        tel: user.tel,
-                        id_place: user.id_place
+                        email: user[0].google.email,
+                        firstName: user[0].fistname,
+                        lastName: user[0].lastname,
+                        avatar: user[0].picture,
+                        tel: user[0].tel,
+                        id_place: user[0].id_place
                     },
                     message: "successfull",
                     success: true
@@ -98,12 +99,12 @@ const Viewprofile = (req, res) => {
             return res.status('200')
                 .json({
                     data: {
-                        email: user.facebook.email,
-                        firstName: user.fistname,
-                        lastName: user.lastname,
-                        avatar: user.picture,
-                        tel: user.tel,
-                        id_place: user.id_place
+                        email: user[0].facebook.email,
+                        firstName: user[0].fistname,
+                        lastName: user[0].lastname,
+                        avatar: user[0].picture,
+                        tel: user[0].tel,
+                        id_place: user[0].id_place
                     },
                     message: "successfull",
                     success: true
@@ -132,7 +133,7 @@ const ViewAvatar = (req, res) => {
                 return res.status('200')
                     .json({
                         data: {
-                            avatar: result.picture
+                            avatar: result[0].picture
                         },
                         message: "successfull",
                         success: true
@@ -148,11 +149,11 @@ const editProfile = (req, res) => {
             res.status('400').json(err);
         }
         else {
-            result.fistname = req.body.fistname;
-            result.lastname = req.body.lastname;
-            result.tel = req.body.tel;
+            result[0].fistname = req.body.fistname;
+            result[0].lastname = req.body.lastname;
+            result[0].tel = req.body.tel;
             //console.log(result)
-            result.save((error) => {
+            result[0].save((error) => {
                 if (error) {
                     res.status('400').json({
                         data: {
@@ -197,9 +198,9 @@ const updateAvatar = (req, res) => {
                 // console.log(file);
                 file.path = '/pics/' + file.path.slice(5);
                 // file.path = file.uploadDir + file.path.slice(5);
-                result.picture = file.path;
+                result[0].picture = file.path;
 
-                result.save((error) => {
+                result[0].save((error) => {
                     if (error) {
                         res.status('200').json({
                             data: {
@@ -212,7 +213,7 @@ const updateAvatar = (req, res) => {
                     else {
                         res.status('200').json({
                             data: {
-                                avatar: result.picture
+                                avatar: result[0].picture
                             },
                             message: 'Cập nhật tài khoản thành công!',
                             success: true
@@ -253,8 +254,8 @@ const getNamePic = (req, res) =>{
                 return res.status('200')
                     .json({
                         data: {
-                            lastName: result.lastname,
-                            avatar: result.picture,
+                            lastName: result[0].lastname,
+                            avatar: result[0].picture,
                         },
                         message: "successfull",
                         success: true
@@ -287,6 +288,46 @@ const deleteUser = (req,res)=>{
     })
 }
 
+const getAllUser_ad=(req,res)=>{
+    User.find({deleted:false})
+    .exec((err, result) => {
+        if (err) {
+            return res.status('200').json({
+                message: "Không lấy được dữ liệu",
+                success: false
+            });
+
+        }
+        else {
+            return res.status('200').json({
+                data: result,
+                message:"Thành công",
+                success: true
+            });
+        }
+    })
+}
+
+const getDeletedUser=(req,res)=>{
+    User.find({deleted:false})
+    .exec((err, result) => {
+        if (err) {
+            return res.status('200').json({
+                message: "Không lấy được dữ liệu",
+                success: false
+            });
+
+        }
+        else {
+            return res.status('200').json({
+                data: result,
+                message:"Thành công",
+                success: true
+            });
+        }
+    })
+}
+
 module.exports = {
     signup: signup,
     signout: signout,
@@ -295,5 +336,8 @@ module.exports = {
     updateAvatar: updateAvatar,
     ViewAvatar: ViewAvatar,
     getNamePic: getNamePic,
-    deleteUser:deleteUser
+    deleteUser:deleteUser,
+    getAllUser_ad:getAllUser_ad,
+    getDeletedUser:getDeletedUser,
+    
 };

@@ -60,7 +60,7 @@ const signin = (req, res) => {
                     if (err) {
                         console.log(err);
                     }
-                    const token = jwt.sign({ _id: user._id, isEditor: result, isAdmin:'false'}, config.jwtSecret, { expiresIn: 60 * 60 });
+                    const token = jwt.sign({ _id: user._id, isEditor: result, isAdmin: false}, config.jwtSecret, { expiresIn: 60 * 60 });
                     // console.log(user);
                     // console.log('token local: '+token);
                     res.cookie('token', token, { exqire: new Date() + 3000 });

@@ -103,7 +103,7 @@ class CardPlace extends React.Component {
                     style={{ textAlign: "left" }}
                 >
                     <Col span={4}>
-                        <img src={`${API_URL}` + this.props.picture} style={{ maxWidth: 70, width: '100%', height: 'auto' }} />
+                        <img src={`${API_URL}` + this.props.picture[0]} style={{ maxWidth: 70, width: '100%', height: 'auto' }} />
                     </Col>
                     <Col span={12}>
                         <p>

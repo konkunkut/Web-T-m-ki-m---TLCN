@@ -6,6 +6,7 @@ import { HOME_URL } from '../../config';
 import Dashboard from './MenuItem/DashBoard';
 import Places_Management from './MenuItem/PlacesManage';
 import User_Management from './MenuItem/UserManage';
+import Blogs_Management from './MenuItem/BlogsManage';
 
 import { Col, Row, BackTop, Layout, Avatar, Tabs, message, Button, Menu } from 'antd';
 const { Content } = Layout;
@@ -42,6 +43,11 @@ class Admin_Dash extends React.Component {
                 <User_Management />
             )
         }
+        if(this.state.renderKey=="blogs"){
+            return(
+                <Blogs_Management />
+            )
+        }
     }
 
     componentDidMount() {
@@ -74,6 +80,10 @@ class Admin_Dash extends React.Component {
                             {/* place */}
                             <Menu.Item key="places">
                                 Quản lý địa điểm
+                            </Menu.Item>
+                            {/* place */}
+                                <Menu.Item key="blogs">
+                                Quản lý bài viết
                             </Menu.Item>
                             {/* user */}
                             <Menu.Item key="users">

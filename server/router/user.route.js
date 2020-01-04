@@ -30,4 +30,7 @@ route.put('/updateAvatar',login.checkOauthToken,usercontroller.updateAvatar);
 route.get('/ViewAvatar',login.checkOauthToken,usercontroller.ViewAvatar);
 route.get('/getNamePic/:id_user',usercontroller.getNamePic);
 route.delete('/deleteUser/:id',login.checkOauthToken,usercontroller.deleteUser);
+route.get('/getAllUser_ad',usercontroller.getAllUser_ad);
+route.get('/getDeletedUser',usercontroller.getDeletedUser);
+
 module.exports=route;

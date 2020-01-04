@@ -14,7 +14,7 @@ class LstNewBlog extends React.Component {
                         pictures={c.pictures}
                         content={c.content}
                         date={c.date}
-                        star={123}
+                        view={c.view}
                         blogger={c.id_user.fistname + " "+ c.id_user.lastname}
                     />
                 )}

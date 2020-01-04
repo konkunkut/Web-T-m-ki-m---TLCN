@@ -26,6 +26,7 @@ class CustommerPage extends React.Component {
             checkOwn: false,
             isAdmin : false,
             isEditor : false,
+            permission: false,
             // userAvatar: null,
             userID: sessionStorage.getItem("userID")||null,
             // firstName: sessionStorage.getItem("firstName")||null,
@@ -62,16 +63,23 @@ class CustommerPage extends React.Component {
         this.props.validAvatar();
 
         var decoded = jwt.verify(sessionStorage.getItem("token"), 'Sang_oc_cho_haha');
-        if(decoded.isAdmin){
-            this.setState({isAdmin : decoded.isAdmin});
-            // console.log(decoded);
-        }
-        if(decoded.isEditor){
-            this.setState({isEditor : decoded.isEditor});
+        // if(decoded.isAdmin){
+        //     this.setState({isAdmin : decoded.isAdmin});
+        //     //console.log(decoded);
+        // }
+        // if(decoded.isEditor){
+        //     this.setState({isEditor : decoded.isEditor});
+        // }
+        if(decoded.isAdmin||decoded.isEditor){
+            console.log(decoded);
+            this.setState({
+                permission: true
+            })
         }
     }
 
     render() {
+        console.log(this.state.permission)
         return (
             <Content style={{ padding: '20px', marginTop: 60 }}>
                 {/* tạo cho đẹp */}
@@ -99,26 +107,26 @@ class CustommerPage extends React.Component {
                             <TabPane tab="Thêm địa điểm" key="3">
                                 <AddPlaces />
                             </TabPane>
-                            {!this.state.isAdmin||!this.state.isEditor ? <div></div>:
+                            {/* {!this.state.isAdmin || !this.state.isEditor ? <div></div>:
                                 <TabPane tab="Thêm bài viết" key="4">
                                     <AddBlogs />
                                 </TabPane>
                             }
-                            {!this.state.isAdmin||!this.state.isEditor ? <div></div>:
+                            {!this.state.isAdmin || !this.state.isEditor ? <div></div>:
+                                <TabPane tab="Các bài viết đã đăng" key="5">
+                                    <OwnBlogs />
+                                </TabPane>
+                            } */}
+                            {this.state.permission==false ? <div></div>:
+                                <TabPane tab="Thêm bài viết" key="4">
+                                    <AddBlogs />
+                                </TabPane>
+                            }
+                            {this.state.permission==false ? <div></div>:
                                 <TabPane tab="Các bài viết đã đăng" key="5">
                                     <OwnBlogs />
                                 </TabPane>
                             }
-                            {/* {!this.state.isAdmin||!this.state.isEditor ? <div></div>:
-                                <TabPane tab="Quản lý người dùng" key="5">
-                                    Xem người dùng ở đây
-                                </TabPane>
-                            }
-                            {!this.state.isAdmin||!this.state.isEditor ? <div></div>:
-                                <TabPane tab="Thống kê" key="6">
-                                    Thống kê ở đây
-                                </TabPane>
-                            } */}
                         </Tabs>
                     </Row>
                 </Col>

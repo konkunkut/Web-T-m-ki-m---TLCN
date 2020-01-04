@@ -2,10 +2,22 @@ import {API_URL} from '../config';
 import axios from 'axios';
 import {STORE_ID_PLACE} from './constants';
 
-export const getAllPlaces=(page)=>{
-    return axios.get(`${API_URL}/Places/getAllPlace/`+page)
+export const getAllPlaces=(page, data)=>{
+
+    const config = {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json' 
+        }
+    }
+
+    const body={
+        params: data
+    }
+
+    return axios.get(`${API_URL}/Places/getAllPlace/`+page, body, config)
                 .then(res=>{
-                    // console.log("thành cÔng");
+                    console.log(res.data);
                     return res.data;
                 })
                 .catch(err=>{

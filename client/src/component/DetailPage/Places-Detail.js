@@ -112,29 +112,29 @@ class DetailPlaces extends React.Component {
                     dataMaps.pop();
                 }
                 dataMaps.push({
-                    lat: data.data.lat,
-                    lng: data.data.lng,
-                    name: data.data.name_place,
-                    phone: data.data.phone
+                    lat: data.data[0].lat,
+                    lng: data.data[0].lng,
+                    name: data.data[0].name_place,
+                    phone: data.data[0].phone
                 });
 
                 this.setState({
-                    name_place: data.data.name_place,
-                    phone: data.data.phone,
-                    stress: data.data.stress,
-                    dictrict: data.data.dictrict,
-                    city: data.data.city,
+                    name_place: data.data[0].name_place,
+                    phone: data.data[0].phone,
+                    stress: data.data[0].stress,
+                    dictrict: data.data[0].dictrict,
+                    city: data.data[0].city,
                     // createBy: data.data.createBy,
-                    id_type_place: data.data.id_type_place,
-                    lat: data.data.lat,
-                    lng: data.data.lng,
-                    decription: data.data.decription,
-                    picture: data.data.picture,
+                    id_type_place: data.data[0].id_type_place,
+                    lat: data.data[0].lat,
+                    lng: data.data[0].lng,
+                    decription: data.data[0].decription,
+                    picture: data.data[0].picture,
 
-                    userFirstName: data.data.createBy.fistname,
-                    userLastName: data.data.createBy.lastname,
-                    userTel: data.data.createBy.tel,
-                    userAvatar: `${API_URL}` + data.data.createBy.picture,
+                    userFirstName: data.data[0].createBy.fistname,
+                    userLastName: data.data[0].createBy.lastname,
+                    userTel: data.data[0].createBy.tel,
+                    userAvatar: `${API_URL}` + data.data[0].createBy.picture,
                 });
                 while (collection.length) {
                     collection.pop();
@@ -249,11 +249,11 @@ class DetailPlaces extends React.Component {
                                         Mô tả:
                                     </p>
                                     {this.state.decription == "null" ? 
-                                        <p style={{whiteSpace : "pre"}}>
+                                        <p style={{whiteSpace : "pre-wrap"}}>
                                             
                                         </p>
                                         : 
-                                        <p style={{whiteSpace : "pre"}}>
+                                        <p style={{whiteSpace : "pre-wrap"}}>
                                             {this.state.decription }
                                         </p>
                                     }

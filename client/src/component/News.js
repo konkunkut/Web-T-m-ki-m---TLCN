@@ -86,7 +86,10 @@ class News extends React.Component {
                         {/* list tin tức */}
                         <Col className="content-news" span={17}>
                             <Row>
-                                <MyNewBlogs contentsBlogs={this.state.allBlogs} />
+                                {this.state.allBlogs? this.state.allBlogs.length > 0 ?
+                                    <MyNewBlogs contentsBlogs={this.state.allBlogs} />
+                                :<div>Không có dữ liệu</div> : <div>Không có dữ liệu</div>
+                                }
                             </Row>
                             <Row>
                                 {/* phân trang */}
@@ -116,8 +119,10 @@ class News extends React.Component {
                             <Row className="new-blogs">
                                 <h3 style={{ textAlign: "left", marginLeft: 10 }}>Bài viết mới</h3>
                                 <Divider style={{ marginTop: 5, marginBottom: 10 }}></Divider>
-
-                                <MyLstLastNews contents={this.state.newestBlogs} />
+                                {this.state.newestBlogs? this.state.newestBlogs.length > 0 ?
+                                    <MyLstLastNews contents={this.state.newestBlogs} />
+                                :<div>Không có dữ liệu</div> : <div>Không có dữ liệu</div>
+                                }
                             </Row>
 
                         </Col>

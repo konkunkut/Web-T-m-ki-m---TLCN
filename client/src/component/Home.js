@@ -33,7 +33,12 @@ class Home extends React.Component
     }
 
     componentDidMount(){
-        getAllPlaces(1).then((data) => {
+        var body ={
+            id_type_place: "default",
+            city: "default",
+            dictrict: "default",
+        }
+        getAllPlaces(1, body).then((data) => {
             if (!data.success) {
                 message.error(data.message, 2);
             }

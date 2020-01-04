@@ -8,11 +8,41 @@ function acl_config(dbconnect){
         {
             roles:'user',
             allows:[
-
+                {
+                    resources:'/Places/deletePlace',
+                    permissions:'delete'
+                },
             ],
             roles: 'admin',
             allows: [
-                
+                {
+                    resources:'/News/createNewsbyUser',
+                    permissions:'post'
+                },
+                {
+                    resources:'/Places/deletePlace',
+                    permissions:'delete'
+                },
+                {
+                    resources:'/News/deleteNews',
+                    permissions:'delete'
+                },
+                {
+                    resources:'/user/deleteUser',
+                    permissions:'delete'
+                },
+                {
+                    resources:'/News/createNewsbyUser',
+                    permissions:'post'
+                },
+                {
+                    resources:'/News/deleteNews',
+                    permissions:'delete'
+                },
+                {
+                    resources:'/News/editNews',
+                    permissions:'put'
+                }
             ],
             roles: 'editor',
             allows: [
@@ -27,7 +57,11 @@ function acl_config(dbconnect){
                 {
                     resources:'/News/editNews',
                     permissions:'put'
-                }
+                },
+                {
+                    resources:'/Places/deletePlace',
+                    permissions:'delete'
+                },
             ]
         }
     ]);

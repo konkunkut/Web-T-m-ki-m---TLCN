@@ -21,7 +21,7 @@ class OwnBlogs extends React.Component
             {
                 title: 'Tiêu đề',
                 dataIndex: 'title',
-                width: '65%',
+                width: '55%',
             },
             {
                 title: 'Lượt xem',

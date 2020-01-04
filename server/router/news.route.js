@@ -18,6 +18,7 @@ route.get('/getNewNews',news.getNewNews);
 route.get('/getNewsTotal',news.getNewsTotal);
 route.put('/upDateView/:newsId',news.upDateView);
 route.get('/getUserBlogs',authentication.checkOauthToken,news.getUserBlogs);
-route.delete('/deleteNews/:id', news.deleteNews);
+route.put('/deleteNews/:id', news.deleteNews);
+route.get('/getAllNews_ad', news.getAllNews_ad);
 
 module.exports = route;

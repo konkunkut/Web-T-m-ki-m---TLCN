@@ -191,7 +191,7 @@ class StepOneTab extends React.Component {
                                     rules: [{ required: true, message: 'Không bỏ trống phần này!' }],
                                     initialValue: this.props.decription
                                 })(
-                                    <TextArea name="decripttionValue" rows={4} onChange={this.inputChange} />
+                                    <TextArea name="decripttionValue" rows={10} onChange={this.inputChange} />
                                 )}
                             </Form.Item>
                         </Col>

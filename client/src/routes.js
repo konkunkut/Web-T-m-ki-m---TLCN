@@ -43,7 +43,7 @@ class Routing extends React.Component{
                     <Route path="/places" component={Place} />
                     <Route path="/news" component={News} />
                     <Route path="/contact" component={Contact} />
-
+                    
                     <Route path="/detailPlaces/:name" component={PlacesDetail} />
                     <Route path="/detailBlogs/:name" component={BlogsDetail} />
 
