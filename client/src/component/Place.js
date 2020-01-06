@@ -14,12 +14,16 @@ const { Content } = Layout;
 const { Option } = Select;
 var dataMaps = [];
 var body = {};
+var tempLocation={};
 
 class Places extends React.Component {
     constructor() {
         super();
         this.state = {
             contacts: [],
+            location : {
+                lat: 10.852154, lng: 106.772201
+            },
 
             typePlaces: typePlace,
             city: [
@@ -43,13 +47,30 @@ class Places extends React.Component {
 
     setDataDistrict = (value) => {
         if(value=="Chọn tỉnh/thành phố"){
-            this.setState({citiesValue: "default"});
+            this.setState({citiesValue: "default",})
             body.city ="default";
+            tempLocation={
+                lat: 10.852154, lng: 106.772201
+            }
         }
         else{
-            this.setState({citiesValue: value});
-            body.city =value;
+            if(value=="Tp.Hồ Chí Minh"){
+                this.setState({citiesValue: value,})
+                body.city =value;
+                tempLocation={
+                    lat: 10.852154, lng: 106.772201
+                }
+            }
+            if(value=="Hà Nội"){
+                body.city =value;
+                this.setState({citiesValue: value,})
+                body.city =value;
+                tempLocation={
+                    lat: 21.05661173534262, lng: 105.81982336848239
+                }
+            }
         }
+        //console.log(value)
         this.props.form.setFieldsValue({
             districts: undefined
         })
@@ -98,7 +119,7 @@ class Places extends React.Component {
     }
 
     onSearch=()=>{
-        console.log(body)
+        //console.log("đã gọi callback")
         getAllPlaces(1, body).then((data) => {
             if (!data.success) {
                 message.error(data.message, 2);
@@ -114,7 +135,10 @@ class Places extends React.Component {
                         phone : data.data[i].phone
                     });
                 }
-                this.setState({ contacts: data.data });
+                this.setState({
+                    contacts: data.data,
+                    location : tempLocation
+                });
             }
         });
     }
@@ -168,15 +192,19 @@ class Places extends React.Component {
                 message.error(data.message, 2);
             }
             else {
-                var avg = Math.ceil(data.data / 10);
+                //console.log(data.data)
+                //var avg = Math.ceil(data.data / 10);
+                var avg = data.data
                 this.setState({
                     totalPage : avg
                 });
+                //console.log(this.state.totalPage);
             }
         })
     };
 
     render() {
+        //console.log(this.state.location)
         const { getFieldDecorator } = this.props.form;
         return (
             <Content style={{ padding: '20px', marginTop: 60 }}>
@@ -260,7 +288,7 @@ class Places extends React.Component {
                                     }
                                     {/* phân trang */}
                                     <Pagination
-                                        defaultCurrent={1}
+                                        defaultCurrent={this.state.curentPage}
                                         total={this.state.totalPage}
                                         pageSize={10}
                                         onChange={this.changePage}
@@ -271,7 +299,7 @@ class Places extends React.Component {
 
                             {/* bản đồ */}
                             <Col className="suggest-and-ad" span={11} style={{height:400}}>
-                                <PrivateMAp  dataMap={dataMaps} />
+                                <PrivateMAp  dataMap={dataMaps} location={this.state.location} callback={this.onSearch} />
                             </Col>
                         </Row>
                     </div>

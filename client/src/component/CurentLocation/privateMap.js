@@ -7,14 +7,29 @@ import { REACT_APP_GOOGLE_KEY } from '../../config';
 //   height: '100%'
 // };
 
+
 class PrivateMap extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             showingInfoWindow: false,  //Hides or the shows the infoWindow
             activeMarker: {},          //Shows the active marker upon click
-            selectedPlace: {}          //Shows the infoWindow to the selected place upon a marker
+            selectedPlace: {},          //Shows the infoWindow to the selected place upon a marker
+            //locations: this.props.location,
+            locations: {
+                lat: 10.852154, lng: 106.772201
+            },
         };
+    }
+
+    shouldComponentUpdate(nextProps, nextState){
+        if( this.props.location != nextProps.location){
+            this.setState({
+                locations: nextProps.location,
+            })
+            nextProps.callback();
+        }
+        return true;
     }
 
     onMarkerClick = (props, marker, e) =>
@@ -32,13 +47,16 @@ class PrivateMap extends React.Component {
             });
         }
     };
+
     render() {
+        //console.log(this.state.locations)
         return (
             <Map
                 google={this.props.google}
                 zoom={11}
                 style={{width:"100%", height:"100%"}}
-                initialCenter={{ lat: 10.852154, lng: 106.772201 }}
+                center={this.state.locations}
+                initialCenter={{lat: 10.852154, lng: 106.772201}}
             >
                 {this.props.dataMap && this.props.dataMap.map((data,i) =>
                     <Marker

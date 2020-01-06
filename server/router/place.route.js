@@ -14,4 +14,5 @@ route.get('/getPlaceTotal',controlPlace.getPlaceTotal);
 route.get('/getAllPlaces_ad', controlPlace.getAllPlaces_ad);
 route.get('getDeletedPlaces', controlPlace.getDeletedPlaces);
 route.put('/deletePlaces_ad/:id',controlPlace.deletePlaces_ad);
+route.get('/getNewestPlace', controlPlace.getNewestPlace);
 module.exports =route;

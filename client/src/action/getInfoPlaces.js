@@ -17,7 +17,7 @@ export const getAllPlaces=(page, data)=>{
 
     return axios.get(`${API_URL}/Places/getAllPlace/`+page, body, config)
                 .then(res=>{
-                    console.log(res.data);
+                    //console.log(res.data);
                     return res.data;
                 })
                 .catch(err=>{
@@ -72,4 +72,14 @@ export const storeIdPlace =(id_Places)=> dispatch =>{
         type: STORE_ID_PLACE,
         payload: {idPlace}
     });
+}
+
+export const getNewestPlace=()=>{
+    return axios.get(`${API_URL}/Places/getNewestPlace`)
+                .then(res=>{
+                    return res.data;
+                })
+                .catch(err=>{
+                    console.log(err);
+                })
 }

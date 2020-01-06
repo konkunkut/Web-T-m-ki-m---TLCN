@@ -47,7 +47,8 @@ class News extends React.Component {
                 message.error(data.message, 2);
             }
             else {
-                var avg = Math.ceil(data.data / 10);
+                //var avg = Math.ceil(data.data / 10);
+                var avg = data.data
                 this.setState({
                     totalPage: avg
                 });
@@ -94,7 +95,7 @@ class News extends React.Component {
                             <Row>
                                 {/* phân trang */}
                                 <Pagination
-                                    defaultCurrent={1}
+                                    defaultCurrent={this.state.curentPage}
                                     total={this.state.totalPage}
                                     pageSize={10}
                                     onChange={this.changePage}

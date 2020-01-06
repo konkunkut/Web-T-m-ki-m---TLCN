@@ -5,7 +5,7 @@ import BlogList from './ListComponent/BlogList';
 import ButtonList from './ListComponent/ButtonList';
 import 'antd/dist/antd.css';
 
-import { getAllPlaces } from '../action/getInfoPlaces';
+import { getAllPlaces, getNewestPlace } from '../action/getInfoPlaces';
 import {getNewHomepage} from '../action/uploadBlogs';
 
 import {Layout, Col, Input, BackTop, message} from 'antd';
@@ -38,7 +38,7 @@ class Home extends React.Component
             city: "default",
             dictrict: "default",
         }
-        getAllPlaces(1, body).then((data) => {
+        getNewestPlace().then((data) => {
             if (!data.success) {
                 message.error(data.message, 2);
             }

@@ -328,6 +328,29 @@ const deletePlaces_ad=(req,res)=>{
     })
 }
 
+const getNewestPlace=(req,res)=>{
+    Place.find({deleted:false})
+    // .select('_id name_place phone stress dictrict city picture')
+    .limit(5)
+    .sort({$natural:-1})
+    .exec((err, result) => {
+        if (err) {
+            return res.status('200').json({
+                message: "Không lấy được dữ liệu",
+                success: false
+            });
+
+        }
+        else {
+            return res.status('200').json({
+                data: result,
+                message:"Thành công",
+                success: true
+            });
+        }
+    })
+}
+
 module.exports = {
     createPlace: createPlace,
     editPlace: editPlace,
@@ -340,4 +363,5 @@ module.exports = {
     getAllPlaces_ad:getAllPlaces_ad,
     getDeletedPlaces:getDeletedPlaces,
     deletePlaces_ad:deletePlaces_ad,
+    getNewestPlace:getNewestPlace,
 }
