@@ -299,7 +299,7 @@ class Places extends React.Component {
 
                             {/* bản đồ */}
                             <Col className="suggest-and-ad" span={11} style={{height:400}}>
-                                <PrivateMAp  dataMap={dataMaps} location={this.state.location} callback={this.onSearch} />
+                                <PrivateMAp  dataMap={dataMaps} location={this.state.location} />
                             </Col>
                         </Row>
                     </div>

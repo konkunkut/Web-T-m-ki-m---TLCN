@@ -27,7 +27,7 @@ class PrivateMap extends React.Component {
             this.setState({
                 locations: nextProps.location,
             })
-            nextProps.callback();
+            //nextProps.callback();
         }
         return true;
     }

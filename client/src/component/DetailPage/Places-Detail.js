@@ -33,6 +33,8 @@ class DetailPlaces extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            location:{},
+
             name_place: null,
             phone: null,
             stress: null,
@@ -142,6 +144,19 @@ class DetailPlaces extends React.Component {
                 for (let i = 0; i < this.state.picture.length; i++) {
                     collection.push({
                         src: `${API_URL}` + this.state.picture[i], caption: ""
+                    })
+                }
+
+                if(data.data[0].city=="Tp.Hồ Chí Minh"){
+                    this.setState({
+                        location:{
+                        lat: 10.852154, lng: 106.772201}
+                    })
+                }
+                if(data.data[0].city=="Hà Nội"){
+                    this.setState({
+                        location:{
+                        lat: 21.05661173534262, lng: 105.81982336848239}
                     })
                 }
             }
@@ -264,7 +279,7 @@ class DetailPlaces extends React.Component {
                         {/* location on map */}
                         <Row>
                             <Col style={{ backgroundColor: '#636363', height: 400 }}>
-                                <PrivateMAp dataMap={dataMaps} />
+                                <PrivateMAp dataMap={dataMaps} location={this.state.location}  />
                             </Col>
 
                             <Divider></Divider>
