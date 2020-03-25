@@ -8,7 +8,7 @@ import 'antd/dist/antd.css';
 import { getAllPlaces, getNewestPlace } from '../action/getInfoPlaces';
 import {getNewHomepage} from '../action/uploadBlogs';
 
-import {Layout, Col, Input, BackTop, message} from 'antd';
+import {Layout, Col, Input, BackTop, message, Modal} from 'antd';
 const {Content} = Layout;
 const {Search} = Input;
 
@@ -29,6 +29,7 @@ class Home extends React.Component
         this.state={
             contacts : [],
             listData : [],
+            visible : true,
         }
     }
 
@@ -57,9 +58,38 @@ class Home extends React.Component
         })
     }
 
+    handleOk = e => {
+        //console.log(e);
+        this.setState({
+          visible: false
+        });
+      };
+    
+    handleCancel = e => {
+        //console.log(e);
+        this.setState({
+          visible: false
+        });
+    };
+
     render(){
     return(
         <Content style={{ padding: '20px' }}>
+
+        <Modal
+            title={`MỪNG XUÂN CANH TÝ`}
+            visible={this.state.visible}
+            onOk={this.handleOk}
+            onCancel={this.handleCancel}
+            footer={null}
+            style={{textAlign:"center"}}
+        >
+            <img
+                src="https://i.pinimg.com/originals/1d/e9/18/1de918ad842bd5db07b0fa08b9eba309.gif"
+                alt="happynewyear"
+                style={{ width: "100%" }}
+            />
+        </Modal>
 
             {/* tìm kiếm, gợi ý địa điểm */}
             <div className="content-home" style={{padding: 24, height: 1024}}>
